@@ -1,0 +1,358 @@
+/* Asegurar que el contenedor principal ocupe toda la altura */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden; /* Evitar desplazamiento horizontal no deseado */
+  background: #232323;
+}
+
+/* Contenedor para Sidebar y Contenido */
+.main-layout {
+  display: flex;
+  flex-grow: 1; /* Ocupa el espacio restante vertical */
+  position: relative; /* Para posicionamiento absoluto del sidebar en móvil */
+  background: #232323;
+}
+
+/* Estilo para el área de contenido */
+.content-area {
+  flex-grow: 1; /* Ocupa el espacio restante horizontal */
+  padding: 20px; /* Añadir algo de padding */
+  overflow-y: auto; /* Permitir scroll si el contenido es largo */
+  transition: margin-left 0.3s ease; /* Transición suave para ajuste al sidebar */
+  margin-left: 250px; /* Por defecto considerando el sidebar abierto */
+  width: calc(100vw - 250px); /* Ancho total menos el sidebar */
+  background: #232323;
+  color: white;
+}
+
+/* Estilos básicos para la sidebar */
+.sidebar {
+  width: 250px; 
+  height: 100%;
+  background: #353535; 
+  color: rgba(255, 255, 255, 0.8);
+  box-sizing: border-box;
+  overflow-y: auto;
+  z-index: 150;
+  transition: transform 0.3s ease;
+}
+
+/* Estilos para íconos de Font Awesome en la barra lateral */
+.sidebar i {
+  width: 20px;
+  margin-right: 10px;
+  text-align: center;
+}
+
+/* Estilos para las tabs en el sidebar */
+.sidebar-tab {
+  padding: 12px 15px;
+  margin: 8px 15px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid #D7B615;
+  color: #D7B615;
+  background: transparent;
+}
+
+.sidebar-tab:hover {
+  background-color: rgba(215, 182, 21, 0.1);
+}
+
+/* === LAYOUTS DE CONTENIDO (ClassDetail, Streaming) === */
+.page-layout-columns, .streaming-layout {
+  display: flex;
+  gap: 20px; 
+}
+.left-column { flex: 3; min-width: 0; max-width: 900px; }
+.right-column { flex: 1; min-width: 0; }
+
+/* Ajustar proporción para Streaming */
+.streaming-main {
+  flex: 3 1 0%;
+  min-width: 0; 
+  display: flex; 
+  flex-direction: column; 
+  height: 100%;
+}
+.streaming-playlist {
+  flex: 1 1 0%;
+  min-width: 300px;
+  max-width: 450px;
+  width: 100%;
+  display: flex; 
+  flex-direction: column;
+  background: #232323;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  padding: 18px 12px 12px 12px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* === GRIDS DE CONTENIDO (HomePage Clases) === */
+.collection-grid {
+    display: flex; 
+    flex-wrap: wrap; 
+    margin-bottom: 30px; 
+  gap: 15px; 
+}
+
+/* Estilos para la página de perfil */
+.profile-page {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Estilos para la página Acerca */
+.about-page {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Estilo para botones de tab en HomePage */
+.tab-button {
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid #D7B615;
+  background-color: transparent;
+  color: #D7B615;
+}
+
+.tab-button.active {
+  border: 2px solid #D7B615;
+  background-color: #444;
+  color: #D7B615;
+  font-weight: bold;
+}
+
+/* === MEDIA QUERIES PARA RESPONSIVE === */
+@media (max-width: 768px) {
+  /* Ajustes para el área de contenido cuando el sidebar está activo */
+  .content-area {
+    margin-left: 0; /* Sin margen para el sidebar en móvil */
+    width: 100%; /* Ancho completo en móvil */
+    padding: 15px; /* Reducir padding */
+    transition: none; /* No necesitamos transición en móvil */
+  }
+
+  /* En dispositivos móviles, el sidebar se posiciona como una capa sobre el contenido */
+  .sidebar {
+    position: fixed;
+    top: 57px; /* Altura del header */
+    left: 0;
+    height: calc(100vh - 57px);
+    transform: translateX(-100%); /* Oculto por defecto */
+    box-shadow: 2px 0 10px rgba(0,0,0,0.2); /* Sombra para mejor visibilidad */
+  }
+
+  /* Cuando el sidebar está abierto */
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* Ajustes adicionales para mejorar la experiencia móvil */
+  html { 
+    font-size: 90%; 
+  }
+
+  /* Apilar columnas */
+  .page-layout-columns, .streaming-layout {
+    flex-direction: column;
+  }
+  
+  /* Ajustar ancho máximo en móvil */
+  .left-column {
+    max-width: 100%; 
+  }
+
+  /* Ajustar grid de colecciones */
+  .collection-grid {
+    justify-content: center; /* Centrar items */
+  }
+
+  /* Ajustar header */
+  header { 
+    padding: 8px 15px; 
+  }
+  
+  /* Ajustar tamaño de botones */
+  button {
+    padding: 0.5em 1em; 
+      font-size: 0.9em;
+  }
+  
+  /* Ajustar títulos */
+  h1 { font-size: 2em; }
+  h2 { font-size: 1.5em; }
+  h3 { font-size: 1.2em; margin-bottom: 10px; }
+
+  /* Tarjetas optimizadas para móvil */
+  .feed .post-card, 
+  .content-area .video-item-wrapper, 
+  .comments-list .comment-item {
+    padding: 10px; 
+  }
+
+  .feed .post-card .post-header,
+  .comments-list .comment-item .comment-header {
+    .avatar { 
+          width: 35px;
+          height: 35px;
+          margin-right: 8px;
+      }
+      .author-name { font-size: 0.9em; }
+      .author-info { font-size: 0.8em; }
+  }
+
+  /* ClassCard para móvil */
+  .class-card {
+    flex-direction: column; 
+  }
+  .class-card .thumbnail-container {
+    width: 100%; 
+  }
+  .class-card .class-content {
+    padding: 10px; 
+  }
+  .class-card .class-title { font-size: 1em; }
+  .class-card .class-duration { font-size: 0.8em; }
+  .class-card .class-progress-text { font-size: 0.75em; }
+  .class-card .download-icon { font-size: 1em; padding: 4px; }
+}
+
+/* Para pantallas más pequeñas */
+@media (max-width: 480px) {
+    html {
+        font-size: 85%;
+    }
+    .content-area {
+    padding: 10px;
+    padding-bottom: 40px;
+    }
+    button {
+      padding: 0.4em 0.8em; 
+      font-size: 0.85em;
+    }
+  .feed .post-card, .content-area .video-item-wrapper {
+    padding: 8px;
+  }
+  
+  /* Ajustar tabs en móvil pequeño */
+  .tabs-container {
+    gap: 8px !important;
+  }
+  .tab-button {
+    padding: 6px 12px !important;
+    font-size: 0.85em !important;
+  }
+}
+
+/* Añadir estilos para Font Awesome */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+
+@media (max-width: 900px) {
+  .streaming-layout {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .streaming-main, .streaming-playlist {
+    max-width: 100%;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+  }
+}
+
+.publish-button {
+  border: 1px solid #D7B615;
+  color: #D7B615;
+  background: transparent;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.publish-button:hover {
+  background: rgba(215, 182, 21, 0.1);
+}
+
+/* Estilos para el tooltip de likes en LevelsPage */
+.ranking-item {
+  position: relative;
+  cursor: pointer;
+}
+
+.likes-tooltip {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #FFD700;
+  color: #232323;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 10;
+  visibility: hidden;
+}
+
+.ranking-item:hover .likes-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Estilos adicionales para LevelsPage responsive */
+@media (max-width: 480px) {
+  .levels-container {
+    padding: 10px 5px !important;
+  }
+  
+  .ranking-item .likes-tooltip {
+    font-size: 12px;
+    padding: 4px 8px;
+    top: -35px;
+  }
+}
+
+@media (max-width: 768px) {
+  .levels-container > div:first-of-type {
+    margin-bottom: 16px !important;
+  }
+}
+
+/* Estilos para el chat en vivo */
+.streaming-playlist {
+  position: sticky !important;
+  top: 20px !important;
+  align-self: flex-start;
+  height: 500px !important;
+}
+
+@media (max-width: 900px) {
+  .streaming-playlist {
+    position: relative !important;
+    top: 0 !important;
+    height: 400px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .streaming-playlist {
+    height: 350px !important;
+  }
+}
