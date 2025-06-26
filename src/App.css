@@ -3,28 +3,22 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  overflow-x: hidden; /* Evitar desplazamiento horizontal no deseado */
-  background: #232323;
 }
 
 /* Contenedor para Sidebar y Contenido */
 .main-layout {
   display: flex;
-  flex-grow: 1; /* Ocupa el espacio restante vertical */
-  position: relative; /* Para posicionamiento absoluto del sidebar en móvil */
-  background: #232323;
+  flex: 1; /* Ocupa el espacio restante */
+  overflow-y: auto; /* Permite scroll en el layout principal si es necesario */
 }
 
 /* Estilo para el área de contenido */
 .content-area {
-  flex-grow: 1; /* Ocupa el espacio restante horizontal */
-  padding: 20px; /* Añadir algo de padding */
-  overflow-y: auto; /* Permitir scroll si el contenido es largo */
-  transition: margin-left 0.3s ease; /* Transición suave para ajuste al sidebar */
-  margin-left: 250px; /* Por defecto considerando el sidebar abierto */
-  width: calc(100vw - 250px); /* Ancho total menos el sidebar */
-  background: #232323;
-  color: white;
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto; /* Permite scroll solo en el área de contenido */
+  background-color: #232323;
+  padding-bottom: 50px;
 }
 
 /* Estilos básicos para la sidebar */
@@ -355,4 +349,12 @@
   .streaming-playlist {
     height: 350px !important;
   }
+}
+
+.loading {
+  /* Estilos para el estado de carga, puedes personalizarlos aquí */
+  padding: 20px;
+  text-align: center;
+  color: #fff;
+  font-size: 1.2rem;
 }

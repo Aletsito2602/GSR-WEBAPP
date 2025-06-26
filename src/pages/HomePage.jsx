@@ -8,7 +8,6 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Importam
 import { updateProfile } from 'firebase/auth'; // Importamos updateProfile para actualizar el perfil
 // Importar los nuevos componentes
 import PostInput from '../components/PostInput';
-import FilterButtons from '../components/FilterButtons';
 import PostCard from '../components/PostCard';
 import AnunciosList from '../components/AnunciosList'; // Importar componente de anuncios
 // Importar componentes de Streaming
@@ -20,6 +19,7 @@ import Playlist from '../components/Playlist';
 import VideoGallery from '../components/VideoGallery';
 import LevelsPage from '../components/LevelsPage';
 import MapaPage from '../components/MapaPage'; // Importar el nuevo componente de mapa
+import TopNavBar from '../components/TopNavBar';
 
 // Componente para el perfil de usuario (separado para mejor organización)
 function UserProfile({ currentUser }) {
@@ -955,388 +955,152 @@ function HomePage() {
   };
 
   return (
-    <div className="home-page" style={{ background: '#232323', minHeight: '100vh' }}>
-      {/* Selector de pestañas con enlaces de React Router en lugar de botones */}
-      <div className="tabs-container" style={{
-        display: 'flex',
-        justifyContent: 'flex-start',
-        margin: '15px 0 25px',
-        gap: '15px',
-        padding: '0 10px',
-        overflowX: 'auto',
-        background: '#232323',
-        msOverflowStyle: 'none', /* IE and Edge */
-        scrollbarWidth: 'none', /* Firefox */
-        WebkitOverflowScrolling: 'touch',
-      }}>
-        {/* Ocultar scrollbar en Chrome, Safari y Opera */}
-        <style dangerouslySetInnerHTML={{__html: `
-          .tabs-container::-webkit-scrollbar {
-            display: none;
-          }
-          .tab-button:hover {
-            color: white !important;
-          }
-        `}} />
-        <Link 
-          to="/?tab=comunidad" 
-          style={{ textDecoration: 'none' }}
-        >
-          <div 
-            className={`tab-button ${activeTab === 'comunidad' ? 'active' : ''}`}
-          style={{
-              padding: '10px 20px',
-              borderRadius: '30px',
-              border: activeTab === 'comunidad' ? '1px solid #D7B615' : '1px solid #666',
-              background: 'transparent',
-              color: activeTab === 'comunidad' ? '#FFF' : '#999',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              fontWeight: activeTab === 'comunidad' ? 'bold' : 'normal',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              whiteSpace: 'nowrap'
-          }}
-        >
-            <img 
-              src="/images/Meeting Room.png" 
-              alt="Comunidad" 
-              style={{ width: '18px', height: '18px' }} 
-            />
-          Comunidad
-          </div>
-        </Link>
-        
-        <Link 
-          to="/?tab=streaming" 
-          style={{ textDecoration: 'none' }}
-        >
-          <div 
-            className={`tab-button ${activeTab === 'streaming' ? 'active' : ''}`}
-          style={{
-              padding: '10px 20px',
-              borderRadius: '30px',
-              border: activeTab === 'streaming' ? '1px solid #D7B615' : '1px solid #666',
-              background: 'transparent',
-              color: activeTab === 'streaming' ? '#FFF' : '#999',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              fontWeight: activeTab === 'streaming' ? 'bold' : 'normal',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              whiteSpace: 'nowrap'
-          }}
-        >
-            <img 
-              src="/images/Youtube Live.png" 
-              alt="Streaming" 
-              style={{ width: '18px', height: '18px' }} 
-            />
-          Streaming
-          </div>
-        </Link>
-        
-        <Link 
-          to="/?tab=levels" 
-          style={{ textDecoration: 'none' }}
-        >
-          <div 
-            className={`tab-button ${activeTab === 'levels' ? 'active' : ''}`}
-          style={{
-              padding: '10px 20px',
-              borderRadius: '30px',
-              border: activeTab === 'levels' ? '1px solid #D7B615' : '1px solid #666',
-              background: 'transparent',
-              color: activeTab === 'levels' ? '#FFF' : '#999',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              fontWeight: activeTab === 'levels' ? 'bold' : 'normal',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              whiteSpace: 'nowrap'
-            }}
-          >
-            <img 
-              src="/images/Prize.png" 
-              alt="Levels" 
-              style={{ width: '18px', height: '18px' }} 
-            />
-            Levels
-          </div>
-        </Link>
-        
-        <Link 
-          to="/?tab=mapa" 
-          style={{ textDecoration: 'none' }}
-        >
-          <div 
-            className={`tab-button ${activeTab === 'mapa' ? 'active' : ''}`}
-          style={{
-              padding: '10px 20px',
-              borderRadius: '30px',
-              border: activeTab === 'mapa' ? '1px solid #D7B615' : '1px solid #666',
-              background: 'transparent',
-              color: activeTab === 'mapa' ? '#FFF' : '#999',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              fontWeight: activeTab === 'mapa' ? 'bold' : 'normal',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              whiteSpace: 'nowrap'
-            }}
-          >
-            <img 
-              src="/images/Map Marker.svg" 
-              alt="Mapa" 
-              style={{ width: '18px', height: '18px' }} 
-            />
-            Mapa
-          </div>
-        </Link>
-        
-        <Link 
-          to="/?tab=acerca" 
-          style={{ textDecoration: 'none' }}
-        >
-          <div 
-            className={`tab-button ${activeTab === 'acerca' ? 'active' : ''}`}
-          style={{
-              padding: '10px 20px',
-              borderRadius: '30px',
-              border: activeTab === 'acerca' ? '1px solid #D7B615' : '1px solid #666',
-              background: 'transparent',
-              color: activeTab === 'acerca' ? '#FFF' : '#999',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              fontWeight: activeTab === 'acerca' ? 'bold' : 'normal',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              whiteSpace: 'nowrap'
-            }}
-          >
-            <img 
-              src="/images/Info.png" 
-              alt="Acerca De" 
-              style={{ width: '18px', height: '18px' }} 
-            />
-            Acerca De
-          </div>
-        </Link>
-        
-        <Link 
-          to="/?tab=perfil" 
-          style={{ textDecoration: 'none' }}
-        >
-          <div 
-            className={`tab-button ${activeTab === 'perfil' ? 'active' : ''}`}
-          style={{
-              padding: '10px 20px',
-              borderRadius: '30px',
-              border: activeTab === 'perfil' ? '1px solid #D7B615' : '1px solid #666',
-              background: 'transparent',
-              color: activeTab === 'perfil' ? '#FFF' : '#999',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              fontWeight: activeTab === 'perfil' ? 'bold' : 'normal',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              whiteSpace: 'nowrap'
-            }}
-          >
-            <img 
-              src="/images/Settings.png" 
-              alt="Mi Perfil" 
-              style={{ width: '18px', height: '18px' }} 
-            />
-            Mi Perfil
-          </div>
-        </Link>
-      </div>
+    <div style={{ maxWidth: 800, margin: '0 auto' }}>
+      {/* Navegación superior */}
+      <TopNavBar />
+      
+      {/* Perfil de usuario */}
+      <UserProfile currentUser={currentUser} />
+      
 
-      {/* Mostrar contenido según la pestaña activa */}
+
+      {/* Contenido dinámico según la pestaña activa */}
       {activeTab === 'comunidad' && (
-        <div className="comunidad-tab">
-          {/* Mostrar anuncios en la parte superior */}
-          <AnunciosList maxAnuncios={3} />
-          {/* Mostrar PostInput solo si: (1) no es Anuncios, o (2) es Anuncios y es admin */}
-          {(
-            activeCategory !== 'Anuncios' || (activeCategory === 'Anuncios' && isAdmin)
-          ) && (
-            <PostInput 
-              onSubmitPost={handlePostSubmit} 
-              isSubmitting={isSubmittingPost}
-              selectedCategory={activeCategory}
-            />
-          )}
-          <FilterButtons 
-            activeCategory={activeCategory} 
-            onCategoryChange={handleCategoryChange} 
-          />
-          {/* Lista de Posts */}
+        <div>
+          {/* Sub-navegación para categorías en Comunidad */}
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px', gap: '10px' }}>
+            <button 
+              className={`tab-button ${activeCategory === 'Chat' ? 'active' : ''}`}
+              onClick={() => handleCategoryChange('Chat')}
+            >
+              <i className="fas fa-comment" style={{ marginRight: '8px' }}></i>
+              Chat
+            </button>
+            <button 
+              className={`tab-button ${activeCategory === 'Anuncios' ? 'active' : ''}`}
+              onClick={() => handleCategoryChange('Anuncios')}
+            >
+              <i className="fas fa-bullhorn" style={{ marginRight: '8px' }}></i>
+              Anuncios
+            </button>
+          </div>
+
+          {/* Input para crear posts */}
+          <PostInput onPost={handlePostSubmit} />
+
+          {/* Lista de posts */}
           {loadingPosts ? (
-            <div>Cargando publicaciones...</div>
+            <div style={{ textAlign: 'center', padding: '20px', color: '#888' }}>
+              Cargando publicaciones...
+            </div>
           ) : errorPosts ? (
-            <div style={{ color: 'red' }}>{errorPosts}</div>
+            <div style={{ textAlign: 'center', padding: '20px', color: '#ff6b6b' }}>
+              Error: {errorPosts}
+            </div>
           ) : posts.length === 0 ? (
-            <div>No hay publicaciones para mostrar en esta categoría.</div>
+            <div style={{ textAlign: 'center', padding: '20px', color: '#888' }}>
+              No hay publicaciones en esta categoría.
+            </div>
           ) : (
-            posts.map(post => <PostCard key={post.id} post={post} />)
+            posts.map(post => (
+              <PostCard 
+                key={post.id}
+                post={post}
+                currentUser={currentUser}
+                formatTimestamp={formatFirestoreTimestamp}
+                onPostUpdate={fetchPosts}
+              />
+            ))
           )}
         </div>
       )}
 
-      {/* Sección Streaming */}
       {activeTab === 'streaming' && (
-        <div>
-          {/* <SearchBar placeholder="Buscar en streaming..." /> */}
-          <div style={{ position: 'sticky', top: 0, zIndex: 10, background: '#232323', paddingBottom: '8px' }}>
-            <SectionHeader title="Disfruta del contenido en vivo y grabado" />
-          </div>
-          <div className="streaming-layout" style={{ display: 'flex', gap: 32 }}>
-            <div className="streaming-main" style={{ flex: 2, minWidth: 0 }}>
-              {streamingSelectedVideo && (
-                <button
-                  onClick={() => setStreamingSelectedVideo(null)}
-                  style={{
-                    marginBottom: 16,
-                    padding: '8px 18px',
-                    background: '#D7B615',
-                    color: '#222',
-                    border: 'none',
-                    borderRadius: 6,
-                    fontWeight: 'bold',
-                    cursor: 'pointer',
-                    fontSize: '1em',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
-                  }}
-                >
-                  Ver streaming en vivo
-                </button>
-              )}
-              <VideoPlayer video={streamingSelectedVideo} />
-              <VideoInfo title="Mi Legado - Isaac Ramirez" viewers={viewers} />
+        <div className="streaming-layout">
+          <div className="streaming-main">
+            {/* Header con información de streaming */}
+            <div style={{ marginBottom: '20px' }}>
+              <SectionHeader 
+                title="Mi Legado - Isaac Ramírez" 
+                subtitle={`${viewers} espectadores en vivo`}
+              />
             </div>
-            {/* Columna Derecha: Chat en vivo más grande */}
-            <div className="streaming-playlist" style={{ 
-              flex: 1.2, 
-              minWidth: 340, 
-              maxWidth: 500, 
-              height: '500px', 
-              display: 'flex', 
-              flexDirection: 'column',
-              position: 'sticky',
-              top: '20px'
-            }}>
-              <LiveChat db={db} currentUser={currentUser} />
+
+            {/* Player de video principal */}
+            <div style={{ marginBottom: '20px' }}>
+              <VideoPlayer 
+                videoUrl={streamingSelectedVideo?.link || "https://vimeo.com/1040149188"}
+                isLive={!streamingSelectedVideo}
+              />
             </div>
+
+            {/* Información del video */}
+            <VideoInfo 
+              title={streamingSelectedVideo?.title || "Transmisión en vivo"}
+              description={streamingSelectedVideo?.description || "Contenido educativo en vivo"}
+              isLive={!streamingSelectedVideo}
+            />
+
+            {/* Chat en vivo */}
+            <LiveChat db={db} currentUser={currentUser} />
           </div>
 
-          {/* Sección de Clases Grabadas */}
-          <div style={{ marginTop: 40 }}>
-            <div style={{ 
-              textAlign: 'center', 
-              marginBottom: 30
-            }}>
-              <h2 style={{ 
-                color: '#D7B615', 
-                fontSize: '2rem', 
-                fontWeight: 'bold',
-                margin: '0 0 10px 0',
-                textTransform: 'uppercase',
-                letterSpacing: '1px'
-              }}>
-                Sesiones Grabadas
-              </h2>
-              <div style={{ 
-                height: '3px', 
-                width: '80px', 
-                background: '#D7B615', 
-                margin: '0 auto',
-                borderRadius: '2px'
-              }}></div>
-            </div>
-            
-            {loadingClasses ? (
-              <div style={{ textAlign: 'center', padding: '30px', color: '#aaa' }}>
-                Cargando clases grabadas...
-              </div>
-            ) : errorClasses ? (
-              <div style={{ textAlign: 'center', padding: '30px', color: '#ff6b6b' }}>
-                Error al cargar las clases: {errorClasses}
-              </div>
-            ) : (
-              <VideoGallery videos={recordedClasses} />
-            )}
+          {/* Playlist lateral */}
+          <div className="streaming-playlist">
+            <Playlist 
+              videos={streamingPlaylistVideos}
+              selectedVideo={streamingSelectedVideo}
+              onVideoSelect={setStreamingSelectedVideo}
+              isLoading={isLoadingStreaming}
+              error={errorStreaming}
+              recordedClasses={recordedClasses}
+              loadingClasses={loadingClasses}
+              errorClasses={errorClasses}
+            />
           </div>
         </div>
       )}
 
-      {/* Sección Acerca */}
-      {activeTab === 'acerca' && (
+      {activeTab === 'clases' && (
         <div>
-          <SectionHeader title="Acerca de Mi Legado" />
-          <div style={{ background: '#353535', padding: '25px', borderRadius: '8px', marginBottom: '20px' }}>
-            <h2 style={{ marginBottom: '15px', color: '#D7B615' }}>Bienvenido a Mi Legado.</h2>
-            <p style={{ lineHeight: '1.6', marginBottom: '20px', color: 'rgba(255,255,255,0.85)' }}>
-              No estás ante un curso más de trading. Estás entrando en una experiencia transformadora de 7 días donde no solo aprenderás lo que me llevó a construir resultados reales en los mercados, sino también lo que muy pocos se atreven a enseñar: la parte interna del éxito.<br /><br />
-              Aquí vas a descubrir estrategias avanzadas, estructuras institucionales, gestión profesional del riesgo, lectura real del mercado…<br />
-              Pero sobre todo, vas a enfrentarte contigo mismo: con tus creencias, tus emociones y tus bloqueos que hoy te impiden avanzar.<br /><br />
-              Nuestra misión con Mi Legado es dejarte una marca que transforme tu forma de operar, de pensar y de vivir.<br />
-              Queremos que termines estos 7 días con claridad, fuerza mental, y un plan de ejecución real y sostenible.<br />
-              Esto no es motivación vacía: es un mapa para construir tu independencia.<br /><br />
-              <strong>Prepárate.</strong><br />
-              No viniste aquí solo a aprender, viniste a despertar.
-            </p>
-          </div>
+          <SectionHeader 
+            title="Clases Disponibles" 
+            subtitle="Explora nuestro contenido educativo"
+          />
+          <VideoGallery 
+            videos={recordedClasses}
+            isLoading={loadingClasses}
+            error={errorClasses}
+          />
         </div>
       )}
 
-      {/* Sección Mi Perfil */}
-      {activeTab === 'perfil' && (
-        <div>
-          <SectionHeader title="Mi Perfil" />
-          <div style={{ background: '#353535', padding: '25px', borderRadius: '8px', marginBottom: '20px' }}>
-            {currentUser ? (
-              <UserProfile currentUser={currentUser} />
-            ) : (
-              <div style={{ textAlign: 'center', padding: '40px 20px' }}>
-                <p style={{ fontSize: '1.2rem', marginBottom: '20px', color: 'rgba(255,255,255,0.7)' }}>
-                  Inicia sesión para ver tu perfil
-                </p>
-              <button 
-                  onClick={() => navigate('/login')}
-                style={{ 
-                    padding: '12px 25px',
-                    backgroundColor: '#D7B615',
-                  color: '#222',
-                    border: 'none',
-                    borderRadius: '4px',
-                  cursor: 'pointer',
-                    fontWeight: 'bold'
-                }}
-              >
-                  Iniciar sesión
-              </button>
-            </div>
-            )}
-          </div>
-        </div>
+      {activeTab === 'mapa' && (
+        <MapaPage />
       )}
 
-      {/* Sección Levels */}
-      {activeTab === 'levels' && (
+      {activeTab === 'niveles' && (
         <LevelsPage posts={posts} />
       )}
 
-      {/* Sección Mapa */}
-      {activeTab === 'mapa' && (
-        <MapaPage />
+      {activeTab === 'calendario' && (
+        <div>
+          <SectionHeader 
+            title="Calendario de Eventos" 
+            subtitle="Próximas clases y eventos"
+          />
+          <div style={{ 
+            background: '#232323', 
+            borderRadius: 12, 
+            padding: '20px', 
+            textAlign: 'center',
+            color: '#888'
+          }}>
+            <i className="fas fa-calendar-alt" style={{ fontSize: '3rem', marginBottom: '20px', color: '#D7B615' }}></i>
+            <h3 style={{ color: '#fff', marginBottom: '10px' }}>Calendario en desarrollo</h3>
+            <p>Próximamente podrás ver todas las clases y eventos programados.</p>
+          </div>
+        </div>
       )}
     </div>
   );

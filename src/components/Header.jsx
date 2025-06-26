@@ -4,8 +4,7 @@ import { auth } from '../firebaseConfig';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
-// Recibe la función onToggleSidebar y el prop isMobile
-function Header({ onToggleSidebar, isMobile }) { 
+function Header({ isMobile }) { 
   const { currentUser } = useAuth();
   const navigate = useNavigate();
 
@@ -31,24 +30,6 @@ function Header({ onToggleSidebar, isMobile }) {
       zIndex: 200
     }}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        {/* Mostrar botón de menú siempre, no solo en escritorio */}
-        <button 
-          onClick={onToggleSidebar} 
-          style={{ 
-            marginRight: '15px', 
-            background: 'transparent',
-            border: 'none',
-            color: '#D7B615',
-            fontSize: '1.5rem',
-            cursor: 'pointer',
-            padding: '5px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <i className="fas fa-bars"></i>
-        </button>
         <span style={{ fontWeight: 'bold', color: 'rgba(255, 255, 255, 0.87)' }}>Mi Legado</span>
       </div>
       

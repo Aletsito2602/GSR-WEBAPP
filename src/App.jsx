@@ -9,12 +9,15 @@ import ClientesPage from './pages/ClientesPage';
 import AdminManager from './components/AdminManager';
 import AnunciosManager from './components/AnunciosManager';
 import Header from './components/Header';
-import Sidebar from './components/Sidebar';
 import { useAuth } from './context/AuthContext';
 import useMediaQuery from './hooks/useMediaQuery';
 import { db } from './firebaseConfig';
 import { enableIndexedDbPersistence, collection, getDocs, query, limit } from 'firebase/firestore';
 import { isUserAdmin } from './utils/authUtils';
+import ClasesPage from './pages/ClasesPage';
+import StreamingPage from './pages/StreamingPage';
+import CalendarioPage from './pages/CalendarioPage';
+import InfoPage from './pages/InfoPage';
 
 // Componente para Rutas Protegidas
 function ProtectedRoute({ children }) {
@@ -27,24 +30,10 @@ function ProtectedRoute({ children }) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // Inicializar Sidebar abierto en escritorio y cerrado en móvil
-  const [isSidebarOpen, setIsSidebarOpen] = useState(!isMobile);
-  
-  // Actualizar estado del sidebar si cambia el tamaño de pantalla
-  useEffect(() => {
-    setIsSidebarOpen(!isMobile);
-  }, [isMobile]);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(prev => !prev);
-  };
-
   return (
     <div className="app-container">
-      <Header onToggleSidebar={toggleSidebar} isMobile={isMobile} /> 
+      <Header isMobile={isMobile} /> 
       <div className="main-layout">
-        {/* Sidebar siempre presente, controlado por estado isSidebarOpen */}
-        <Sidebar isOpen={isSidebarOpen} />
         <main className="content-area">
           {children}
         </main>
@@ -60,8 +49,6 @@ function AdminRoute({ children }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const isMobile = useMediaQuery('(max-width: 768px)');
-  // Inicializar Sidebar abierto en escritorio y cerrado en móvil
-  const [isSidebarOpen, setIsSidebarOpen] = useState(!isMobile);
   
   // Verificar si el usuario es administrador
   useEffect(() => {
@@ -75,15 +62,6 @@ function AdminRoute({ children }) {
     
     checkAdmin();
   }, [currentUser]);
-  
-  // Actualizar estado del sidebar si cambia el tamaño de pantalla
-  useEffect(() => {
-    setIsSidebarOpen(!isMobile);
-  }, [isMobile]);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(prev => !prev);
-  };
 
   // Renderizar estado de carga
   if (loading) {
@@ -103,9 +81,8 @@ function AdminRoute({ children }) {
   // Renderizar contenido si es admin
   return (
       <div className="app-container">
-        <Header onToggleSidebar={toggleSidebar} isMobile={isMobile} /> 
+        <Header isMobile={isMobile} /> 
         <div className="main-layout">
-        <Sidebar isOpen={isSidebarOpen} />
           <main className="content-area">
             {children}
           </main>
@@ -184,6 +161,38 @@ function App() {
         element={
           <ProtectedRoute>
             <HomePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route 
+        path="/clases" 
+        element={
+          <ProtectedRoute>
+            <ClasesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route 
+        path="/streaming" 
+        element={
+          <ProtectedRoute>
+            <StreamingPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route 
+        path="/calendario" 
+        element={
+          <ProtectedRoute>
+            <CalendarioPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route 
+        path="/info" 
+        element={
+          <ProtectedRoute>
+            <InfoPage />
           </ProtectedRoute>
         }
       />

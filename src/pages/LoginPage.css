@@ -1,400 +1,404 @@
 /* src/pages/LoginPage.css */
 
-.login-page-container {
+/* LoginPage.css - Re-styled based on image */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+/* Main container */
+.login-page-split {
   display: flex;
   min-height: 100vh;
   width: 100%;
-  /* Eliminar imagen de fondo del contenedor principal */
-  /* background-image: url('/images/fondo-login.png'); */
-  /* background-size: cover; */
-  /* background-position: center; */
-  /* background-repeat: no-repeat; */
-  /* Poner un color de fondo base */
-  background-color: #111111;
-  color: #ffffff;
+  background-color: #121212;
+  color: #e0e0e0;
+  font-family: 'Inter', sans-serif;
 }
 
-.login-left-column {
+/* Columns */
+.login-form-column, .info-column {
   flex: 1;
-  /* Eliminar gradiente */
-  /* background: linear-gradient(145deg, rgba(106, 13, 173, 0.8), rgba(75, 0, 130, 0.8)); */
-  /* Aplicar imagen de fondo aquí */
-  background-image: url('/images/isaac-fondo-login.jpg');
-  /* Ajustar tamaño: 100% ancho, altura automática */
-  background-size: cover;
-  background-position: center; /* Mantener centrado */
-  background-repeat: no-repeat; /* No repetir */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 40px;
-  text-align: center;
-  /* Añadir un overlay oscuro si el texto no se lee bien sobre la imagen */
-  position: relative; /* Necesario si usamos un pseudo-elemento para overlay */
+  box-sizing: border-box;
 }
 
-/* Opcional: Overlay oscuro sobre la imagen en la columna izquierda para legibilidad del texto */
-.login-left-column::before {
-  content: '';
+.login-form-column {
+  background-color: #181818;
+  position: relative; /* For absolute positioning of language selector */
+}
+
+/* Form container and elements */
+.form-container {
+  width: 100%;
+  max-width: 490px;
+  display: flex;
+  flex-direction: column;
+}
+
+.language-selector {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Ajusta la opacidad */
-  z-index: 1; /* Asegura que esté sobre el fondo pero debajo del contenido */
-}
-
-/* Asegurar que el contenido esté sobre el overlay */
-.left-content {
-  position: relative;
-  z-index: 2;
-  max-width: 400px;
-  width: 100%;
-}
-
-.logo-placeholder {
-  font-size: 3rem;
-  font-weight: bold;
-  color: #ffd700;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-  margin-bottom: 30px;
-  width: 100%;
-  text-align: center;
-}
-
-.left-content h2 {
-  font-size: 2.5rem;
-  margin-bottom: 15px;
-}
-
-.left-content p {
-  font-size: 1rem;
-  color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 40px;
-}
-
-.steps-placeholder .step {
-  background-color: rgba(0, 0, 0, 0.3);
-  padding: 15px 20px;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  text-align: left;
+  top: 40px;
+  left: 40px;
   display: flex;
-  align-items: center;
-  transition: background-color 0.3s ease;
-}
-
-.steps-placeholder .step.active {
-  background-color: #ffffff;
-  color: #1a1a1a;
-}
-
-.steps-placeholder .step span {
-  background-color: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  display: inline-flex; /* Usar flex para centrar */
-  justify-content: center;
-  align-items: center;
-  margin-right: 15px;
-  font-weight: bold;
-  font-size: 0.9rem;
-}
-
-.steps-placeholder .step.active span {
-  background-color: #1a1a1a;
-  color: #ffffff;
-}
-
-.login-right-column {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px;
-  background-color: #111111; /* Fondo ligeramente diferente para la columna derecha */
-}
-
-.login-form-container {
-  width: 100%;
-  max-width: 450px;
-  background-color: #1f1f1f; /* Fondo del contenedor del formulario */
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-}
-
-.login-form-container h2 {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.login-form-container p {
-  font-size: 0.9rem;
-  color: #a0a0a0;
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.social-login-buttons {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.social-button {
-  flex: 1;
-  padding: 12px;
-  border: 1px solid #444;
-  background-color: #2a2a2a;
-  color: #ffffff;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background-color 0.3s ease;
-  display: flex;
-  justify-content: center;
   align-items: center;
   gap: 8px;
+  padding: 8px 12px;
+  background-color: #2a2a2a;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 10;
 }
 
-.social-button:hover {
-  background-color: #3a3a3a;
+.language-selector .fa-chevron-down {
+  font-size: 10px;
+  transition: transform 0.3s ease;
+}
+.language-selector .fa-chevron-down.open {
+  transform: rotate(180deg);
 }
 
-/* Añadir íconos reales sería mejor */
-.social-button.google::before {
- content: 'G'; /* Placeholder */
- font-weight: bold;
-}
-.social-button.github::before {
- content: 'GH'; /* Placeholder */
- font-weight: bold;
+.language-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background-color: #2a2a2a;
+  border: 1px solid #424242;
+  border-radius: 12px;
+  padding: 8px;
+  width: 150px;
+  animation: dropdown-fade-in 0.2s ease-out;
 }
 
-.divider {
+@keyframes dropdown-fade-in {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.language-option {
   display: flex;
   align-items: center;
-  text-align: center;
-  color: #666;
-  margin: 25px 0;
-  font-size: 0.8rem;
-}
-
-.divider::before,
-.divider::after {
-  content: '';
-  flex: 1;
-  border-bottom: 1px solid #444;
-}
-
-.divider span {
-  padding: 0 10px;
-}
-
-.name-inputs {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 15px;
-}
-
-.name-inputs .input-group {
-    flex: 1;
-    margin-bottom: 0; /* Reset margin since it's handled by gap */
-}
-
-.input-group {
-  margin-bottom: 20px;
-  text-align: left;
-}
-
-.input-group label {
-  display: block;
-  margin-bottom: 5px;
-  color: #ccc;
-}
-
-.input-group input {
-  width: 100%;
+  gap: 12px;
   padding: 10px;
-  background-color: #333;
-  border: 1px solid #555;
-  border-radius: 5px;
-  color: #fff;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+.language-option:hover {
+  background-color: #424242;
+}
+.language-option span {
+  font-size: 14px;
 }
 
-.login-button {
-  width: 100%;
-  padding: 12px;
-  background: linear-gradient(90deg, #ffd700, #f0c040);
-  border: 1px solid #DAA520; /* Borde dorado */
-  color: #222;
-  font-size: 1.1em;
-  font-weight: bold;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.login-button:hover {
-  opacity: 0.9;
-  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
-}
-
-.error-message {
-  color: #ff4d4d;
-  margin-bottom: 15px;
-}
-
-.submit-button {
-  width: 100%;
-  padding: 14px;
-  background-color: #ffffff;
-  color: #1a1a1a;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  margin-top: 10px; /* Espacio antes del botón */
-}
-
-.submit-button:hover {
-  background-color: #f0f0f0;
-}
-
-.toggle-mode {
+.logo-wrapper {
   text-align: center;
-  margin-top: 25px;
-  font-size: 0.9rem;
-  color: #a0a0a0;
+  margin-bottom: 48px;
 }
 
-.toggle-button {
-  background: none;
-  border: none;
-  color: #d7b615; /* Dorado como el tema general */
-  font-weight: bold;
+.form-logo {
+  width: 80px;
+  height: auto;
+}
+
+.input-wrapper {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.input-wrapper .input-icon {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  color: #757575;
+}
+
+.input-wrapper input {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #2a2a2a;
+  border: 1px solid #424242;
+  border-radius: 30px;
+  padding: 16px 50px 16px 20px;
+  color: #e0e0e0;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+.input-wrapper input:focus {
+  outline: none;
+  border-color: #a18a51;
+}
+
+.options-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+
+.remember-me-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
-  margin-left: 5px;
-  padding: 0;
+  color: #bdbdbd;
 }
 
-.toggle-button:hover {
+/* Custom Checkbox */
+.remember-me-label input[type="checkbox"] {
+  display: none;
+}
+.remember-me-label span {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #757575;
+  border-radius: 3px;
+  display: inline-block;
+  position: relative;
+}
+.remember-me-label input[type="checkbox"]:checked + span {
+  background-color: #a18a51;
+  border-color: #a18a51;
+}
+.remember-me-label input[type="checkbox"]:checked + span::after {
+  content: '✔';
+  font-size: 12px;
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  color: #181818;
+}
+
+
+.forgot-password-link {
+  color: #bdbdbd;
+  text-decoration: none;
+}
+.forgot-password-link:hover {
   text-decoration: underline;
 }
 
-/* Estilos para los nuevos botones toggle de formulario */
-.form-toggle-buttons {
-  display: flex;
-  gap: 10px; /* Espacio entre botones */
-  margin-bottom: 25px; /* Espacio antes del divisor */
-  border: 1px solid #444; /* Borde contenedor opcional */
-  border-radius: 6px; /* Redondeado contenedor opcional */
-  overflow: hidden; /* Para que el borde redondeado funcione bien */
-}
-
-.toggle-form-button {
-  flex: 1; /* Ocupa el espacio disponible */
-  padding: 12px;
-  border: none; /* Sin borde individual */
-  background-color: #2a2a2a; /* Fondo inactivo */
-  color: #a0a0a0; /* Color texto inactivo */
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  text-align: center;
-}
-
-.toggle-form-button.active {
-  background-color: #444; /* Fondo activo */
-  color: #ffffff; /* Color texto activo */
+.submit-button-gold {
+  width: 100%;
+  padding: 18px;
+  border-radius: 30px;
+  border: none;
+  background: linear-gradient(to right, #a18a51, #796535);
+  color: #ffffff;
+  font-size: 16px;
   font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.toggle-form-button:hover:not(.active) {
-  background-color: #3a3a3a;
+.submit-button-gold:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(161, 138, 81, 0.3);
 }
 
-/* Responsive Adjustments */
-@media (max-width: 900px) {
-  .login-page-container {
+.submit-button-gold:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.form-footer-links {
+  margin-top: 32px;
+  text-align: center;
+  font-size: 14px;
+  color: #bdbdbd;
+}
+
+.footer-link {
+  display: block;
+  margin-bottom: 12px;
+  color: #bdbdbd;
+  text-decoration: none;
+}
+
+.toggle-mode-text a {
+  color: #a18a51;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.form-error {
+  color: #ef5350;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+/* Info Column SVG */
+.info-column {
+  background-color: #121212;
+}
+
+.info-column-svg {
+    width: 100%;
+    max-width: 550px; /* Or adjust as needed */
+    height: auto;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .login-page-split {
     flex-direction: column;
   }
-
-  .login-left-column {
-     min-height: 40vh; /* Altura mínima en móvil */
-     flex: none; /* Quita el flex grow */
-     justify-content: flex-start; /* Alinea arriba */
-     padding-top: 60px; /* Más espacio arriba */
+  .info-column {
+    display: none; /* Hide SVG on smaller screens to focus on form */
   }
-
-  .left-content h2 {
-    font-size: 2rem;
+  .login-form-column {
+    min-height: 100vh;
+    background-color: #121212;
   }
-  .left-content p {
-    font-size: 0.9rem;
-  }
-  .steps-placeholder {
-      display: none; /* Ocultar pasos en móvil */
-  }
-
-  .login-right-column {
-    flex: none;
-    padding: 30px 20px; /* Menos padding */
-  }
-
-  .login-form-container {
-    padding: 30px;
-    max-width: none; /* Ocupa el ancho disponible */
-    box-shadow: none;
-    background-color: transparent; /* Fondo transparente en móvil */
+  .language-selector {
+    top: 20px;
+    left: auto;
+    right: 20px;
   }
 }
 
 @media (max-width: 480px) {
-    .social-login-buttons {
-        flex-direction: column;
+    .login-form-column, .info-column {
+        padding: 20px;
     }
-    .name-inputs {
-        flex-direction: column;
-        gap: 15px; /* Ajusta el gap si es necesario */
+    .form-container {
+        max-width: 100%;
     }
 }
 
-/* Añadir estilo para el mensaje de validación de email */
-.email-hint, .password-hint {
-  font-size: 0.8rem;
-  color: #666;
-  margin-top: 5px;
-  display: block;
+/* Signup form specific styles */
+.signup-fields {
+    animation: slide-in 0.5s forwards;
 }
 
-/* Estilo para el mensaje de registro */
-.registration-note {
-  margin-top: 15px;
-  font-size: 0.85rem;
-  color: #666;
+@keyframes slide-in {
+    from { max-height: 0; opacity: 0; }
+    to { max-height: 200px; opacity: 1; }
+}
+
+.signup-fields .input-wrapper:first-child {
+    margin-top: 16px;
+}
+
+/* New styles for Register Form */
+.form-row {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+}
+
+.form-row .input-wrapper {
+  flex: 1;
+}
+
+.input-select {
+  /* Re-use existing input styles and adjust */
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #2a2a2a;
+  border: 1px solid #424242;
+  border-radius: 30px;
+  padding: 16px 20px;
+  color: #e0e0e0;
+  font-size: 16px;
+  transition: border-color 0.3s;
+  appearance: none; /* Remove default arrow */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23757575' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 20px center;
+}
+
+.input-select:focus {
+  outline: none;
+  border-color: #a18a51;
+}
+
+.phone-code {
+  flex: 0.4;
+}
+
+.phone-code select {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #2a2a2a;
+  border: 1px solid #424242;
+  border-radius: 30px;
+  padding: 16px 12px;
+  color: #e0e0e0;
+  font-size: 14px; /* Smaller font for code */
+  appearance: none;
   text-align: center;
-  line-height: 1.4;
 }
 
-/* Estilos para el botón deshabilitado */
-.submit-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+.phone-number {
+  flex: 0.6;
 }
 
-/* Estilo para el mensaje de error */
-.error-message {
-  color: #e74c3c;
-  margin: 10px 0;
-  font-size: 0.9rem;
-  text-align: center;
+.options-wrapper .remember-me-label {
+    font-size: 13px; /* Slightly smaller for the long text */
+    align-items: flex-start;
+}
+
+.options-wrapper .remember-me-label span {
+    margin-top: 2px; /* Align checkbox with first line of text */
+}
+
+/* View-specific Layouts */
+.view-recover .info-column,
+.view-recover .language-selector {
+    display: none;
+}
+
+.view-recover .login-form-column {
+    background-color: #121212; /* Match page background */
+    align-items: center; /* Center the form container */
+}
+
+.view-recover .form-container {
+    background-color: #1e1e1e;
+    padding: 48px;
+    border-radius: 24px;
+    max-width: 420px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.view-recover .logo-wrapper {
+    margin-bottom: 32px;
+}
+.view-recover .auth-form {
+    margin-bottom: 16px;
+}
+.view-recover .submit-button-gold {
+    margin-top: 16px;
+}
+.view-recover .form-footer-links {
+    margin-top: 24px;
+}
+
+/* Back Button */
+.back-button {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  background-color: #2a2a2a;
+  border: none;
+  color: #e0e0e0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  transition: background-color 0.2s;
+  z-index: 20;
+}
+
+.back-button:hover {
+  background-color: #424242;
 } 

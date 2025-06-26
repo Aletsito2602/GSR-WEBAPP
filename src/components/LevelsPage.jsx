@@ -148,89 +148,89 @@ function LevelsPage({ posts = [] }) {
 
   return (
     <div className="levels-container" style={{ 
-      maxWidth: 1100, 
-      margin: '0 auto', 
-      padding: windowWidth < 768 ? '15px 10px' : '30px 0', 
-      color: '#fff' 
-    }}>
-      {/* Cuadro de estadística de likes dados */}
-      <div style={{ 
-        background: '#232323', 
-        borderRadius: 14, 
-        padding: windowWidth < 480 ? '12px 20px' : '18px 32px', 
-        marginBottom: 24, 
-        display: 'flex', 
-        alignItems: 'center', 
-        gap: 18, 
-        boxShadow: '0 2px 8px rgba(0,0,0,0.10)', 
-        maxWidth: windowWidth < 480 ? '100%' : 340 
+        maxWidth: 1100, 
+        margin: '0 auto', 
+        padding: windowWidth < 768 ? '15px 10px' : '30px 0', 
+        color: '#fff' 
       }}>
-        <span style={{ fontSize: windowWidth < 480 ? 24 : 28, color: '#FFD700', marginRight: 12 }}><i className="fas fa-heart" /></span>
-        <div>
-          <div style={{ fontWeight: 'bold', fontSize: windowWidth < 480 ? 16 : 18, color: '#FFD700' }}>Likes dados</div>
-          <div style={{ fontSize: windowWidth < 480 ? 20 : 22, fontWeight: 'bold', color: '#fff' }}>{likesDados}</div>
+        {/* Cuadro de estadística de likes dados */}
+        <div style={{ 
+          background: '#232323', 
+          borderRadius: 14, 
+          padding: windowWidth < 480 ? '12px 20px' : '18px 32px', 
+          marginBottom: 24, 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: 18, 
+          boxShadow: '0 2px 8px rgba(0,0,0,0.10)', 
+          maxWidth: windowWidth < 480 ? '100%' : 340 
+        }}>
+          <span style={{ fontSize: windowWidth < 480 ? 24 : 28, color: '#FFD700', marginRight: 12 }}><i className="fas fa-heart" /></span>
+          <div>
+            <div style={{ fontWeight: 'bold', fontSize: windowWidth < 480 ? 16 : 18, color: '#FFD700' }}>Likes dados</div>
+            <div style={{ fontSize: windowWidth < 480 ? 20 : 22, fontWeight: 'bold', color: '#fff' }}>{likesDados}</div>
+          </div>
         </div>
-      </div>
 
-      {/* Encabezado usuario */}
-      <div style={{ 
-        background: '#232323', 
-        borderRadius: 18, 
-        padding: windowWidth < 480 ? '20px' : 32, 
-        display: 'flex', 
-        alignItems: 'center', 
-        gap: windowWidth < 480 ? 16 : 28, 
-        marginBottom: 32, 
-        boxShadow: '0 2px 8px rgba(0,0,0,0.10)' 
-      }}>
-        <div style={{ position: 'relative' }}>
-          {usuario.foto ? (
-            <img src={usuario.foto} alt={usuario.nombre} style={{ 
-              width: windowWidth < 480 ? 70 : 90, 
-              height: windowWidth < 480 ? 70 : 90, 
+        {/* Encabezado usuario */}
+        <div style={{ 
+          background: '#232323', 
+          borderRadius: 18, 
+          padding: windowWidth < 480 ? '20px' : 32, 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: windowWidth < 480 ? 16 : 28, 
+          marginBottom: 32, 
+          boxShadow: '0 2px 8px rgba(0,0,0,0.10)' 
+        }}>
+          <div style={{ position: 'relative' }}>
+            {usuario.foto ? (
+              <img src={usuario.foto} alt={usuario.nombre} style={{ 
+                width: windowWidth < 480 ? 70 : 90, 
+                height: windowWidth < 480 ? 70 : 90, 
+                borderRadius: '50%', 
+                border: '4px solid #D7B615', 
+                objectFit: 'cover' 
+              }} />
+            ) : (
+              <div style={{ 
+                width: windowWidth < 480 ? 70 : 90, 
+                height: windowWidth < 480 ? 70 : 90, 
+                borderRadius: '50%', 
+                border: '4px solid #D7B615', 
+                background: '#444', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                fontSize: windowWidth < 480 ? 36 : 44, 
+                color: '#FFD700', 
+                fontWeight: 'bold' 
+              }}>
+                {usuario.nombre[0].toUpperCase()}
+              </div>
+            )}
+            <span style={{ 
+              position: 'absolute', 
+              bottom: 0, 
+              right: 0, 
+              background: '#D7B615', 
+              color: '#232323', 
               borderRadius: '50%', 
-              border: '4px solid #D7B615', 
-              objectFit: 'cover' 
-            }} />
-          ) : (
-            <div style={{ 
-              width: windowWidth < 480 ? 70 : 90, 
-              height: windowWidth < 480 ? 70 : 90, 
-              borderRadius: '50%', 
-              border: '4px solid #D7B615', 
-              background: '#444', 
+              width: windowWidth < 480 ? 28 : 32, 
+              height: windowWidth < 480 ? 28 : 32, 
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'center', 
-              fontSize: windowWidth < 480 ? 36 : 44, 
-              color: '#FFD700', 
-              fontWeight: 'bold' 
-            }}>
-              {usuario.nombre[0].toUpperCase()}
-            </div>
-          )}
-          <span style={{ 
-            position: 'absolute', 
-            bottom: 0, 
-            right: 0, 
-            background: '#D7B615', 
-            color: '#232323', 
-            borderRadius: '50%', 
-            width: windowWidth < 480 ? 28 : 32, 
-            height: windowWidth < 480 ? 28 : 32, 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center', 
-            fontWeight: 'bold', 
-            fontSize: windowWidth < 480 ? 16 : 18, 
-            border: '2px solid #232323' 
-          }}>{usuario.nivel}</span>
-        </div>
-        <div>
-          <div style={{ fontWeight: 'bold', fontSize: windowWidth < 480 ? 18 : 22, color: '#FFD700' }}>{usuario.nombre}</div>
-          <div style={{ fontWeight: 600, fontSize: windowWidth < 480 ? 16 : 18, color: '#fff', marginTop: 2 }}>Nivel {usuario.nivel}</div>
-          <div style={{ color: '#aaa', fontSize: windowWidth < 480 ? 13 : 15, marginTop: 4 }}>
-            {usuario.puntosParaSubir} puntos para subir de nivel 
+              fontWeight: 'bold', 
+              fontSize: windowWidth < 480 ? 16 : 18, 
+              border: '2px solid #232323' 
+            }}>{usuario.nivel}</span>
+          </div>
+          <div>
+            <div style={{ fontWeight: 'bold', fontSize: windowWidth < 480 ? 18 : 22, color: '#FFD700' }}>{usuario.nombre}</div>
+            <div style={{ fontWeight: 600, fontSize: windowWidth < 480 ? 16 : 18, color: '#fff', marginTop: 2 }}>Nivel {usuario.nivel}</div>
+            <div style={{ color: '#aaa', fontSize: windowWidth < 480 ? 13 : 15, marginTop: 4 }}>
+              {usuario.puntosParaSubir} puntos para subir de nivel 
             <span title="¿Cómo subo de nivel?" style={{ cursor: 'pointer', color: '#FFD700', marginLeft: 6 }}>?</span>
           </div>
         </div>
