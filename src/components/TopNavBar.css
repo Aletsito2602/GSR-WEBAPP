@@ -193,16 +193,17 @@
 
 /* Estilos adicionales para el header */
 .header {
-  background: linear-gradient(135deg, #282828 0%, #1a1a1a 100%);
-  padding: 12px calc(var(--content-margin, 20px) + 20px);
+  background: transparent;
+  padding: 12px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(161, 138, 81, 0.2);
   position: sticky;
   top: 0;
   z-index: 200;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .logo-container {

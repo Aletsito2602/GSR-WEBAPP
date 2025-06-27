@@ -65,160 +65,76 @@ function UserProfilePage() {
   ];
 
   return (
-    <div className="user-profile-page">
-      {/* Header */}
-      <div className="profile-header">
-        <button className="back-button" onClick={handleGoBack}>
-          <i className="fas fa-arrow-left"></i>
-        </button>
-        <h1>Perfil</h1>
-        <button className="settings-button" onClick={handleEditProfile}>
-          <i className="fas fa-cog"></i>
-        </button>
-      </div>
-
-      {/* Información del usuario */}
-      <div className="user-info-section">
-        <div className="profile-banner">
-          <div className="banner-image"></div>
+    <div style={{background: '#222', minHeight: '100vh', width: '100vw', display: 'flex', justifyContent: 'center', alignItems: 'flex-start', fontFamily: 'Poppins, sans-serif'}}>
+      <div style={{width: '100%', maxWidth: 1200, background: '#222', borderRadius: 30, margin: '32px auto 40px auto', padding: '32px 32px 48px 32px', boxSizing: 'border-box', boxShadow: '0 0 0 4px #222'}}>
+        {/* Header y avatar */}
+        <div style={{display: 'flex', alignItems: 'center', marginBottom: 24}}>
+          <button style={{background: 'linear-gradient(122.63deg, rgba(34,34,34,0.75) 0%, rgba(215,182,21,0.75) 100%)', border: '1px solid #3C3C3C', borderRadius: 50, width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: 24}} onClick={handleGoBack}>
+            <i className="fas fa-arrow-left" style={{fontSize: 20, color: '#fff'}}></i>
+          </button>
+          <div style={{fontWeight: 600, fontSize: 22, color: '#fff'}}>Mi perfil</div>
         </div>
-        
-        <div className="profile-main-info">
-          <div className="avatar-section">
-            <div className="profile-avatar">
-              {currentUser?.photoURL ? (
-                <img src={currentUser.photoURL} alt="Avatar" />
-              ) : (
-                <div className="avatar-placeholder">
-                  {currentUser?.displayName?.charAt(0) || currentUser?.email?.charAt(0) || 'U'}
-                </div>
-              )}
+        <div style={{display: 'flex', alignItems: 'flex-start', gap: 28, marginBottom: 28}}>
+          <div style={{width: 100, height: 100, borderRadius: 300, border: '1px solid #3C3C3C', overflow: 'hidden', marginRight: 20}}>
+            {currentUser?.photoURL ? (
+              <img src={currentUser.photoURL} alt="Avatar" style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+            ) : (
+              <div className="avatar-placeholder" style={{fontSize: 40, color: '#FFD700', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                {currentUser?.displayName?.charAt(0) || currentUser?.email?.charAt(0) || 'U'}
+              </div>
+            )}
+          </div>
+          <div style={{flex: 1}}>
+            <div style={{display: 'flex', alignItems: 'center', gap: 10, marginBottom: 0}}>
+              <span style={{fontWeight: 600, fontSize: 20, color: '#FFD700'}}>Laura</span>
+              <span style={{fontWeight: 500, fontSize: 20, color: '#fff'}}>Paz Canto</span>
             </div>
-            <button className="edit-profile-btn" onClick={handleEditProfile}>
-              Editar perfil
+            <div style={{fontWeight: 500, fontSize: 16, color: '#fff', marginBottom: 8}}>Nivel 1</div>
+            <div style={{display: 'flex', gap: 10, marginBottom: 12}}>
+              <div style={{background: '#292929', borderRadius: 14, padding: '7px 18px', color: '#fff', fontWeight: 500, fontSize: 15}}>Contribuciones (121)</div>
+              <div style={{background: '#292929', borderRadius: 14, padding: '7px 18px', color: '#fff', fontWeight: 500, fontSize: 15}}>Seguidores (53)</div>
+              <div style={{background: '#292929', borderRadius: 14, padding: '7px 18px', color: '#fff', fontWeight: 500, fontSize: 15}}>Seguidos (39)</div>
+            </div>
+            <div style={{fontWeight: 400, fontSize: 15, color: 'rgba(255,255,255,0.6)', marginBottom: 2}}>@laurapaz64</div>
+            <div style={{fontWeight: 400, fontSize: 15, color: '#fff', marginBottom: 2}}>Argentina, esposa y madre. Comerciante y apasionada.</div>
+            <div style={{display: 'flex', gap: 12, marginBottom: 4}}>
+              <a href="#" style={{color: '#fff', fontSize: 18}}><i className="fab fa-instagram"></i></a>
+              <a href="#" style={{color: '#fff', fontSize: 18}}><i className="fab fa-linkedin"></i></a>
+            </div>
+            <div style={{display: 'flex', alignItems: 'center', gap: 12, color: 'rgba(255,255,255,0.6)', fontSize: 13, marginTop: 4}}>
+              <span style={{display: 'flex', alignItems: 'center', gap: 4}}><i className="fas fa-calendar-alt"></i> Se unió el 19 de Mayo de 2024</span>
+              <span style={{display: 'flex', alignItems: 'center', gap: 4}}><i className="fas fa-circle" style={{fontSize: 8, color: '#FFD700'}}></i> Activo hace 10 min</span>
+              <span style={{display: 'flex', alignItems: 'center', gap: 4}}><i className="fas fa-map-marker-alt"></i> Argentina</span>
+            </div>
+          </div>
+        </div>
+        {/* Contribuciones */}
+        <div style={{display: 'flex', alignItems: 'center', marginBottom: 12}}>
+          <div style={{fontWeight: 600, fontSize: 18, color: '#fff', marginRight: 10}}>Contribuciones</div>
+          <div style={{marginLeft: 'auto'}}>
+            <button style={{background: 'linear-gradient(122.63deg, rgba(34,34,34,0.65) 0%, rgba(215,182,21,0.65) 100%)', border: '1px solid #3C3C3C', borderRadius: 50, width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+              <i className="fas fa-sliders-h" style={{color: '#FFD700', fontSize: 16}}></i>
             </button>
           </div>
-
-          <div className="profile-details">
-            <h2>{currentUser?.displayName || 'Usuario'}</h2>
-            <p className="username">@{currentUser?.email?.split('@')[0] || 'usuario'}</p>
-            <p className="bio">
-              Trader profesional | Mentor | Creador de contenido financiero
-              📈 Ayudando a otros a alcanzar la libertad financiera
-            </p>
-            
-            <div className="user-stats">
-              <div className="stat-item">
-                <span className="stat-number">{userStats.posts}</span>
-                <span className="stat-label">Posts</span>
+        </div>
+        <div style={{display: 'flex', flexDirection: 'column', gap: 16}}>
+          {[1,2].map((i) => (
+            <div key={i} style={{background: 'linear-gradient(166.89deg, #222 0%, #3C3C3C 100%)', border: '1px solid #3C3C3C', borderRadius: 18, padding: 24, color: '#fff', boxShadow: '0 2px 12px #0002', maxWidth: 900, margin: '0 auto'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4}}>
+                <img src={currentUser?.photoURL || 'https://randomuser.me/api/portraits/women/44.jpg'} alt="avatar" style={{width: 40, height: 40, borderRadius: 300, border: '1px solid #3C3C3C'}} />
+                <div>
+                  <span style={{fontWeight: 600, fontSize: 16, color: '#fff'}}>Laura Paz</span>
+                  <span style={{color: 'rgba(255,255,255,0.6)', fontWeight: 400, fontSize: 13, marginLeft: 8}}>@laurapaz64</span>
+                </div>
               </div>
-              <div className="stat-item">
-                <span className="stat-number">{userStats.followers}</span>
-                <span className="stat-label">Seguidores</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-number">{userStats.following}</span>
-                <span className="stat-label">Siguiendo</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-number">{userStats.likes}</span>
-                <span className="stat-label">Likes</span>
+              <div style={{fontSize: 15, color: '#fff', marginBottom: 6, fontWeight: 400, fontFamily: 'Poppins'}}>“Nunca juzgamos nuestro presente cuando comprendemos que debemos transitarlo para llegar a donde esperamos”</div>
+              <div style={{display: 'flex', alignItems: 'center', gap: 18, color: 'rgba(255,255,255,0.6)', fontSize: 14}}>
+                <span style={{display: 'flex', alignItems: 'center', gap: 6}}><i className="far fa-heart" style={{fontSize: 15}}></i> 132</span>
+                <span style={{display: 'flex', alignItems: 'center', gap: 6}}><i className="far fa-comment" style={{fontSize: 15}}></i> 0</span>
               </div>
             </div>
-          </div>
+          ))}
         </div>
-      </div>
-
-      {/* Tabs de navegación */}
-      <div className="profile-tabs">
-        <button 
-          className={`tab-button ${activeTab === 'perfil' ? 'active' : ''}`}
-          onClick={() => setActiveTab('perfil')}
-        >
-          <i className="fas fa-th-large"></i>
-          Posts
-        </button>
-        <button 
-          className={`tab-button ${activeTab === 'media' ? 'active' : ''}`}
-          onClick={() => setActiveTab('media')}
-        >
-          <i className="fas fa-play-circle"></i>
-          Media
-        </button>
-        <button 
-          className={`tab-button ${activeTab === 'likes' ? 'active' : ''}`}
-          onClick={() => setActiveTab('likes')}
-        >
-          <i className="fas fa-heart"></i>
-          Likes
-        </button>
-      </div>
-
-      {/* Contenido de las tabs */}
-      <div className="profile-content">
-        {activeTab === 'perfil' && (
-          <div className="posts-grid">
-            {userPosts.map((post) => (
-              <div key={post.id} className="post-item">
-                {post.type === 'image' && (
-                  <div className="post-image">
-                    <img src={post.image} alt="Post" />
-                    <div className="post-overlay">
-                      <div className="post-stats">
-                        <span><i className="fas fa-heart"></i> {post.likes}</span>
-                        <span><i className="fas fa-comment"></i> {post.comments}</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                {post.type === 'video' && (
-                  <div className="post-video">
-                    <img src={post.thumbnail} alt="Video thumbnail" />
-                    <div className="video-indicator">
-                      <i className="fas fa-play"></i>
-                    </div>
-                    <div className="post-overlay">
-                      <div className="post-stats">
-                        <span><i className="fas fa-heart"></i> {post.likes}</span>
-                        <span><i className="fas fa-comment"></i> {post.comments}</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                {post.type === 'text' && (
-                  <div className="post-text">
-                    <p>{post.content}</p>
-                    <div className="post-stats">
-                      <span><i className="fas fa-heart"></i> {post.likes}</span>
-                      <span><i className="fas fa-comment"></i> {post.comments}</span>
-                      <span className="post-date">{post.date}</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-
-        {activeTab === 'media' && (
-          <div className="media-grid">
-            <p>Contenido multimedia próximamente...</p>
-          </div>
-        )}
-
-        {activeTab === 'likes' && (
-          <div className="likes-grid">
-            <p>Posts que te gustaron próximamente...</p>
-          </div>
-        )}
-      </div>
-
-      {/* Botón de logout */}
-      <div className="profile-actions">
-        <button className="logout-button" onClick={handleLogout}>
-          <i className="fas fa-sign-out-alt"></i>
-          Cerrar Sesión
-        </button>
       </div>
     </div>
   );

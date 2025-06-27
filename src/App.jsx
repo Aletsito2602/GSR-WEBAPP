@@ -17,6 +17,7 @@ import { isUserAdmin } from './utils/authUtils';
 import AdminUsersPage from './pages/AdminUsersPage';
 import NotificacionesPage from './pages/NotificacionesPage';
 import UserProfilePage from './pages/UserProfilePage';
+import SettingsPage from './pages/SettingsPage';
 // Las páginas ahora son manejadas por componentes dentro de HomePage
 
 // Componente para Rutas Protegidas
@@ -221,6 +222,14 @@ function App() {
         element={
           <ProtectedRoute>
             <UserProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route 
+        path="/ajustes" 
+        element={
+          <ProtectedRoute>
+            <SettingsPage />
           </ProtectedRoute>
         }
       />

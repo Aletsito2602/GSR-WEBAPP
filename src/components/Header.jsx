@@ -8,10 +8,7 @@ function Header({ onTabClick, currentTab }) {
   const navigate = useNavigate();
 
   const handleSettingsClick = () => {
-    console.log('Configuración clickeada');
-    if (onTabClick) {
-      onTabClick('ajustes');
-    }
+    navigate('/ajustes');
   };
 
   const handleNotificationsClick = () => {
