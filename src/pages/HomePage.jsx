@@ -18,8 +18,9 @@ import VideoInfo from '../components/VideoInfo';
 import Playlist from '../components/Playlist';
 import VideoGallery from '../components/VideoGallery';
 import LevelsPage from '../components/LevelsPage';
-import MapaPage from '../components/MapaPage'; // Importar el nuevo componente de mapa
-import TopNavBar from '../components/TopNavBar';
+  import MapaPage from '../components/MapaPage'; // Importar el nuevo componente de mapa
+  import TopNavBar from '../components/TopNavBar';
+  import Header from '../components/Header';
 
 // Componente para el perfil de usuario (separado para mejor organización)
 function UserProfile({ currentUser }) {
@@ -538,7 +539,7 @@ function HomePage() {
   const [errorStreaming, setErrorStreaming] = useState(null);
   
   // Nuevo estado para la categoría activa
-  const [activeCategory, setActiveCategory] = useState('Chat');
+  const [activeCategory, setActiveCategory] = useState('Todo');
   
   // Nuevo estado para verificar si el usuario es admin
   const [isAdmin, setIsAdmin] = useState(false);
@@ -954,154 +955,281 @@ function HomePage() {
     }
   };
 
-  return (
-    <div style={{ maxWidth: 800, margin: '0 auto' }}>
-      {/* Navegación superior */}
+      return (
+    <div className="homepage-container">
+      {/* Tab Navigation */}
       <TopNavBar />
-      
-      {/* Perfil de usuario */}
-      <UserProfile currentUser={currentUser} />
-      
-
 
       {/* Contenido dinámico según la pestaña activa */}
-      {activeTab === 'comunidad' && (
-        <div>
-          {/* Sub-navegación para categorías en Comunidad */}
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px', gap: '10px' }}>
-            <button 
-              className={`tab-button ${activeCategory === 'Chat' ? 'active' : ''}`}
-              onClick={() => handleCategoryChange('Chat')}
-            >
-              <i className="fas fa-comment" style={{ marginRight: '8px' }}></i>
-              Chat
-            </button>
-            <button 
-              className={`tab-button ${activeCategory === 'Anuncios' ? 'active' : ''}`}
-              onClick={() => handleCategoryChange('Anuncios')}
-            >
-              <i className="fas fa-bullhorn" style={{ marginRight: '8px' }}></i>
-              Anuncios
-            </button>
+        {activeTab === 'comunidad' && (
+          <div key="comunidad" className="tab-panel">
+            {/* Sub-navegación para categorías en Comunidad */}
+            <div className="community-nav">
+              <div className="nav-row">
+                <button 
+                  className={`nav-filter-button ${activeCategory === 'Todo' ? 'active' : ''}`}
+                  onClick={() => handleCategoryChange('Todo')}
+                >
+                  Todo
+                </button>
+                <button 
+                  className={`nav-filter-button ${activeCategory === 'AGM' ? 'active' : ''}`}
+                  onClick={() => handleCategoryChange('AGM')}
+                >
+                  AGM
+                </button>
+                <button 
+                  className={`nav-filter-button ${activeCategory === 'Eventos' ? 'active' : ''}`}
+                  onClick={() => handleCategoryChange('Eventos')}
+                >
+                  Eventos
+                </button>
+                <button 
+                  className={`nav-filter-button ${activeCategory === 'Anuncios' ? 'active' : ''}`}
+                  onClick={() => handleCategoryChange('Anuncios')}
+                >
+                  Anuncios
+                </button>
+                <button 
+                  className={`nav-filter-button ${activeCategory === 'Trading' ? 'active' : ''}`}
+                  onClick={() => handleCategoryChange('Trading')}
+                >
+                  Trading
+                </button>
+                <button className="filter-button">
+                  <i className="fas fa-sliders-h"></i>
+                </button>
+                <button className="week-dropdown">
+                  Semana <i className="fas fa-chevron-down"></i>
+                </button>
+              </div>
+            </div>
+
+            {/* Input para crear posts */}
+            <PostInput onPost={handlePostSubmit} />
+
+            {/* Lista de posts */}
+            <div className="posts-container">
+              {loadingPosts ? (
+                <div className="loading-state">
+                  <i className="fas fa-spinner fa-spin"></i>
+                  <span>Cargando publicaciones...</span>
+                </div>
+              ) : errorPosts ? (
+                <div className="error-state">
+                  <i className="fas fa-exclamation-triangle"></i>
+                  <span>Error: {errorPosts}</span>
+                </div>
+              ) : posts.length === 0 ? (
+                <div className="empty-state">
+                  <i className="fas fa-comments"></i>
+                  <span>No hay publicaciones en esta categoría.</span>
+                </div>
+              ) : (
+                posts.map(post => (
+                  <PostCard 
+                    key={post.id}
+                    post={post}
+                    currentUser={currentUser}
+                    formatTimestamp={formatFirestoreTimestamp}
+                    onPostUpdate={fetchPosts}
+                  />
+                ))
+              )}
+            </div>
           </div>
+        )}
 
-          {/* Input para crear posts */}
-          <PostInput onPost={handlePostSubmit} />
+            {activeTab === 'streaming' && (
+              <div key="streaming" className="tab-panel">
+                <div className="streaming-layout">
+                  <div className="streaming-main">
+                    {/* Header con información de streaming */}
+                    <div className="streaming-header">
+                      <SectionHeader 
+                        title="Mi Legado - Isaac Ramírez" 
+                        subtitle={`${viewers} espectadores en vivo`}
+                      />
+                    </div>
 
-          {/* Lista de posts */}
-          {loadingPosts ? (
-            <div style={{ textAlign: 'center', padding: '20px', color: '#888' }}>
-              Cargando publicaciones...
-            </div>
-          ) : errorPosts ? (
-            <div style={{ textAlign: 'center', padding: '20px', color: '#ff6b6b' }}>
-              Error: {errorPosts}
-            </div>
-          ) : posts.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '20px', color: '#888' }}>
-              No hay publicaciones en esta categoría.
-            </div>
-          ) : (
-            posts.map(post => (
-              <PostCard 
-                key={post.id}
-                post={post}
-                currentUser={currentUser}
-                formatTimestamp={formatFirestoreTimestamp}
-                onPostUpdate={fetchPosts}
-              />
-            ))
-          )}
-        </div>
-      )}
+                    {/* Player de video principal */}
+                    <div className="video-player-container">
+                      <VideoPlayer 
+                        videoUrl={streamingSelectedVideo?.link || "https://vimeo.com/1040149188"}
+                        isLive={!streamingSelectedVideo}
+                      />
+                    </div>
 
-      {activeTab === 'streaming' && (
-        <div className="streaming-layout">
-          <div className="streaming-main">
-            {/* Header con información de streaming */}
-            <div style={{ marginBottom: '20px' }}>
-              <SectionHeader 
-                title="Mi Legado - Isaac Ramírez" 
-                subtitle={`${viewers} espectadores en vivo`}
-              />
-            </div>
+                    {/* Información del video */}
+                    <VideoInfo 
+                      title={streamingSelectedVideo?.title || "Transmisión en vivo"}
+                      description={streamingSelectedVideo?.description || "Contenido educativo en vivo"}
+                      isLive={!streamingSelectedVideo}
+                    />
 
-            {/* Player de video principal */}
-            <div style={{ marginBottom: '20px' }}>
-              <VideoPlayer 
-                videoUrl={streamingSelectedVideo?.link || "https://vimeo.com/1040149188"}
-                isLive={!streamingSelectedVideo}
-              />
-            </div>
+                    {/* Chat en vivo */}
+                    <LiveChat db={db} currentUser={currentUser} />
+                  </div>
 
-            {/* Información del video */}
-            <VideoInfo 
-              title={streamingSelectedVideo?.title || "Transmisión en vivo"}
-              description={streamingSelectedVideo?.description || "Contenido educativo en vivo"}
-              isLive={!streamingSelectedVideo}
-            />
+                  {/* Playlist lateral */}
+                  <div className="streaming-playlist">
+                    <Playlist 
+                      videos={streamingPlaylistVideos}
+                      selectedVideo={streamingSelectedVideo}
+                      onVideoSelect={setStreamingSelectedVideo}
+                      isLoading={isLoadingStreaming}
+                      error={errorStreaming}
+                      recordedClasses={recordedClasses}
+                      loadingClasses={loadingClasses}
+                      errorClasses={errorClasses}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
 
-            {/* Chat en vivo */}
-            <LiveChat db={db} currentUser={currentUser} />
-          </div>
+            {activeTab === 'clases' && (
+              <div key="clases" className="tab-panel">
+                <SectionHeader 
+                  title="Clases Disponibles" 
+                  subtitle="Explora nuestro contenido educativo"
+                />
+                <VideoGallery 
+                  videos={recordedClasses}
+                  isLoading={loadingClasses}
+                  error={errorClasses}
+                />
+              </div>
+            )}
 
-          {/* Playlist lateral */}
-          <div className="streaming-playlist">
-            <Playlist 
-              videos={streamingPlaylistVideos}
-              selectedVideo={streamingSelectedVideo}
-              onVideoSelect={setStreamingSelectedVideo}
-              isLoading={isLoadingStreaming}
-              error={errorStreaming}
-              recordedClasses={recordedClasses}
-              loadingClasses={loadingClasses}
-              errorClasses={errorClasses}
-            />
-          </div>
-        </div>
-      )}
+            {activeTab === 'miembros' && (
+              <div key="miembros" className="tab-panel">
+                <SectionHeader 
+                  title="Miembros de la Comunidad" 
+                  subtitle="Directorio de miembros activos"
+                />
+                <div className="members-placeholder">
+                  <i className="fas fa-user-friends"></i>
+                  <h3>Directorio de Miembros</h3>
+                  <p>Aquí podrás ver todos los miembros de la comunidad educativa.</p>
+                </div>
+              </div>
+            )}
 
-      {activeTab === 'clases' && (
-        <div>
-          <SectionHeader 
-            title="Clases Disponibles" 
-            subtitle="Explora nuestro contenido educativo"
-          />
-          <VideoGallery 
-            videos={recordedClasses}
-            isLoading={loadingClasses}
-            error={errorClasses}
-          />
-        </div>
-      )}
+            {activeTab === 'niveles' && (
+              <div key="niveles" className="tab-panel">
+                <LevelsPage posts={posts} />
+              </div>
+            )}
 
-      {activeTab === 'mapa' && (
-        <MapaPage />
-      )}
+            {activeTab === 'calendario' && (
+              <div key="calendario" className="tab-panel">
+                <SectionHeader 
+                  title="Calendario de Eventos" 
+                  subtitle="Próximas clases y eventos"
+                />
+                <div className="calendar-placeholder">
+                  <i className="fas fa-calendar-alt"></i>
+                  <h3>Calendario en desarrollo</h3>
+                  <p>Próximamente podrás ver todas las clases y eventos programados.</p>
+                </div>
+              </div>
+            )}
 
-      {activeTab === 'niveles' && (
-        <LevelsPage posts={posts} />
-      )}
+            {activeTab === 'acerca' && (
+              <div key="acerca" className="tab-panel">
+                <SectionHeader 
+                  title="Acerca de Golden Suite Room" 
+                  subtitle="Información sobre nuestra plataforma educativa"
+                />
+                <div className="about-content">
+                  <div className="info-card">
+                    <i className="fas fa-graduation-cap"></i>
+                    <h3>Nuestra Misión</h3>
+                    <p>Brindar educación de calidad y crear una comunidad de aprendizaje donde todos puedan crecer y desarrollarse.</p>
+                  </div>
+                  <div className="info-card">
+                    <i className="fas fa-users"></i>
+                    <h3>Comunidad</h3>
+                    <p>Más de 1000 estudiantes activos participando en nuestras clases y eventos en línea.</p>
+                  </div>
+                  <div className="info-card">
+                    <i className="fas fa-medal"></i>
+                    <h3>Excelencia</h3>
+                    <p>Comprometidos con ofrecer contenido educativo de la más alta calidad.</p>
+                  </div>
+                </div>
+              </div>
+            )}
 
-      {activeTab === 'calendario' && (
-        <div>
-          <SectionHeader 
-            title="Calendario de Eventos" 
-            subtitle="Próximas clases y eventos"
-          />
-          <div style={{ 
-            background: '#232323', 
-            borderRadius: 12, 
-            padding: '20px', 
-            textAlign: 'center',
-            color: '#888'
-          }}>
-            <i className="fas fa-calendar-alt" style={{ fontSize: '3rem', marginBottom: '20px', color: '#D7B615' }}></i>
-            <h3 style={{ color: '#fff', marginBottom: '10px' }}>Calendario en desarrollo</h3>
-            <p>Próximamente podrás ver todas las clases y eventos programados.</p>
-          </div>
-        </div>
-      )}
+            {activeTab === 'ajustes' && (
+              <div key="ajustes" className="tab-panel">
+                <SectionHeader 
+                  title="Configuración de Cuenta" 
+                  subtitle="Personaliza tu experiencia"
+                />
+                {/* Aquí va el UserProfile para configuración */}
+                <UserProfile currentUser={currentUser} />
+                
+                <div className="settings-sections">
+                  <div className="settings-card">
+                    <h3><i className="fas fa-bell"></i> Notificaciones</h3>
+                    <p>Configura cómo quieres recibir notificaciones sobre nuevas clases y eventos.</p>
+                    <div className="settings-options">
+                      <label>
+                        <input type="checkbox" defaultChecked />
+                        <span>Notificaciones de nuevas clases</span>
+                      </label>
+                      <label>
+                        <input type="checkbox" defaultChecked />
+                        <span>Recordatorios de eventos</span>
+                      </label>
+                      <label>
+                        <input type="checkbox" />
+                        <span>Notificaciones de chat</span>
+                      </label>
+                    </div>
+                  </div>
+                  
+                  <div className="settings-card">
+                    <h3><i className="fas fa-palette"></i> Apariencia</h3>
+                    <p>Personaliza la apariencia de la plataforma.</p>
+                    <div className="settings-options">
+                      <label>
+                        <input type="radio" name="theme" defaultChecked />
+                        <span>Tema oscuro</span>
+                      </label>
+                      <label>
+                        <input type="radio" name="theme" />
+                        <span>Tema claro</span>
+                      </label>
+                    </div>
+                  </div>
+                  
+                  <div className="settings-card">
+                    <h3><i className="fas fa-sign-out-alt"></i> Sesión</h3>
+                    <p>Administra tu sesión en la plataforma.</p>
+                    <button 
+                      onClick={() => {
+                        import('../firebaseConfig').then(({ auth }) => {
+                          import('firebase/auth').then(({ signOut }) => {
+                            signOut(auth).then(() => {
+                              navigate('/login');
+                            }).catch((error) => {
+                              console.error("Error al cerrar sesión:", error);
+                            });
+                          });
+                        });
+                      }}
+                      className="logout-button"
+                    >
+                      <i className="fas fa-sign-out-alt"></i>
+                      Cerrar Sesión
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
     </div>
   );
 }

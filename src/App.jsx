@@ -14,10 +14,10 @@ import useMediaQuery from './hooks/useMediaQuery';
 import { db } from './firebaseConfig';
 import { enableIndexedDbPersistence, collection, getDocs, query, limit } from 'firebase/firestore';
 import { isUserAdmin } from './utils/authUtils';
-import ClasesPage from './pages/ClasesPage';
-import StreamingPage from './pages/StreamingPage';
-import CalendarioPage from './pages/CalendarioPage';
-import InfoPage from './pages/InfoPage';
+import AdminUsersPage from './pages/AdminUsersPage';
+import NotificacionesPage from './pages/NotificacionesPage';
+import UserProfilePage from './pages/UserProfilePage';
+// Las páginas ahora son manejadas por componentes dentro de HomePage
 
 // Componente para Rutas Protegidas
 function ProtectedRoute({ children }) {
@@ -155,44 +155,12 @@ function App() {
         element={currentUser ? <Navigate to="/" replace /> : <LoginPage />} 
       />
 
-      {/* Rutas Protegidas */}
+      {/* Rutas Protegidas - Todo maneja a través de HomePage con parámetros */}
       <Route 
         path="/" 
         element={
           <ProtectedRoute>
             <HomePage />
-          </ProtectedRoute>
-        }
-      />
-      <Route 
-        path="/clases" 
-        element={
-          <ProtectedRoute>
-            <ClasesPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route 
-        path="/streaming" 
-        element={
-          <ProtectedRoute>
-            <StreamingPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route 
-        path="/calendario" 
-        element={
-          <ProtectedRoute>
-            <CalendarioPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route 
-        path="/info" 
-        element={
-          <ProtectedRoute>
-            <InfoPage />
           </ProtectedRoute>
         }
       />
@@ -236,6 +204,24 @@ function App() {
           <AdminRoute>
             <ClientesPage />
           </AdminRoute>
+        }
+      />
+
+      {/* Rutas adicionales */}
+      <Route 
+        path="/notificaciones" 
+        element={
+          <ProtectedRoute>
+            <NotificacionesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route 
+        path="/perfil" 
+        element={
+          <ProtectedRoute>
+            <UserProfilePage />
+          </ProtectedRoute>
         }
       />
 

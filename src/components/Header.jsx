@@ -1,57 +1,66 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import { auth } from '../firebaseConfig';
-import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import './TopNavBar.css';
 
-function Header({ isMobile }) { 
+function Header({ onTabClick, currentTab }) {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      navigate('/login');
-    } catch (error) {
-      console.error("Error al cerrar sesión:", error);
+  const handleSettingsClick = () => {
+    console.log('Configuración clickeada');
+    if (onTabClick) {
+      onTabClick('ajustes');
     }
   };
 
+  const handleNotificationsClick = () => {
+    console.log('Notificaciones clickeadas');
+    navigate('/notificaciones');
+  };
+
+  const handleAvatarClick = () => {
+    console.log('Avatar clickeado');
+    navigate('/perfil');
+  };
+
   return (
-    <header style={{ 
-      background: '#282828', 
-      padding: '10px 20px',
-      display: 'flex', 
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      borderBottom: '1px solid #353535',
-      position: 'sticky',
-      top: 0,
-      zIndex: 200
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <span style={{ fontWeight: 'bold', color: 'rgba(255, 255, 255, 0.87)' }}>Mi Legado</span>
+    <header className="header">
+      <div className="logo-container">
+        <div className="logo-text">Golden Suite</div>
       </div>
       
-      {/* Mostrar botón de Logout si hay usuario */}
-      {currentUser && (
+      <div className="header-actions">
         <button 
-          onClick={handleLogout} 
-          style={{ 
-            marginLeft: 'auto',
-            background: 'transparent',
-            border: '1px solid #D7B615',
-            borderRadius: '5px',
-            color: '#D7B615',
-            padding: '5px 10px',
-            cursor: 'pointer',
-            fontSize: '0.9rem'
-          }}
+          className="header-icon-btn"
+          onClick={handleNotificationsClick}
+          title="Notificaciones"
         >
-          <i className="fas fa-sign-out-alt" style={{ marginRight: '5px' }}></i>
-          Cerrar Sesión
+          🔔
         </button>
-      )}
+        
+        <button 
+          className="header-icon-btn"
+          onClick={handleSettingsClick}
+          title="Configuración"
+        >
+          ⚙️
+        </button>
+        
+        <button 
+          className="header-avatar-btn"
+          onClick={handleAvatarClick}
+          title="Mi Perfil"
+        >
+          {currentUser?.photoURL ? (
+            <img src={currentUser.photoURL} alt="Avatar" className="avatar-image" />
+          ) : (
+            <div className="avatar-placeholder">
+              {currentUser?.displayName?.charAt(0) || currentUser?.email?.charAt(0) || '👤'}
+            </div>
+          )}
+        </button>
+      </div>
     </header>
   );
 }
