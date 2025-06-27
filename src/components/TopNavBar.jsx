@@ -18,7 +18,6 @@ const TopNavBar = () => {
     { tab: 'miembros', label: 'Miembros', icon: 'fas fa-user-friends' },
     { tab: 'niveles', label: 'Niveles', icon: 'fas fa-medal' },
     { tab: 'acerca', label: 'Acerca De', icon: 'fas fa-info-circle' },
-    { tab: 'ajustes', label: 'Ajustes', icon: 'fas fa-cog' },
   ];
 
   const handleTabClick = (tab) => {

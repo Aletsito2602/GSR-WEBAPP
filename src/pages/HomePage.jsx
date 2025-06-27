@@ -17,10 +17,79 @@ import VideoPlayer from '../components/VideoPlayer';
 import VideoInfo from '../components/VideoInfo';
 import Playlist from '../components/Playlist';
 import VideoGallery from '../components/VideoGallery';
-import LevelsPage from '../components/LevelsPage';
-  import MapaPage from '../components/MapaPage'; // Importar el nuevo componente de mapa
-  import TopNavBar from '../components/TopNavBar';
-  import Header from '../components/Header';
+import NivelesPageNuevo from '../components/NivelesPageNuevo'; // Importar el nuevo componente
+import MapaPage from '../components/MapaPage'; // Importar el nuevo componente de mapa
+import TopNavBar from '../components/TopNavBar';
+import Header from '../components/Header';
+import CalendarioPage from './CalendarioPage'; // Importar la página de calendario
+import MembersPage from './MembersPage'; // Importar la página de miembros
+import AboutPage from './AboutPage'; // Importar AboutPage
+
+// Componente para el feed de la comunidad
+const CommunityFeed = ({ 
+    activeCategory, 
+    handleCategoryChange, 
+    onPost, 
+    loading, 
+    error, 
+    posts = [],
+    currentUser, 
+    formatTimestamp,
+    onPostUpdate 
+}) => (
+    <div key="comunidad" className="tab-panel">
+        <div className="community-nav">
+            <div className="nav-row">
+                {['Todo', 'AGM', 'Eventos', 'Anuncios', 'Trading'].map(category => (
+                    <button
+                        key={category}
+                        className={`nav-filter-button ${activeCategory === category ? 'active' : ''}`}
+                        onClick={() => handleCategoryChange(category)}
+                    >
+                        {category}
+                    </button>
+                ))}
+                <button className="filter-button">
+                    <i className="fas fa-sliders-h"></i>
+                </button>
+                <button className="week-dropdown">
+                    Semana <i className="fas fa-chevron-down"></i>
+                </button>
+            </div>
+        </div>
+
+        <PostInput onPost={onPost} />
+
+        <div className="posts-container">
+            {loading ? (
+                <div className="loading-state">
+                    <i className="fas fa-spinner fa-spin"></i>
+                    <span>Cargando publicaciones...</span>
+                </div>
+            ) : error ? (
+                <div className="error-state">
+                    <i className="fas fa-exclamation-triangle"></i>
+                    <span>Error: {error}</span>
+                </div>
+            ) : posts.length === 0 ? (
+                <div className="empty-state">
+                    <i className="fas fa-comments"></i>
+                    <span>No hay publicaciones en esta categoría.</span>
+                </div>
+            ) : (
+                posts.map(post => (
+                    <PostCard
+                        key={post.id}
+                        post={post}
+                        currentUser={currentUser}
+                        formatTimestamp={formatTimestamp}
+                        onPostUpdate={onPostUpdate}
+                    />
+                ))
+            )}
+        </div>
+    </div>
+);
 
 // Componente para el perfil de usuario (separado para mejor organización)
 function UserProfile({ currentUser }) {
@@ -523,7 +592,9 @@ function HomePage() {
   
   // Escuchar cambios en la URL para actualizar la pestaña activa
   useEffect(() => {
-    setActiveTab(getInitialTab());
+    const params = new URLSearchParams(location.search);
+    const tabParam = params.get('tab') || 'comunidad';
+    setActiveTab(tabParam);
   }, [location.search]);
 
   // <<< NUEVO ESTADO para posts >>>
@@ -542,7 +613,7 @@ function HomePage() {
   const [activeCategory, setActiveCategory] = useState('Todo');
   
   // Nuevo estado para verificar si el usuario es admin
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(null);
 
   // Estado para las clases grabadas (videos de la carpeta Vimeo)
   const [recordedClasses, setRecordedClasses] = useState([]);
@@ -955,281 +1026,88 @@ function HomePage() {
     }
   };
 
-      return (
+  if (isAdmin === null) {
+    return <div>Cargando...</div>; 
+  }
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'comunidad':
+        return <CommunityFeed 
+          activeCategory={activeCategory}
+          handleCategoryChange={handleCategoryChange}
+          onPost={handlePostSubmit}
+          loading={loadingPosts}
+          error={errorPosts}
+          posts={posts}
+          currentUser={currentUser}
+          formatTimestamp={formatFirestoreTimestamp}
+          onPostUpdate={fetchPosts}
+        />;
+      case 'clases':
+        return <VideoGallery videos={recordedClasses} />;
+      case 'streaming':
+        return (
+          <div key="streaming" className="tab-panel" style={{ maxWidth: '1200px', margin: '20px auto', padding: '0 20px', fontFamily: 'Poppins, sans-serif' }}>
+            <h2 style={{ color: '#fff', marginBottom: '24px' }}>Disfruta del contenido en vivo</h2>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px', alignItems: 'start' }}>
+              {/* Columna Izquierda: Player + Info */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <VideoPlayer 
+                  videoUrl={streamingSelectedVideo?.link || "https://vimeo.com/1040149188"}
+                  isLive={!streamingSelectedVideo}
+                />
+                <VideoInfo 
+                  title={streamingSelectedVideo?.title || "Estrategias trading para potenciar tus operaciones"}
+                  isLive={!streamingSelectedVideo}
+                />
+              </div>
+
+              {/* Columna Derecha: Chat */}
+              <LiveChat db={db} currentUser={currentUser} />
+            </div>
+
+            {/* Sección de Lives Grabados */}
+            <div style={{ marginTop: '48px' }}>
+                <h2 style={{ color: '#D7B615', fontSize: '24px' }}>Lives grabados</h2>
+                <p style={{color: '#ccc', marginTop: '-10px'}}>¡Vuelve a mirar el contenido!<br/>Al termino de la transmisión aparecerán los lives grabados en la siguiente sección :</p>
+                <VideoGallery videos={recordedClasses} />
+            </div>
+
+          </div>
+        );
+      case 'calendario':
+        return <CalendarioPage />;
+      case 'niveles':
+        return <NivelesPageNuevo />;
+      case 'miembros':
+        return <MembersPage />;
+      case 'acerca':
+        return <AboutPage />;
+      default:
+        return <CommunityFeed 
+          activeCategory={activeCategory}
+          handleCategoryChange={handleCategoryChange}
+          onPost={handlePostSubmit}
+          loading={loadingPosts}
+          error={errorPosts}
+          posts={posts}
+          currentUser={currentUser}
+          formatTimestamp={formatFirestoreTimestamp}
+          onPostUpdate={fetchPosts}
+        />;
+    }
+  };
+
+  return (
     <div className="homepage-container">
       {/* Tab Navigation */}
       <TopNavBar />
-
-      {/* Contenido dinámico según la pestaña activa */}
-        {activeTab === 'comunidad' && (
-          <div key="comunidad" className="tab-panel">
-            {/* Sub-navegación para categorías en Comunidad */}
-            <div className="community-nav">
-              <div className="nav-row">
-                <button 
-                  className={`nav-filter-button ${activeCategory === 'Todo' ? 'active' : ''}`}
-                  onClick={() => handleCategoryChange('Todo')}
-                >
-                  Todo
-                </button>
-                <button 
-                  className={`nav-filter-button ${activeCategory === 'AGM' ? 'active' : ''}`}
-                  onClick={() => handleCategoryChange('AGM')}
-                >
-                  AGM
-                </button>
-                <button 
-                  className={`nav-filter-button ${activeCategory === 'Eventos' ? 'active' : ''}`}
-                  onClick={() => handleCategoryChange('Eventos')}
-                >
-                  Eventos
-                </button>
-                <button 
-                  className={`nav-filter-button ${activeCategory === 'Anuncios' ? 'active' : ''}`}
-                  onClick={() => handleCategoryChange('Anuncios')}
-                >
-                  Anuncios
-                </button>
-                <button 
-                  className={`nav-filter-button ${activeCategory === 'Trading' ? 'active' : ''}`}
-                  onClick={() => handleCategoryChange('Trading')}
-                >
-                  Trading
-                </button>
-                <button className="filter-button">
-                  <i className="fas fa-sliders-h"></i>
-                </button>
-                <button className="week-dropdown">
-                  Semana <i className="fas fa-chevron-down"></i>
-                </button>
-              </div>
-            </div>
-
-            {/* Input para crear posts */}
-            <PostInput onPost={handlePostSubmit} />
-
-            {/* Lista de posts */}
-            <div className="posts-container">
-              {loadingPosts ? (
-                <div className="loading-state">
-                  <i className="fas fa-spinner fa-spin"></i>
-                  <span>Cargando publicaciones...</span>
-                </div>
-              ) : errorPosts ? (
-                <div className="error-state">
-                  <i className="fas fa-exclamation-triangle"></i>
-                  <span>Error: {errorPosts}</span>
-                </div>
-              ) : posts.length === 0 ? (
-                <div className="empty-state">
-                  <i className="fas fa-comments"></i>
-                  <span>No hay publicaciones en esta categoría.</span>
-                </div>
-              ) : (
-                posts.map(post => (
-                  <PostCard 
-                    key={post.id}
-                    post={post}
-                    currentUser={currentUser}
-                    formatTimestamp={formatFirestoreTimestamp}
-                    onPostUpdate={fetchPosts}
-                  />
-                ))
-              )}
-            </div>
-          </div>
-        )}
-
-            {activeTab === 'streaming' && (
-              <div key="streaming" className="tab-panel">
-                <div className="streaming-layout">
-                  <div className="streaming-main">
-                    {/* Header con información de streaming */}
-                    <div className="streaming-header">
-                      <SectionHeader 
-                        title="Mi Legado - Isaac Ramírez" 
-                        subtitle={`${viewers} espectadores en vivo`}
-                      />
-                    </div>
-
-                    {/* Player de video principal */}
-                    <div className="video-player-container">
-                      <VideoPlayer 
-                        videoUrl={streamingSelectedVideo?.link || "https://vimeo.com/1040149188"}
-                        isLive={!streamingSelectedVideo}
-                      />
-                    </div>
-
-                    {/* Información del video */}
-                    <VideoInfo 
-                      title={streamingSelectedVideo?.title || "Transmisión en vivo"}
-                      description={streamingSelectedVideo?.description || "Contenido educativo en vivo"}
-                      isLive={!streamingSelectedVideo}
-                    />
-
-                    {/* Chat en vivo */}
-                    <LiveChat db={db} currentUser={currentUser} />
-                  </div>
-
-                  {/* Playlist lateral */}
-                  <div className="streaming-playlist">
-                    <Playlist 
-                      videos={streamingPlaylistVideos}
-                      selectedVideo={streamingSelectedVideo}
-                      onVideoSelect={setStreamingSelectedVideo}
-                      isLoading={isLoadingStreaming}
-                      error={errorStreaming}
-                      recordedClasses={recordedClasses}
-                      loadingClasses={loadingClasses}
-                      errorClasses={errorClasses}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeTab === 'clases' && (
-              <div key="clases" className="tab-panel">
-                <SectionHeader 
-                  title="Clases Disponibles" 
-                  subtitle="Explora nuestro contenido educativo"
-                />
-                <VideoGallery 
-                  videos={recordedClasses}
-                  isLoading={loadingClasses}
-                  error={errorClasses}
-                />
-              </div>
-            )}
-
-            {activeTab === 'miembros' && (
-              <div key="miembros" className="tab-panel">
-                <SectionHeader 
-                  title="Miembros de la Comunidad" 
-                  subtitle="Directorio de miembros activos"
-                />
-                <div className="members-placeholder">
-                  <i className="fas fa-user-friends"></i>
-                  <h3>Directorio de Miembros</h3>
-                  <p>Aquí podrás ver todos los miembros de la comunidad educativa.</p>
-                </div>
-              </div>
-            )}
-
-            {activeTab === 'niveles' && (
-              <div key="niveles" className="tab-panel">
-                <LevelsPage posts={posts} />
-              </div>
-            )}
-
-            {activeTab === 'calendario' && (
-              <div key="calendario" className="tab-panel">
-                <SectionHeader 
-                  title="Calendario de Eventos" 
-                  subtitle="Próximas clases y eventos"
-                />
-                <div className="calendar-placeholder">
-                  <i className="fas fa-calendar-alt"></i>
-                  <h3>Calendario en desarrollo</h3>
-                  <p>Próximamente podrás ver todas las clases y eventos programados.</p>
-                </div>
-              </div>
-            )}
-
-            {activeTab === 'acerca' && (
-              <div key="acerca" className="tab-panel">
-                <SectionHeader 
-                  title="Acerca de Golden Suite Room" 
-                  subtitle="Información sobre nuestra plataforma educativa"
-                />
-                <div className="about-content">
-                  <div className="info-card">
-                    <i className="fas fa-graduation-cap"></i>
-                    <h3>Nuestra Misión</h3>
-                    <p>Brindar educación de calidad y crear una comunidad de aprendizaje donde todos puedan crecer y desarrollarse.</p>
-                  </div>
-                  <div className="info-card">
-                    <i className="fas fa-users"></i>
-                    <h3>Comunidad</h3>
-                    <p>Más de 1000 estudiantes activos participando en nuestras clases y eventos en línea.</p>
-                  </div>
-                  <div className="info-card">
-                    <i className="fas fa-medal"></i>
-                    <h3>Excelencia</h3>
-                    <p>Comprometidos con ofrecer contenido educativo de la más alta calidad.</p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeTab === 'ajustes' && (
-              <div key="ajustes" className="tab-panel">
-                <SectionHeader 
-                  title="Configuración de Cuenta" 
-                  subtitle="Personaliza tu experiencia"
-                />
-                {/* Aquí va el UserProfile para configuración */}
-                <UserProfile currentUser={currentUser} />
-                
-                <div className="settings-sections">
-                  <div className="settings-card">
-                    <h3><i className="fas fa-bell"></i> Notificaciones</h3>
-                    <p>Configura cómo quieres recibir notificaciones sobre nuevas clases y eventos.</p>
-                    <div className="settings-options">
-                      <label>
-                        <input type="checkbox" defaultChecked />
-                        <span>Notificaciones de nuevas clases</span>
-                      </label>
-                      <label>
-                        <input type="checkbox" defaultChecked />
-                        <span>Recordatorios de eventos</span>
-                      </label>
-                      <label>
-                        <input type="checkbox" />
-                        <span>Notificaciones de chat</span>
-                      </label>
-                    </div>
-                  </div>
-                  
-                  <div className="settings-card">
-                    <h3><i className="fas fa-palette"></i> Apariencia</h3>
-                    <p>Personaliza la apariencia de la plataforma.</p>
-                    <div className="settings-options">
-                      <label>
-                        <input type="radio" name="theme" defaultChecked />
-                        <span>Tema oscuro</span>
-                      </label>
-                      <label>
-                        <input type="radio" name="theme" />
-                        <span>Tema claro</span>
-                      </label>
-                    </div>
-                  </div>
-                  
-                  <div className="settings-card">
-                    <h3><i className="fas fa-sign-out-alt"></i> Sesión</h3>
-                    <p>Administra tu sesión en la plataforma.</p>
-                    <button 
-                      onClick={() => {
-                        import('../firebaseConfig').then(({ auth }) => {
-                          import('firebase/auth').then(({ signOut }) => {
-                            signOut(auth).then(() => {
-                              navigate('/login');
-                            }).catch((error) => {
-                              console.error("Error al cerrar sesión:", error);
-                            });
-                          });
-                        });
-                      }}
-                      className="logout-button"
-                    >
-                      <i className="fas fa-sign-out-alt"></i>
-                      Cerrar Sesión
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
+      <div className="homepage-content">
+        {/* Contenido dinámico según la pestaña activa */}
+        {renderContent()}
+      </div>
     </div>
   );
 }

@@ -1376,3 +1376,77 @@
   margin-right: auto;
   max-width: var(--max-content-width);
 }
+
+/* === Estilos para campos de perfil en dos columnas === */
+.profile-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.profile-row {
+  display: flex;
+  gap: 24px;
+}
+
+.profile-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.profile-field label {
+  color: #a18a51;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.profile-field input,
+.profile-field textarea {
+  background: #232323;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  padding: 10px 14px;
+  font-size: 15px;
+  outline: none;
+  resize: none;
+}
+
+.save-btn {
+  padding: 10px 15px;
+  background: linear-gradient(90deg, #D7B615, #f0c040);
+  color: #222;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+.save-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.cancel-btn {
+  padding: 10px 15px;
+  background: #666;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.cancel-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+@media (max-width: 700px) {
+  .profile-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+}

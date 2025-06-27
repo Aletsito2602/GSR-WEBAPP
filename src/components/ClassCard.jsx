@@ -1,132 +1,66 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { FaPlay, FaHeart } from 'react-icons/fa';
 
-function ClassCard({ classInfo }) {
-  const cardStyle = {
-    backgroundColor: '#353535',
-    borderRadius: '8px',
-    marginBottom: '20px',
-    overflow: 'hidden', // Para que el borde redondeado afecte a la imagen
-    display: 'flex', // Usar flex para imagen y contenido
-    color: 'rgba(255, 255, 255, 0.87)'
-  };
+const ProgressBar = ({ progress }) => (
+  <div style={{ width: '100%', background: '#444', borderRadius: '4px', height: '6px', marginTop: 'auto' }}>
+    <div style={{ width: `${progress || 0}%`, background: 'linear-gradient(90deg, #D7B615, #F0D042)', height: '100%', borderRadius: '4px' }}></div>
+  </div>
+);
 
-  const thumbnailContainerStyle = {
-    flexShrink: 0, // Evitar que la imagen se encoja
-    width: '40%', // Ancho relativo para la imagen
-    position: 'relative', // Para posicionar iconos sobre la imagen
-    cursor: 'pointer'
-  };
-
-  const thumbnailStyle = {
-    display: 'block',
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover' // Ajustar imagen
-  };
-  
-  const playButtonStyle = {
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      backgroundColor: 'rgba(255, 255, 255, 0.8)',
-      color: '#222',
-      borderRadius: '50%',
-      width: '50px',
-      height: '50px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontSize: '1.5em',
-      border: 'none'
-  };
-
-  const heartIconStyle = {
-      position: 'absolute',
-      top: '10px',
-      right: '10px',
-      color: 'white', // Cambiar color si es favorito
-      fontSize: '1.5em',
-      cursor: 'pointer'
-  };
-
-  const contentStyle = {
-    padding: '20px',
-    flexGrow: 1, // Ocupar espacio restante
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between' // Espacio entre título/progreso y descarga
-  };
-
-  const titleStyle = {
-    fontWeight: 'bold',
-    fontSize: '1.2em',
-    color: 'white',
-    marginBottom: '5px'
-  };
-
-  const durationStyle = {
-    fontSize: '0.9em',
-    color: 'rgba(255, 255, 255, 0.7)',
-    marginBottom: '15px'
-  };
-
-  const progressContainerStyle = {
-    backgroundColor: '#555',
-    borderRadius: '5px',
-    height: '8px',
-    overflow: 'hidden',
-    marginBottom: '5px'
-  };
-
-  const progressBarStyle = {
-    backgroundColor: '#D7B615', // Color dorado para progreso
-    height: '100%',
-    width: `${classInfo.progress || 0}%` // Ancho basado en progreso
-  };
-  
-  const progressTextStyle = {
-      fontSize: '0.8em',
-      color: 'rgba(255, 255, 255, 0.6)',
-      marginBottom: '15px'
-  };
-
-  const downloadIconStyle = {
-    alignSelf: 'flex-end', // Alinear icono a la derecha
-    color: '#aaa',
-    border: '1px solid #555',
-    borderRadius: '50%',
-    padding: '5px',
-    cursor: 'pointer',
-    fontSize: '1.2em'
-  };
-
+function ClassCard({ id, title, description, progress, imageUrl }) {
   return (
-    <Link to={`/clases/${classInfo.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-      <div style={cardStyle} className="class-card">
-        <div style={thumbnailContainerStyle} className="thumbnail-container">
-          <img 
-            src={classInfo.thumbnailUrl || 'https://placehold.co/600x400/444/ccc?text=Clase'}
-            alt={classInfo.title} 
-            style={thumbnailStyle} 
-          />
-          <span style={heartIconStyle}>♡</span>
-        </div>
-        <div style={contentStyle} className="class-content">
-          <div>
-            <div style={titleStyle} className="class-title">{classInfo.title}</div>
-            <div style={durationStyle} className="class-duration">{classInfo.duration}</div>
-            <div style={progressContainerStyle}>
-              <div style={progressBarStyle}></div>
+    <Link to={`/clases/${id}`} style={{ textDecoration: 'none' }}>
+      <div style={{
+        background: '#2c2c2c',
+        borderRadius: '16px',
+        overflow: 'hidden',
+        color: '#fff',
+        fontFamily: 'Poppins, sans-serif',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        <div style={{ position: 'relative' }}>
+          <img src={imageUrl || 'https://placehold.co/600x400/2c2c2c/fff?text=Clase'} alt={title} style={{ width: '100%', height: '180px', objectFit: 'cover' }} />
+          <div style={{ 
+            position: 'absolute', 
+            top: 0, 
+            left: 0, 
+            right: 0, 
+            bottom: 0, 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            background: 'rgba(0,0,0,0.3)'
+          }}>
+            <div style={{
+              background: 'rgba(255,255,255,0.2)',
+              border: '1px solid #fff',
+              color: '#fff',
+              borderRadius: '50%',
+              width: '50px',
+              height: '50px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <FaPlay size={20} />
             </div>
-            <div style={progressTextStyle} className="progress-text">{classInfo.progress || 0}% completado</div>
           </div>
-          <span style={downloadIconStyle} className="download-icon">↓</span>
+          <div style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(0,0,0,0.5)', borderRadius: '50%', padding: '8px', cursor: 'pointer' }}>
+            <FaHeart color="#D7B615" />
+          </div>
+        </div>
+        <div style={{ padding: '16px', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+          <h3 style={{ marginTop: 0, marginBottom: '8px', fontSize: '1.1rem' }}>{title}</h3>
+          <p style={{ color: '#aaa', fontSize: '14px', marginBottom: '16px', flexGrow: 1 }}>{description}</p>
+          <ProgressBar progress={progress} />
+          <p style={{ color: '#aaa', fontSize: '12px', marginTop: '8px', textAlign: 'right', marginBlockEnd: 0 }}>{progress || 0}% completado</p>
         </div>
       </div>
     </Link>
   );
-}
+};
 
 export default ClassCard; 

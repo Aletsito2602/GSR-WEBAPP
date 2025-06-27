@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './TopNavBar.css';
 
 function Header({ onTabClick, currentTab }) {
@@ -24,7 +24,11 @@ function Header({ onTabClick, currentTab }) {
   return (
     <header className="header">
       <div className="logo-container">
-        <div className="logo-text">Golden Suite</div>
+        <Link to="/" style={{ textDecoration: 'none' }}>
+          <div className="logo-text" style={{ color: '#FFFFFF' }}>
+            Golden Suite
+          </div>
+        </Link>
       </div>
       
       <div className="header-actions">

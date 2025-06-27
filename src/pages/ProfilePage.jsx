@@ -1,449 +1,299 @@
 import React, { useState, useEffect } from 'react';
+import { FaChevronDown, FaEdit, FaMapMarkerAlt, FaPenSquare } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
-import SectionHeader from '../components/SectionHeader';
-import { initializeUserDocument, testFirestoreConnection } from '../utils/initFirestore';
-import ImageUploader from '../components/ImageUploader';
+import { db } from '../firebaseConfig';
+import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 
-function ProfilePage() {
-  const { currentUser, userProfile, updateUserProfile } = useAuth();
-  const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    displayName: '',
-    bio: '',
-    location: '',
-    website: '',
-    phoneNumber: ''
+function SettingsPage() { // Renombrado para mayor claridad
+  
+  // Simulación de datos estáticos para el diseño
+  const profileData = {
+    firstName: 'Laura',
+    lastName: 'Paz Rejón',
+    phone: '1123456789',
+    email: 'laurapaz@gmail.com',
+    username: '@laurapaz64',
+    location: 'Argentina',
+    bio: 'Argentina, esposa y madre. Comerciante y apasionada.',
+    url: 'skool.com/@laura-paz-rejon-2277',
+    myersBriggs: 'No mostrar',
+    timezone: '(GMT -05:00) America/Cancun',
+    language: 'Español',
+    theme: 'Predeterminado (Negro)',
+    avatarUrl: 'https://randomuser.me/api/portraits/women/44.jpg'
+  };
+
+  const [openAccordion, setOpenAccordion] = useState({
+    social: false,
+    visibility: false,
+    advanced: false,
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [message, setMessage] = useState({ text: '', type: '' });
-  const [initStatus, setInitStatus] = useState({ isRunning: false, result: null });
-  const [profileImage, setProfileImage] = useState(currentUser?.photoURL || '');
 
-  // Cargar datos del perfil actual cuando esté disponible
-  useEffect(() => {
-    if (userProfile) {
-      setFormData({
-        displayName: userProfile.displayName || '',
-        bio: userProfile.bio || '',
-        location: userProfile.location || '',
-        website: userProfile.website || '',
-        phoneNumber: userProfile.phoneNumber || ''
-      });
-    }
-    
-    // Actualizar la imagen de perfil cuando cambie el usuario
-    if (currentUser) {
-      setProfileImage(currentUser.photoURL || '');
-    }
-  }, [userProfile, currentUser]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setMessage({ text: '', type: '' });
-
-    try {
-      const success = await updateUserProfile({
-        ...formData,
-        photoURL: profileImage // Incluir la URL de la foto al actualizar el perfil
-      });
-      if (success) {
-        setMessage({ text: 'Perfil actualizado correctamente', type: 'success' });
-        setIsEditing(false);
-      } else {
-        setMessage({ text: 'Error al actualizar el perfil', type: 'error' });
-      }
-    } catch (error) {
-      console.error('Error al guardar el perfil:', error);
-      setMessage({ text: `Error: ${error.message}`, type: 'error' });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  // Manejar actualización de imagen
-  const handleImageUploaded = (downloadURL) => {
-    setProfileImage(downloadURL);
-    setMessage({ text: 'Foto de perfil actualizada correctamente', type: 'success' });
-    
-    // También actualizamos el perfil en Firestore
-    console.log('ProfilePage - Actualizando perfil con nueva URL de foto:', downloadURL);
-    updateUserProfile({ photoURL: downloadURL })
-      .then(() => {
-        console.log('ProfilePage - Perfil en Firestore actualizado con nueva foto');
-        
-        // Recargar la página para asegurar que todos los componentes muestren la nueva imagen
-        setTimeout(() => {
-          window.location.reload();
-        }, 1500);
-      })
-      .catch(error => {
-        console.error('ProfilePage - Error al actualizar foto en Firestore:', error);
-        setMessage({ 
-          text: 'Error al actualizar la foto en la base de datos: ' + error.message, 
-          type: 'error' 
-        });
-      });
-  };
-
-  // Función para inicializar manualmente el documento de usuario
-  const handleInitializeUser = async () => {
-    setInitStatus({ isRunning: true, result: null });
-    try {
-      const success = await initializeUserDocument();
-      setInitStatus({ 
-        isRunning: false, 
-        result: success ? 'success' : 'error' 
-      });
-    } catch (error) {
-      console.error('Error al inicializar usuario:', error);
-      setInitStatus({ 
-        isRunning: false, 
-        result: 'error'
-      });
-    }
-  };
-
-  // Función para probar la conexión a Firestore
-  const handleTestConnection = async () => {
-    setInitStatus({ isRunning: true, result: null });
-    try {
-      const success = await testFirestoreConnection();
-      setInitStatus({ 
-        isRunning: false, 
-        result: success ? 'connection-success' : 'connection-error' 
-      });
-    } catch (error) {
-      console.error('Error al probar conexión:', error);
-      setInitStatus({ 
-        isRunning: false, 
-        result: 'connection-error'
-      });
-    }
-  };
-
-  if (!currentUser) {
-    return <div>Debes iniciar sesión para ver tu perfil.</div>;
-  }
-
-  return (
-    <div className="profile-page">
-      <SectionHeader title="Perfil de Usuario" />
-      
-      {message.text && (
-        <div 
-          style={{ 
-            padding: '10px', 
-            borderRadius: '8px',
-            marginBottom: '20px',
-            backgroundColor: message.type === 'success' ? '#4caf50' : '#f44336',
-            color: 'white'
-          }}
-        >
-          {message.text}
-        </div>
-      )}
-
-      <div style={{ 
-        backgroundColor: '#353535', 
-        borderRadius: '20px', 
-        padding: '20px',
-        marginBottom: '20px'
-      }}>
-        {/* Header con foto de perfil e información principal */}
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-          <div style={{ 
-            width: '100px', 
-            height: '100px', 
-            borderRadius: '50%', 
-            backgroundColor: '#555', 
-            marginRight: '20px',
-            backgroundImage: `url(${profileImage || 'https://via.placeholder.com/100'})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            position: 'relative',
-            overflow: 'hidden'
-          }}>
-            {/* Mostrar un indicador cuando la imagen está cargando */}
-            {profileImage !== currentUser.photoURL && (
-              <div style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: 'rgba(0,0,0,0.5)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'white',
-                fontSize: '12px',
-                textAlign: 'center'
-              }}>
-                Actualizando...
-              </div>
-            )}
-          </div>
-          <div>
-            <h2 style={{ margin: '0 0 10px 0' }}>{userProfile?.displayName || currentUser.email}</h2>
-            <p style={{ color: '#aaa', margin: 0 }}>{currentUser.email}</p>
-            {userProfile?.bio && <p style={{ margin: '10px 0 0 0' }}>{userProfile.bio}</p>}
-          </div>
-        </div>
-
-        {/* Añadir componente para subir imágenes */}
-        <ImageUploader onImageUploaded={handleImageUploaded} />
-
-        {!isEditing ? (
-          // Vista de información (modo lectura)
-          <div>
-            <div style={{ marginBottom: '15px' }}>
-              <h3 style={{ color: '#D7B615', marginBottom: '10px' }}>Información de Contacto</h3>
-              <p><strong>Email:</strong> {currentUser.email}</p>
-              {userProfile?.phoneNumber && <p><strong>Teléfono:</strong> {userProfile.phoneNumber}</p>}
-              {userProfile?.website && <p><strong>Sitio web:</strong> {userProfile.website}</p>}
-              {userProfile?.location && <p><strong>Ubicación:</strong> {userProfile.location}</p>}
-            </div>
-            
-            <button 
-              onClick={() => setIsEditing(true)}
-              style={{ 
-                padding: '10px 15px',
-                background: 'linear-gradient(90deg, #D7B615, #f0c040)',
-                color: '#222',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                marginRight: '10px'
-              }}
-            >
-              Editar Perfil
-            </button>
-          </div>
-        ) : (
-          // Formulario de edición
-          <form onSubmit={handleSubmit}>
-            <div style={{ marginBottom: '15px' }}>
-              <label style={{ display: 'block', marginBottom: '5px' }}>
-                Nombre
-                <input
-                  type="text"
-                  name="displayName"
-                  value={formData.displayName}
-                  onChange={handleInputChange}
-                  style={{ 
-                    width: '100%', 
-                    padding: '10px', 
-                    backgroundColor: '#444',
-                    border: '1px solid #555',
-                    borderRadius: '5px',
-                    color: 'white',
-                    marginTop: '5px'
-                  }}
-                />
-              </label>
-            </div>
-            
-            <div style={{ marginBottom: '15px' }}>
-              <label style={{ display: 'block', marginBottom: '5px' }}>
-                Biografía
-                <textarea
-                  name="bio"
-                  value={formData.bio}
-                  onChange={handleInputChange}
-                  rows={3}
-                  style={{ 
-                    width: '100%', 
-                    padding: '10px', 
-                    backgroundColor: '#444',
-                    border: '1px solid #555',
-                    borderRadius: '5px',
-                    color: 'white',
-                    marginTop: '5px'
-                  }}
-                />
-              </label>
-            </div>
-            
-            <div style={{ marginBottom: '15px' }}>
-              <label style={{ display: 'block', marginBottom: '5px' }}>
-                Ubicación
-                <input
-                  type="text"
-                  name="location"
-                  value={formData.location}
-                  onChange={handleInputChange}
-                  style={{ 
-                    width: '100%', 
-                    padding: '10px', 
-                    backgroundColor: '#444',
-                    border: '1px solid #555',
-                    borderRadius: '5px',
-                    color: 'white',
-                    marginTop: '5px'
-                  }}
-                />
-              </label>
-            </div>
-            
-            <div style={{ marginBottom: '15px' }}>
-              <label style={{ display: 'block', marginBottom: '5px' }}>
-                Sitio Web
-                <input
-                  type="url"
-                  name="website"
-                  value={formData.website}
-                  onChange={handleInputChange}
-                  style={{ 
-                    width: '100%', 
-                    padding: '10px', 
-                    backgroundColor: '#444',
-                    border: '1px solid #555',
-                    borderRadius: '5px',
-                    color: 'white',
-                    marginTop: '5px'
-                  }}
-                />
-              </label>
-            </div>
-            
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', marginBottom: '5px' }}>
-                Teléfono
-                <input
-                  type="tel"
-                  name="phoneNumber"
-                  value={formData.phoneNumber}
-                  onChange={handleInputChange}
-                  style={{ 
-                    width: '100%', 
-                    padding: '10px', 
-                    backgroundColor: '#444',
-                    border: '1px solid #555',
-                    borderRadius: '5px',
-                    color: 'white',
-                    marginTop: '5px'
-                  }}
-                />
-              </label>
-            </div>
-            
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <button 
-                type="submit"
-                disabled={isSubmitting}
-                style={{ 
-                  padding: '10px 15px',
-                  background: 'linear-gradient(90deg, #D7B615, #f0c040)',
-                  color: '#222',
-                  border: 'none',
-                  borderRadius: '5px',
-                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                  fontWeight: 'bold',
-                  opacity: isSubmitting ? 0.7 : 1
-                }}
-              >
-                {isSubmitting ? 'Guardando...' : 'Guardar Cambios'}
-              </button>
-              
-              <button 
-                type="button"
-                onClick={() => setIsEditing(false)}
-                disabled={isSubmitting}
-                style={{ 
-                  padding: '10px 15px',
-                  backgroundColor: '#666',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '5px',
-                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                  opacity: isSubmitting ? 0.7 : 1
-                }}
-              >
-                Cancelar
-              </button>
-            </div>
-          </form>
-        )}
-      </div>
-
-      {/* Sección de diagnóstico y herramientas */}
-      <div style={{ 
-        backgroundColor: '#353535', 
-        borderRadius: '20px', 
-        padding: '20px',
-        marginBottom: '20px'
-      }}>
-        <h3 style={{ color: '#D7B615', marginBottom: '15px' }}>Herramientas de Diagnóstico</h3>
-        
-        <p style={{ marginBottom: '15px' }}>Si no puedes ver tu perfil o hay problemas con Firestore, usa estas herramientas:</p>
-        
-        <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-          <button 
-            onClick={handleInitializeUser}
-            disabled={initStatus.isRunning}
-            style={{ 
-              padding: '10px 15px',
-              backgroundColor: '#2196F3',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: initStatus.isRunning ? 'not-allowed' : 'pointer',
-              opacity: initStatus.isRunning ? 0.7 : 1
-            }}
-          >
-            {initStatus.isRunning ? 'Procesando...' : 'Inicializar Perfil en Firestore'}
-          </button>
-          
-          <button 
-            onClick={handleTestConnection}
-            disabled={initStatus.isRunning}
-            style={{ 
-              padding: '10px 15px',
-              backgroundColor: '#795548',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: initStatus.isRunning ? 'not-allowed' : 'pointer',
-              opacity: initStatus.isRunning ? 0.7 : 1
-            }}
-          >
-            {initStatus.isRunning ? 'Probando...' : 'Probar Conexión a Firestore'}
-          </button>
-        </div>
-        
-        {initStatus.result && (
-          <div style={{ 
-            padding: '10px', 
-            borderRadius: '8px',
-            backgroundColor: 
-              initStatus.result === 'success' || initStatus.result === 'connection-success' 
-                ? '#4caf50' 
-                : '#f44336',
-            color: 'white'
-          }}>
-            {initStatus.result === 'success' && 'Perfil inicializado correctamente. Verifica en Firebase.'}
-            {initStatus.result === 'error' && 'Error al inicializar perfil. Verifica la consola para más detalles.'}
-            {initStatus.result === 'connection-success' && 'Conexión a Firestore establecida correctamente.'}
-            {initStatus.result === 'connection-error' && 'Error de conexión a Firestore. Verifica permisos y configuración.'}
-          </div>
-        )}
-        
-        <div style={{ marginTop: '15px', fontSize: '0.9rem', color: '#aaa' }}>
-          <p><strong>Nota:</strong> Es posible que necesites recargar la página después de inicializar tu perfil.</p>
-        </div>
-      </div>
+  const AccordionRow = ({ label, name }) => (
+    <div 
+      style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid #2c2c2c', cursor: 'pointer' }}
+      onClick={() => setOpenAccordion(prev => ({ ...prev, [name]: !prev[name] }))}
+    >
+      <span style={{ fontSize: '16px', color: '#fff' }}>{label}</span>
+      <FaChevronDown style={{ color: '#D7B615', transform: openAccordion[name] ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
     </div>
   );
+
+  return (
+    <div style={{ 
+      maxWidth: '860px', 
+      margin: '40px auto', 
+      padding: '24px', 
+      fontFamily: 'Poppins, sans-serif',
+      color: '#fff',
+      background: '#1a1a1a',
+      borderRadius: '24px',
+    }}>
+
+      {/* --- Cabecera --- */}
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '32px' }}>
+        <img 
+          src={profileData.avatarUrl} 
+          alt="Avatar" 
+          style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover' }} 
+        />
+        <h1 style={{ 
+          color: '#D7B615', 
+          fontSize: '28px', 
+          marginLeft: '20px', 
+          flexGrow: 1,
+          background: 'linear-gradient(90.18deg, #D7B615 8.94%, rgba(255, 255, 255, 0.8) 67.3%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent'
+        }}>
+          Mi perfil
+        </h1>
+        <button style={{
+          background: 'linear-gradient(122deg, #D7B615, #B99C18)',
+          color: '#111',
+          border: 'none',
+          borderRadius: '12px',
+          padding: '12px 24px',
+          fontWeight: '600',
+          fontSize: '16px',
+          cursor: 'pointer'
+        }}>
+          Editar
+        </button>
+      </div>
+
+      {/* --- Sección Perfil --- */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        {/* ... (campos de perfil como antes) ... */}
+        <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+          <div style={{ flex: '1 1 48%' }}>
+            <label style={{ fontSize: '14px', color: '#aaa', display: 'block', marginBottom: '8px' }}>Nombres</label>
+            <div style={{ background: '#2c2c2c', borderRadius: '12px', padding: '12px 16px', border: '1px solid #444' }}>
+              {profileData.firstName}
+            </div>
+          </div>
+          <div style={{ flex: '1 1 48%' }}>
+            <label style={{ fontSize: '14px', color: '#aaa', display: 'block', marginBottom: '8px' }}>Apellidos</label>
+            <div style={{ background: '#2c2c2c', borderRadius: '12px', padding: '12px 16px', border: '1px solid #444' }}>
+              {profileData.lastName}
+            </div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+          <div style={{ flex: '1 1 48%' }}>
+            <label style={{ fontSize: '14px', color: '#aaa', display: 'block', marginBottom: '8px' }}>Número de teléfono</label>
+            <div style={{ background: '#2c2c2c', borderRadius: '12px', padding: '12px 16px', border: '1px solid #444' }}>
+              {profileData.phone}
+            </div>
+          </div>
+          <div style={{ flex: '1 1 48%' }}>
+            <label style={{ fontSize: '14px', color: '#aaa', display: 'block', marginBottom: '8px' }}>Correo electrónico</label>
+            <div style={{ background: '#2c2c2c', borderRadius: '12px', padding: '12px 16px', border: '1px solid #444' }}>
+              {profileData.email}
+            </div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+          <div style={{ flex: '1 1 48%' }}>
+            <label style={{ fontSize: '14px', color: '#aaa', display: 'block', marginBottom: '8px' }}>Usuario</label>
+            <div style={{ background: '#2c2c2c', borderRadius: '12px', padding: '12px 16px', border: '1px solid #444' }}>
+              {profileData.username}
+            </div>
+          </div>
+          <div style={{ flex: '1 1 48%' }}>
+            <label style={{ fontSize: '14px', color: '#aaa', display: 'block', marginBottom: '8px' }}>Locación</label>
+            <div style={{ background: '#2c2c2c', borderRadius: '12px', padding: '12px 16px', border: '1px solid #444', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span>{profileData.location}</span>
+              <FaChevronDown style={{ color: '#D7B615' }} />
+            </div>
+          </div>
+        </div>
+        <div>
+          <label style={{ fontSize: '14px', color: '#aaa', display: 'block', marginBottom: '8px' }}>Biografía</label>
+          <div style={{ background: '#2c2c2c', borderRadius: '12px', padding: '12px 16px', border: '1px solid #444', minHeight: '60px' }}>
+            {profileData.bio}
+          </div>
+          <div style={{ textAlign: 'right', fontSize: '12px', color: '#aaa', marginTop: '4px' }}>
+            16 / 150
+          </div>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px', flexWrap: 'wrap', gap: '16px' }}>
+          <a href="#" style={{ color: '#D7B615', textDecoration: 'underline', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px' }}>
+            <FaMapMarkerAlt />
+            Cambiar mi ubicación en el mapa
+          </a>
+          <a href="#" style={{ color: '#aaa', textDecoration: 'underline', fontSize: '14px' }}>
+            Eliminar mi ubicación
+          </a>
+        </div>
+        <div>
+          <label style={{ fontSize: '14px', color: '#aaa', display: 'block', marginBottom: '8px' }}>URL</label>
+          <div style={{ background: '#2c2c2c', borderRadius: '12px', padding: '12px 16px', border: '1px solid #444' }}>
+            {profileData.url}
+          </div>
+          <p style={{ fontSize: '12px', color: '#aaa', marginTop: '8px', marginBlock: 0 }}>
+            Podrás cambiar tu URL cuando tengas 90 contribuciones, 30 seguidores y la hayas usado durante 90 días.
+          </p>
+        </div>
+        <AccordionRow label="Myers Briggs" name="myers" />
+        <AccordionRow label="Enlaces a redes sociales" name="social" />
+        <AccordionRow label="Visibilidad de membresía" name="visibility" />
+        <AccordionRow label="Ajustes avanzados" name="advanced" />
+      </div>
+
+      {/* --- Sección Mi cuenta --- */}
+      <div style={{ marginTop: '40px', borderTop: '1px solid #2c2c2c', paddingTop: '32px' }}>
+        <h2 style={{ fontSize: '24px', color: '#fff', marginBottom: '24px' }}>Mi cuenta</h2>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+            <div style={{ flex: '1 1 48%' }}>
+              <label style={{ fontSize: '14px', color: '#aaa', display: 'block', marginBottom: '8px' }}>Correo electrónico</label>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ flexGrow: 1, background: '#2c2c2c', borderRadius: '12px', padding: '12px 16px', border: '1px solid #444' }}>{profileData.email}</div>
+                <div style={{ background: '#D7B615', borderRadius: '8px', padding: '8px', cursor: 'pointer' }}><FaPenSquare color="#111" /></div>
+              </div>
+            </div>
+            <div style={{ flex: '1 1 48%' }}>
+              <label style={{ fontSize: '14px', color: '#aaa', display: 'block', marginBottom: '8px' }}>Contraseña</label>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ flexGrow: 1, background: '#2c2c2c', borderRadius: '12px', padding: '12px 16px', border: '1px solid #444', letterSpacing: '4px' }}>••••••••</div>
+                <div style={{ background: '#D7B615', borderRadius: '8px', padding: '8px', cursor: 'pointer' }}><FaPenSquare color="#111" /></div>
+              </div>
+            </div>
+          </div>
+          <AccordionRow label={`Zona horaria: ${profileData.timezone}`} name="timezone" />
+          <AccordionRow label={`Idioma: ${profileData.language}`} name="language" />
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+            <p style={{ margin: 0, color: '#aaa' }}>Puedes cerrar las sesiones activas en todos los dispositivos.</p>
+            <button style={{ background: '#333', color: '#fff', border: '1px solid #444', borderRadius: '12px', padding: '12px 20px', fontWeight: '600' }}>Cerrar sesión</button>
+          </div>
+        </div>
+      </div>
+      
+      {/* --- Sección Estilo visual --- */}
+      <div style={{ marginTop: '40px', borderTop: '1px solid #2c2c2c', paddingTop: '32px' }}>
+        <h2 style={{ fontSize: '24px', color: '#fff', marginBottom: '24px' }}>Estilo visual</h2>
+        <AccordionRow label={`Tema: ${profileData.theme}`} name="theme" />
+      </div>
+
+      <style>{`
+        @media (max-width: 600px) {
+          div[style*="flex-wrap: wrap"] > div { flex-basis: 100% !important; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+const ContributionCard = ({ post }) => (
+    <div style={{
+        background: '#2c2c2c',
+        borderRadius: '12px',
+        padding: '16px',
+        color: '#fff',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between'
+    }}>
+        <p style={{ margin: 0, color: '#ccc', fontSize: '14px', lineHeight: '1.5', flexGrow: 1 }}>{post.content}</p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px', color: '#888', fontSize: '12px' }}>
+            <span>{post.likes || 0} Likes</span>
+            <span>{new Date(post.createdAt?.toDate()).toLocaleDateString()}</span>
+        </div>
+    </div>
+);
+
+function ProfilePage() {
+    const { currentUser, userProfile } = useAuth();
+    const [userPosts, setUserPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (currentUser?.uid) {
+            const fetchUserPosts = async () => {
+                setLoading(true);
+                const postsRef = collection(db, 'posts');
+                const q = query(postsRef, where('authorUid', '==', currentUser.uid), orderBy('createdAt', 'desc'));
+                const querySnapshot = await getDocs(q);
+                const posts = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                setUserPosts(posts);
+                setLoading(false);
+            };
+            fetchUserPosts();
+        }
+    }, [currentUser]);
+
+    if (!currentUser || !userProfile) {
+        return <div style={{ textAlign: 'center', padding: '50px', color: '#fff' }}>Cargando perfil...</div>;
+    }
+
+    return (
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
+            
+            {/* Encabezado del Perfil */}
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '24px',
+                marginBottom: '40px'
+            }}>
+                <img
+                    src={userProfile.photoURL || 'https://via.placeholder.com/150'}
+                    alt="Foto de perfil"
+                    style={{ width: '120px', height: '120px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #D7B615' }}
+                />
+                <div>
+                    <h1 style={{ margin: 0, color: '#fff', fontSize: '2.5rem', fontWeight: 600 }}>{userProfile.displayName}</h1>
+                    <p style={{ margin: '4px 0 0', color: '#aaa' }}>{currentUser.email}</p>
+                </div>
+            </div>
+
+            {/* Contribuciones */}
+            <div style={{ padding: '0 20px' }}>
+              <h2 style={{ color: '#fff', borderBottom: '1px solid #444', paddingBottom: '12px', marginBottom: '24px' }}>
+                  Mis Contribuciones ({userPosts.length})
+              </h2>
+            
+              {loading ? (
+                  <p style={{ color: '#888' }}>Cargando contribuciones...</p>
+              ) : userPosts.length > 0 ? (
+                  <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                      gap: '20px'
+                  }}>
+                      {userPosts.map(post => (
+                          <ContributionCard key={post.id} post={post} />
+                      ))}
+                  </div>
+              ) : (
+                  <div style={{ color: '#888', background: '#2c2c2c', padding: '30px', borderRadius: '12px', textAlign: 'center' }}>
+                      <p style={{margin: 0}}>Aún no has realizado ninguna contribución.</p>
+                  </div>
+              )}
+            </div>
+        </div>
+    );
 }
 
 export default ProfilePage; 

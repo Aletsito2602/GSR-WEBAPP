@@ -1,58 +1,38 @@
 import React from 'react';
+import { FaPlay } from 'react-icons/fa';
 
 function VideoInfo({ title }) {
-  const containerStyle = {
-    backgroundColor: '#353535',
-    borderRadius: '8px',
-    padding: '15px 20px',
-    marginTop: '15px',
-    display: 'flex',
-    alignItems: 'center',
-    // justifyContent: 'space-between' // Ya no es necesario
-  };
-
-  const logoStyle = {
-      width: '30px', // Tamaño del logo GSR
-      height: '30px',
-      borderRadius: '50%',
-      backgroundColor: '#222', // Fondo para el logo
-      marginRight: '15px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontWeight: 'bold',
-      color: '#D7B615' // Letras doradas
-  };
-
-  const titleStyle = {
-    fontWeight: 'bold',
-    fontSize: '1.1em',
-    color: 'white',
-    flexGrow: 1, // Ocupar espacio
-    marginRight: '15px'
-  };
-
-  const statusStyle = {
-    fontSize: '0.9em',
-    color: 'red', // Color rojo para "Live"
-    display: 'flex',
-    alignItems: 'center'
-  };
-
-  const liveDotStyle = {
-    width: '8px',
-    height: '8px',
-    borderRadius: '50%',
-    backgroundColor: 'red',
-    marginRight: '5px'
-  };
+  // Simulación de un logo
+  const logoUrl = '/public/images/logo.png';
 
   return (
-    <div style={containerStyle}>
-      <div style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
-        <div style={logoStyle}>G</div> {/* Placeholder Logo GSR */} 
-        <span style={titleStyle}>{title}</span>
+    <div style={{
+      background: '#2c2c2c',
+      borderRadius: '16px',
+      padding: '24px',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '20px'
+    }}>
+      <div style={{
+        background: '#1a1a1a',
+        borderRadius: '50%',
+        width: '50px',
+        height: '50px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <img src={logoUrl} alt="Logo" style={{ width: '30px', filter: 'brightness(0) invert(1)' }} />
       </div>
+      <h2 style={{
+        margin: 0,
+        color: '#fff',
+        fontSize: '1.4rem',
+        fontWeight: '500'
+      }}>
+        {title}
+      </h2>
     </div>
   );
 }
