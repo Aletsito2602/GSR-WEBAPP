@@ -6,8 +6,8 @@ const RecordedClassCard = ({ video }) => {
   return (
     <Link to={`/clases/${video.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
       <div style={{
-        background: '#2c2c2c',
-        borderRadius: '16px',
+        background: 'linear-gradient(to bottom, #222222 0%, #3C3C3C 100%)',
+        borderRadius: '20px',
         overflow: 'hidden',
         fontFamily: 'Poppins, sans-serif'
       }}>
@@ -43,9 +43,28 @@ const RecordedClassCard = ({ video }) => {
           </div>
         </div>
         <div style={{ padding: '16px' }}>
-          <h3 style={{ margin: 0, color: '#fff', fontSize: '1rem', fontWeight: '500', textAlign: 'center' }}>
+          <h3 style={{ 
+            margin: 0, 
+            color: '#fff', 
+            fontSize: '20px', 
+            fontWeight: '500', 
+            textAlign: 'center',
+            fontFamily: 'Poppins, sans-serif'
+          }}>
             {video.title}
           </h3>
+          <p style={{ 
+            margin: '8px 0 0 0', 
+            color: '#aaa', 
+            fontSize: '16px', 
+            fontWeight: 'normal', 
+            textAlign: 'center',
+            fontFamily: 'Poppins, sans-serif'
+          }}>
+            {video.description && video.description.length > 100 
+              ? `${video.description.substring(0, 100)}...` 
+              : video.description}
+          </p>
         </div>
       </div>
     </Link>

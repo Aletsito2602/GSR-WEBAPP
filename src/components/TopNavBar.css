@@ -64,9 +64,9 @@
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
-  border-radius: 25px;
+  border-radius: 100px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background-color: rgba(42, 42, 42, 0.8);
+  background: linear-gradient(135deg, #222222, #353535);
   border: 1px solid rgba(161, 138, 81, 0.3);
   cursor: pointer;
   white-space: nowrap;
@@ -75,38 +75,26 @@
   box-sizing: border-box;
   position: relative;
   overflow: hidden;
+  box-shadow: none;
 }
 
 .nav-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(161, 138, 81, 0.1), transparent);
-  transition: left 0.5s ease;
-}
-
-.nav-item:hover::before {
-  left: 100%;
+  display: none;
 }
 
 .nav-item:hover {
-  background-color: rgba(56, 56, 56, 0.9);
+  background: linear-gradient(135deg, #252525, #383838);
   border-color: rgba(161, 138, 81, 0.6);
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 6px 20px rgba(161, 138, 81, 0.2);
+  transform: none;
+  box-shadow: none;
 }
 
 .nav-item.active {
-  background: linear-gradient(135deg, rgba(161, 138, 81, 0.2), rgba(212, 195, 102, 0.2));
+  background: linear-gradient(135deg, #222222, #353535);
   color: var(--text-white);
   border: 2px solid #a18a51;
-  box-shadow: 
-    0 0 20px rgba(161, 138, 81, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  transform: translateY(-2px);
+  box-shadow: none;
+  transform: none;
 }
 
 .nav-item.active::before {
@@ -143,7 +131,7 @@
     font-size: 13px;
     min-width: 130px; /* Aumentado significativamente el ancho mínimo */
     height: 42px;
-    border-radius: 21px;
+    border-radius: 100px; /* Cambiado a 100px */
     gap: 12px; /* Aumentado el gap entre ícono y texto */
   }
 
@@ -172,7 +160,7 @@
     font-size: 12px;
     min-width: 115px; /* Aumentado significativamente el ancho mínimo */
     height: 38px;
-    border-radius: 19px;
+    border-radius: 100px; /* Cambiado a 100px */
     gap: 10px; /* Aumentado el gap entre ícono y texto */
   }
 
@@ -199,7 +187,7 @@
   .nav-item.active {
     padding: 10px 22px; /* Padding aún mayor para el estado activo */
     border: 2px solid #a18a51;
-    background: linear-gradient(135deg, rgba(161, 138, 81, 0.25), rgba(212, 195, 102, 0.25));
+    background: linear-gradient(135deg, #222222, #353535); /* Actualizado para usar el mismo gradiente */
   }
 }
 
@@ -207,7 +195,7 @@
 @keyframes tabChange {
   0% {
     opacity: 0.8;
-    transform: scale(0.98);
+    transform: scale(1);
   }
   100% {
     opacity: 1;

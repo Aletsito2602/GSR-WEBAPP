@@ -8,6 +8,11 @@ import { HiOutlineAdjustments } from "react-icons/hi";
 import { useAuth } from '../context/AuthContext';
 import './ProfilePage.css';
 
+// Importamos el icono de flecha izquierda para el botón volver
+import leftArrow from '../../public/images/left-arrow.svg';
+import likesIcon from '../../public/images/likes.svg';
+import commentsIcon from '../../public/images/comments.svg';
+
 // Función para obtener las iniciales del nombre
 const getInitials = (name) => {
     if (!name) return 'U';
@@ -52,7 +57,7 @@ const getLastActiveTime = (lastSeen) => {
     }
 };
 
-// Card de contribución rediseñada
+// Card de contribución rediseñada para que sea igual a PostCard
 const MyContributionCard = ({ post, onClick }) => {
     const { currentUser } = useAuth();
     const initials = getInitials(post.authorName || currentUser?.displayName);
@@ -76,33 +81,39 @@ const MyContributionCard = ({ post, onClick }) => {
     };
     
     return (
-        <div className="my-contribution-card" onClick={() => onClick && onClick(post)}>
-            <div className="card-header">
-                {post.authorAvatarUrl || currentUser?.photoURL ? (
-                    <img 
-                        src={post.authorAvatarUrl || currentUser?.photoURL} 
-                        alt="Avatar" 
-                        className="author-avatar" 
-                    />
-                ) : (
-                    <div className="author-avatar">
-                        {initials}
+        <div className="post-card-container post-card" onClick={() => onClick && onClick(post)}>
+            <div className="post-header">
+                <div className="post-author-link">
+                    {post.authorAvatarUrl || currentUser?.photoURL ? (
+                        <img 
+                            src={post.authorAvatarUrl || currentUser?.photoURL} 
+                            alt="Avatar" 
+                            className="post-avatar" 
+                        />
+                    ) : (
+                        <div className="post-avatar post-avatar-fallback">
+                            {initials}
+                        </div>
+                    )}
+                    <div className="post-author-info">
+                        <div className="author-name">{post.authorName || currentUser?.displayName || 'Mi publicación'}</div>
+                        <div className="author-meta">{getPostTime()} | {post.category || 'General'}</div>
                     </div>
-                )}
-                <div className="author-details">
-                    <span className="author-name">{post.authorName || currentUser?.displayName || 'Mi publicación'}</span>
-                    <span className="post-meta">{getPostTime()} | {post.category || 'General'}</span>
                 </div>
             </div>
-            <p className="card-content">
+            <div className="post-content">
                 {post.content}
-                {post.content && post.content.length > 150 && (
-                    <span className="ver-mas"> Ver más</span>
-                )}
-            </p>
-            <div className="card-footer">
-                <span><FaEye /> {post.likes || post.views || 0}</span>
-                <span><FaComment /> {post.commentCount || post.comments || 0}</span>
+                {post.content && post.content.length > 200 && '...'}
+            </div>
+            <div className="post-footer">
+                <div className="post-footer-action">
+                    <img src={likesIcon} alt="Likes" className="like-icon" />
+                    <span className="like-count">{post.likes || post.views || 0}</span>
+                </div>
+                <div className="post-footer-action">
+                    <img src={commentsIcon} alt="Comments" className="comment-icon" />
+                    <span>{post.commentCount || post.comments || 0}</span>
+                </div>
             </div>
         </div>
     );
@@ -115,7 +126,8 @@ function ProfilePage() {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const [activeTab, setActiveTab] = useState('contribuciones');
+    
     useEffect(() => {
         if (loadingAuth) return;
 
@@ -217,6 +229,10 @@ function ProfilePage() {
         navigate('/ajustes');
     };
 
+    const handleGoBack = () => {
+        navigate(-1);
+    };
+
     if (loadingAuth) {
         return (
             <div className="my-profile-container">
@@ -289,84 +305,235 @@ function ProfilePage() {
     
     return (
         <div className="my-profile-container">
-            {/* Header */}
-            <header className="page-header">
-                <h1>Mi perfil</h1>
-                <button className="settings-button" onClick={handleSettingsClick} aria-label="Configuración">
-                    <FaCog />
+            {/* Header con botón volver y título - Solo mobile */}
+            <div className="profile-header-mobile">
+                <button className="back-button-profile" onClick={handleGoBack}>
+                    <img src={leftArrow} alt="Volver" className="back-icon-profile" />
                 </button>
-            </header>
+                <h1 className="profile-title-mobile">Mi perfil</h1>
+            </div>
 
-            {/* Sección de Perfil Principal */}
-            <section className="profile-details-card">
-                <div className="profile-main-section">
+            {/* Header para PC */}
+            <header className="page-header-desktop">
+                <h1>Mi perfil</h1>
+            </header>
+            
+            {/* Layout para mobile */}
+            <div className="profile-mobile-layout">
+                {/* Contenido principal mobile */}
+                <div className="profile-mobile-header">
                     {/* Avatar con fallback de iniciales */}
                     {user?.photoURL || currentUser?.photoURL ? (
                         <img 
                             src={user?.photoURL || currentUser?.photoURL} 
                             alt="Mi avatar" 
-                            className="profile-avatar-large" 
+                            className="profile-avatar-mobile" 
                         />
                     ) : (
                         <div 
-                            className="profile-avatar-large"
+                            className="profile-avatar-mobile"
                             data-initials={userInitials}
                         >
                             {userInitials}
                         </div>
                     )}
                     
-                    <div className="profile-content">
-                        {/* Bloque de Nombre y Botón */}
-                        <div className="profile-summary">
-                            <div className="user-info">
-                                <h2 className="user-name">{displayName}</h2>
-                                <p className="user-level">Nivel {level} • {points} puntos</p>
-                            </div>
-                            <button className="edit-profile-button" onClick={handleSettingsClick}>
-                                Editar perfil
-                            </button>
-                        </div>
-
-                        {/* Barra de Estadísticas */}
-                        <div className="profile-stats">
-                            <button>Contribuciones ({contributionsCount})</button>
-                            <button>Seguidores ({followers})</button>
-                            <button>Seguidos ({following})</button>
-                        </div>
-
-                        {/* Biografía y Enlaces */}
-                        <div className="user-bio">
-                            <p className="user-handle">@{username}</p>
-                            <p>{bio}</p>
-                        </div>
-
-                        <div className="user-links">
-                            <a href="#" aria-label="Website"><FaLink /></a>
-                            <a href="#" aria-label="LinkedIn"><FaLinkedinIn /></a>
-                        </div>
-
-                        {/* Metadatos del Perfil */}
-                        <div className="user-metadata">
-                            <span><FaCalendarAlt /> Te uniste el {joinDate}</span>
-                            <span><GoDotFill color="#8cff98" /> {lastActive}</span>
-                            <span><FaMapMarkerAlt /> {location}</span>
-                        </div>
+                    {/* Tabs para mobile con nuevo diseño de botones */}
+                    <div className="profile-tabs">
+                        <button 
+                            className={`profile-tab-button-new ${activeTab === 'contribuciones' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('contribuciones')}
+                        >
+                            Contribuciones ({contributionsCount})
+                        </button>
+                        <button 
+                            className={`profile-tab-button-new ${activeTab === 'seguidores' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('seguidores')}
+                        >
+                            Seguidores ({followers})
+                        </button>
+                        <button 
+                            className={`profile-tab-button-new ${activeTab === 'seguidos' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('seguidos')}
+                        >
+                            Seguidos ({following})
+                        </button>
                     </div>
                 </div>
-            </section>
 
-            {/* Sección de Contribuciones */}
-            <section className="user-contributions">
+                {/* Información del usuario en mobile */}
+                <div className="profile-info-mobile">
+                    <h2 className="profile-name-mobile">{displayName}</h2>
+                    <p className="profile-username-mobile">@{username}</p>
+                    <p className="profile-level-mobile">Nivel {level}</p>
+                    <p className="profile-bio-mobile">{bio}</p>
+                    <div className="profile-metadata-mobile">
+                        <span><FaCalendarAlt /> {joinDate}</span>
+                        <span><GoDotFill color="#8cff98" /> {lastActive}</span>
+                        <span><FaMapMarkerAlt /> {location}</span>
+                    </div>
+                </div>
+            </div>
+
+            {/* Layout para PC - Distribución de UserProfilePage con diseño de ProfilePage mobile */}
+            <div className="profile-desktop-layout">
+                {/* Sección de Perfil Principal - Sidebar */}
+                <section className="profile-details-card-desktop">
+                    <div className="profile-main-section-desktop">
+                        {/* Avatar con fallback de iniciales */}
+                        {user?.photoURL || currentUser?.photoURL ? (
+                            <img 
+                                src={user?.photoURL || currentUser?.photoURL} 
+                                alt="Mi avatar" 
+                                className="profile-avatar-large-desktop" 
+                            />
+                        ) : (
+                            <div 
+                                className="profile-avatar-large-desktop"
+                                data-initials={userInitials}
+                            >
+                                {userInitials}
+                            </div>
+                        )}
+                        
+                        <div className="profile-content-desktop">
+                            {/* Bloque de Nombre */}
+                            <div className="profile-summary-desktop">
+                                <div className="user-info-desktop">
+                                    <h2 className="user-name-desktop">{displayName}</h2>
+                                    <p className="user-level-desktop">Nivel {level}</p>
+                                </div>
+                            </div>
+
+                            {/* Barra de Estadísticas - Usando diseño mobile */}
+                            <div className="profile-stats-desktop">
+                                <button 
+                                    className={`profile-tab-button-new ${activeTab === 'contribuciones' ? 'active' : ''}`}
+                                    onClick={() => setActiveTab('contribuciones')}
+                                >
+                                    Contribuciones ({contributionsCount})
+                                </button>
+                                <button 
+                                    className={`profile-tab-button-new ${activeTab === 'seguidores' ? 'active' : ''}`}
+                                    onClick={() => setActiveTab('seguidores')}
+                                >
+                                    Seguidores ({followers})
+                                </button>
+                                <button 
+                                    className={`profile-tab-button-new ${activeTab === 'seguidos' ? 'active' : ''}`}
+                                    onClick={() => setActiveTab('seguidos')}
+                                >
+                                    Seguidos ({following})
+                                </button>
+                            </div>
+
+                            {/* Biografía y Enlaces */}
+                            <div className="user-bio-desktop">
+                                <p className="user-handle-desktop">@{username}</p>
+                                <p className="bio-text-desktop">{bio}</p>
+                            </div>
+
+                            <div className="user-links-desktop">
+                                <a href="#" aria-label="Website"><FaLink /></a>
+                                <a href="#" aria-label="LinkedIn"><FaLinkedinIn /></a>
+                            </div>
+
+                            {/* Metadatos del Perfil */}
+                            <div className="user-metadata-desktop">
+                                <span><FaCalendarAlt /> Se unió el {joinDate}</span>
+                                <span><GoDotFill color="#8cff98" /> {lastActive}</span>
+                                <span><FaMapMarkerAlt /> {location}</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Sección de Contribuciones - Contenido principal */}
+                <section className="user-contributions-desktop">
+                    <header className="contributions-header-desktop">
+                        <h3>Contribuciones</h3>
+                        <button className="filter-button" aria-label="Filtros">
+                            <HiOutlineAdjustments />
+                        </button>
+                    </header>
+                    
+                    <div className="contributions-list-desktop">
+                        {activeTab === 'contribuciones' && posts.length > 0 ? (
+                            posts.map(post => (
+                                <MyContributionCard 
+                                    key={post.id} 
+                                    post={post} 
+                                    onClick={handlePostClick}
+                                />
+                            ))
+                        ) : activeTab === 'contribuciones' ? (
+                            <div style={{ 
+                                textAlign: 'center', 
+                                padding: '60px 20px', 
+                                color: '#A0A0A0',
+                                background: '#1a1a1a',
+                                borderRadius: '20px',
+                                border: '1px solid #2c2c2c'
+                            }}>
+                                <div style={{ fontSize: '3rem', marginBottom: '16px' }}>📝</div>
+                                <h3 style={{ color: '#EAEAEA', marginBottom: '8px' }}>¡Aún no tienes publicaciones!</h3>
+                                <p style={{ marginBottom: '24px' }}>Comparte tu primera contribución con la comunidad Golden Suite.</p>
+                                <button 
+                                    onClick={() => navigate('/')}
+                                    style={{
+                                        padding: '12px 24px',
+                                        background: 'linear-gradient(135deg, #F0B90B, #E5A500)',
+                                        color: '#000',
+                                        border: 'none',
+                                        borderRadius: '25px',
+                                        cursor: 'pointer',
+                                        fontWeight: '600',
+                                        fontSize: '1rem',
+                                        transition: 'transform 0.2s ease'
+                                    }}
+                                    onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'}
+                                    onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}
+                                >
+                                    Crear primera publicación
+                                </button>
+                            </div>
+                        ) : activeTab === 'seguidores' ? (
+                            <div style={{ 
+                                textAlign: 'center', 
+                                padding: '60px 20px', 
+                                color: '#A0A0A0',
+                                background: '#1a1a1a',
+                                borderRadius: '20px',
+                                border: '1px solid #2c2c2c'
+                            }}>
+                                <h3 style={{ color: '#EAEAEA', marginBottom: '8px' }}>No tienes seguidores aún</h3>
+                                <p>Tus seguidores aparecerán aquí</p>
+                            </div>
+                        ) : (
+                            <div style={{ 
+                                textAlign: 'center', 
+                                padding: '60px 20px', 
+                                color: '#A0A0A0',
+                                background: '#1a1a1a',
+                                borderRadius: '20px',
+                                border: '1px solid #2c2c2c'
+                            }}>
+                                <h3 style={{ color: '#EAEAEA', marginBottom: '8px' }}>No sigues a nadie aún</h3>
+                                <p>Los usuarios que sigas aparecerán aquí</p>
+                            </div>
+                        )}
+                    </div>
+                </section>
+            </div>
+
+            {/* Sección de Contribuciones para mobile */}
+            <section className="user-contributions-mobile">
                 <header className="contributions-header">
-                    <h3>Mis contribuciones</h3>
-                    <button className="filter-button" aria-label="Filtros">
-                        <HiOutlineAdjustments />
-                    </button>
+                    <h3>Contribuciones</h3>
                 </header>
                 
                 <div className="contributions-list">
-                    {posts.length > 0 ? (
+                    {activeTab === 'contribuciones' && posts.length > 0 ? (
                         posts.map(post => (
                             <MyContributionCard 
                                 key={post.id} 
@@ -374,7 +541,7 @@ function ProfilePage() {
                                 onClick={handlePostClick}
                             />
                         ))
-                    ) : (
+                    ) : activeTab === 'contribuciones' ? (
                         <div style={{ 
                             textAlign: 'center', 
                             padding: '60px 20px', 
@@ -404,6 +571,30 @@ function ProfilePage() {
                             >
                                 Crear primera publicación
                             </button>
+                        </div>
+                    ) : activeTab === 'seguidores' ? (
+                        <div style={{ 
+                            textAlign: 'center', 
+                            padding: '60px 20px', 
+                            color: '#A0A0A0',
+                            background: '#1a1a1a',
+                            borderRadius: '20px',
+                            border: '1px solid #2c2c2c'
+                        }}>
+                            <h3 style={{ color: '#EAEAEA', marginBottom: '8px' }}>No tienes seguidores aún</h3>
+                            <p>Tus seguidores aparecerán aquí</p>
+                        </div>
+                    ) : (
+                        <div style={{ 
+                            textAlign: 'center', 
+                            padding: '60px 20px', 
+                            color: '#A0A0A0',
+                            background: '#1a1a1a',
+                            borderRadius: '20px',
+                            border: '1px solid #2c2c2c'
+                        }}>
+                            <h3 style={{ color: '#EAEAEA', marginBottom: '8px' }}>No sigues a nadie aún</h3>
+                            <p>Los usuarios que sigas aparecerán aquí</p>
                         </div>
                     )}
                 </div>

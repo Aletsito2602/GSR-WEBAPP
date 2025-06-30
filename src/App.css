@@ -249,18 +249,18 @@ html, body, #root {
   }
    .nav-filter-button {
     white-space: nowrap;
-    padding: 8px 16px;
-    border-radius: 20px;
+    padding: 6px 12px;
+    border-radius: 10px;
     border: 1px solid #3c3c3c;
-    background: #2a2a2a;
+    background: #2a2a2a !important;
     color: #e0e0e0;
     font-size: 0.9rem;
     transition: all 0.2s ease;
   }
   
   .nav-filter-button.active {
-    background: #F0B90B;
-    color: #000;
+    background: transparent !important;
+    color: #F0B90B;
     border-color: #F0B90B;
   }
   
@@ -269,16 +269,15 @@ html, body, #root {
     background: #2a2a2a;
     border: 1px solid #3c3c3c;
     color: #e0e0e0;
-    padding: 8px 12px;
-    border-radius: 20px;
+    padding: 6px 10px;
+    border-radius: 10px;
     font-size: 0.9rem;
   }
   .post-card {
-    border-radius: 0;
-    border-left: 0;
-    border-right: 0;
-    border-bottom: 1px solid #3c3c3c;
-    margin: 0;
+    border-radius: 15px;
+    border: 1px solid #3c3c3c;
+    margin-bottom: 15px;
+    background: linear-gradient(to bottom, #222222 0%, #3C3C3C 100%) !important;
   }
 
   /* GRIDS Y TARJETAS */
@@ -316,6 +315,8 @@ html, body, #root {
     }
   .feed .post-card, .content-area .video-item-wrapper {
     padding: 8px;
+    border-radius: 15px;
+    background: linear-gradient(to bottom, #222222 0%, #3C3C3C 100%) !important;
   }
   
   /* Ajustar tabs en móvil pequeño */
@@ -454,7 +455,7 @@ html, body, #root {
 /* Post cards full width */
 .posts-container > div,
 .post-card,
-[style*="background: linear-gradient(to bottom, #222222, #3C3C3C)"] {
+[style*="background: linear-gradient(to bottom, #222222"] {
   width: 100% !important;
   max-width: none !important;
   box-sizing: border-box;
@@ -513,38 +514,41 @@ html, body, #root {
 
 .nav-filter-button {
   white-space: nowrap;
-  padding: 8px 16px;
-  border-radius: 20px;
+  padding: 6px 12px;
+  border-radius: 10px;
   border: 1px solid #3c3c3c;
-  background: #2a2a2a !important;
+  background: linear-gradient(135deg, #222222, #353535) !important;
   color: #e0e0e0;
   font-size: 0.9rem;
   transition: all 0.2s ease;
-  min-width: 80px; /* Ancho mínimo base */
+  min-width: 70px;
+  box-shadow: none;
 }
 
 .nav-filter-button.active {
-  background: #F0B90B !important;
-  color: #000;
+  background: linear-gradient(135deg, #222222, #353535) !important;
+  color: #F0B90B;
   border-color: #F0B90B;
+  box-shadow: none;
 }
 
 .filter-button,
 .week-dropdown {
-  background: #2a2a2a !important;
+  background: linear-gradient(135deg, #222222, #353535) !important;
   border: 1px solid #3c3c3c;
   color: #e0e0e0;
-  padding: 8px 12px;
-  border-radius: 20px;
+  padding: 6px 10px;
+  border-radius: 10px;
   font-size: 0.9rem;
+  box-shadow: none;
 }
 
 .week-dropdown {
-  padding: 8px 16px;
-  border-radius: 5px;
+  padding: 6px 12px;
+  border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  background-color: rgba(215, 182, 21, 0.8);
-  color: #1a1a1a;
+  background: linear-gradient(135deg, #222222, #353535) !important;
+  color: #e0e0e0;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -554,11 +558,12 @@ html, body, #root {
   align-items: center;
   gap: 8px;
   margin-left: auto;
+  box-shadow: none;
 }
 
 .week-dropdown:hover {
-  background-color: #D7B615;
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, #252525, #383838) !important;
+  transform: none;
 }
 
 /* State Messages */
@@ -679,15 +684,33 @@ html, body, #root {
   }
 
   .nav-filter-button {
-    padding: 6px 12px;
-    font-size: 13px;
+    padding: 10px 20px !important; /* Aumentado padding horizontal */
+    font-size: 0.9rem !important;
+    background: #2a2a2a !important;
+    min-width: 100px !important; /* Aumentado ancho mínimo */
+    flex: 1 1 auto; /* Permitir que se expandan */
+    text-align: center;
+  }
+
+  .nav-filter-button.active {
+    background: transparent !important;
+    color: #F0B90B !important;
+    border-color: #F0B90B;
+    font-weight: 600;
+  }
+
+  .filter-button,
+  .week-dropdown {
+    padding: 10px 16px !important; /* Aumentado padding */
+    font-size: 0.9rem !important;
+    min-width: 80px !important;
   }
 }
 
 @media (max-width: 480px) {
   .homepage-container {
-    padding: 8px;
-    padding-top: 85px;
+    padding: 6px 4px 6px 4px !important; /* Padding equilibrado en dispositivos pequeños */
+    padding-top: 12px !important;
   }
   
   .header {
@@ -1592,30 +1615,33 @@ html, body, #root {
 
 .nav-filter-button {
   white-space: nowrap;
-  padding: 8px 16px;
-  border-radius: 20px;
+  padding: 6px 12px;
+  border-radius: 10px;
   border: 1px solid #3c3c3c;
-  background: #2a2a2a !important;
+  background: linear-gradient(135deg, #222222, #353535) !important;
   color: #e0e0e0;
   font-size: 0.9rem;
   transition: all 0.2s ease;
-  min-width: 80px; /* Ancho mínimo base */
+  min-width: 70px;
+  box-shadow: none;
 }
 
 .nav-filter-button.active {
-  background: #F0B90B !important;
-  color: #000;
+  background: linear-gradient(135deg, #222222, #353535) !important;
+  color: #F0B90B;
   border-color: #F0B90B;
+  box-shadow: none;
 }
 
 .filter-button,
 .week-dropdown {
-  background: #2a2a2a !important;
+  background: linear-gradient(135deg, #222222, #353535) !important;
   border: 1px solid #3c3c3c;
   color: #e0e0e0;
-  padding: 8px 12px;
-  border-radius: 20px;
+  padding: 6px 10px;
+  border-radius: 10px;
   font-size: 0.9rem;
+  box-shadow: none;
 }
 
 /* Estados de carga mejorados */
@@ -1637,14 +1663,14 @@ html, body, #root {
   /* Content area móvil */
   .content-area {
     padding-top: 80px !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+    padding-left: 4px !important;
+    padding-right: 4px !important;
     background-color: #2a2a2a !important; /* Cambiar de negro a gris */
   }
   
-  /* Homepage móvil - Sin padding derecho */
+  /* Homepage móvil - padding equilibrado */
   .homepage-container {
-    padding: 8px 0 8px 8px !important; /* Reducido padding general */
+    padding: 8px 4px 8px 4px !important; /* Padding equilibrado a ambos lados */
     padding-top: 16px !important; /* Reducido padding top */
     background: transparent !important;
   }
@@ -1661,7 +1687,7 @@ html, body, #root {
   /* Navegación optimizada - Botones más anchos */
   .nav-row {
     gap: 6px !important; /* Reducido gap para permitir botones más anchos */
-    padding: 0 0 0 4px !important; /* Solo padding izquierdo */
+    padding: 0 4px 0 4px !important; /* Padding equilibrado a ambos lados */
   }
   
   .nav-filter-button {
@@ -1674,8 +1700,9 @@ html, body, #root {
   }
   
   .nav-filter-button.active {
-    background: #F0B90B !important;
-    color: #000 !important;
+    background: transparent !important;
+    color: #F0B90B !important;
+    border-color: #F0B90B;
     font-weight: 600;
   }
   
@@ -1703,7 +1730,7 @@ html, body, #root {
 
 @media (max-width: 480px) {
   .homepage-container {
-    padding: 6px 0 6px 6px !important; /* Más reducido en pantallas pequeñas */
+    padding: 6px 4px 6px 4px !important; /* Padding equilibrado en dispositivos pequeños */
     padding-top: 12px !important;
   }
   
@@ -1713,15 +1740,23 @@ html, body, #root {
   }
   
   .nav-filter-button {
-    padding: 8px 16px !important; /* Ajustado para pantallas pequeñas */
+    padding: 5px 10px !important; /* Reducido aún más para móvil */
     font-size: 0.85rem !important;
-    min-width: 90px !important;
+    min-width: 70px !important;
+    border-radius: 10px !important; /* Mantener el radio de 10px también en móvil */
+  }
+  
+  .nav-filter-button.active {
+    background: linear-gradient(135deg, #222222, #353535) !important; /* Mismo gradiente */
+    color: #F0B90B !important;
+    border-color: #F0B90B;
   }
   
   .filter-button,
   .week-dropdown {
-    padding: 8px 12px !important;
+    padding: 5px 10px !important; /* Reducido aún más para móvil */
     font-size: 0.85rem !important;
-    min-width: 70px !important;
+    min-width: 60px !important;
+    border-radius: 10px !important; /* Mantener el radio de 10px también en móvil */
   }
 }

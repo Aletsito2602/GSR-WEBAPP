@@ -32,7 +32,15 @@ const CourseCard = ({
   };
 
   return (
-    <div className={`course-card ${variant}`} onClick={onPress}>
+    <div 
+      className={`course-card ${variant}`} 
+      onClick={onPress}
+      style={{
+        background: 'linear-gradient(to bottom, #222222 0%, #3C3C3C 100%)',
+        borderRadius: '20px',
+        fontFamily: 'Poppins, sans-serif'
+      }}
+    >
       <div className="course-card__image-container">
         <img src={imageUrl} alt={title} className="course-card__image" />
         {variant === 'default' && (
@@ -45,8 +53,8 @@ const CourseCard = ({
         </div>
       </div>
       <div className="course-card__content">
-        <h3 className="course-card__title">{title}</h3>
-        <p className="course-card__description">{description}</p>
+        <h3 className="course-card__title" style={{ fontSize: '20px', fontFamily: 'Poppins, sans-serif' }}>{title}</h3>
+        <p className="course-card__description" style={{ fontSize: '16px', fontFamily: 'Poppins, sans-serif', fontWeight: 'normal' }}>{description}</p>
         <div className="course-card__progress-bar-container">
           <div className="course-card__progress-bar" style={{ width: `${progress}%` }}></div>
         </div>

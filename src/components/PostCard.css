@@ -1,8 +1,8 @@
 /* src/components/PostCard.css */
 
 .post-card-container {
-  background: linear-gradient(135deg, var(--bg-card-primary) 0%, var(--bg-card-secondary) 100%) !important;
-  border-radius: 16px !important;
+  background: linear-gradient(to bottom, #222222 0%, #3C3C3C 100%) !important;
+  border-radius: 15px !important;
   padding: 24px !important;
   margin-bottom: 20px !important;
   color: var(--text-secondary) !important;
@@ -17,7 +17,7 @@
 .post-card-container:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px var(--shadow-medium);
-  background: linear-gradient(135deg, var(--bg-card-hover) 0%, #3a3a3a 100%) !important;
+  background: linear-gradient(to bottom, #2a2a2a 0%, #444444 100%) !important;
 }
 
 .post-header {
@@ -64,8 +64,9 @@
 }
 
 .post-author-info .author-name {
-  font-weight: 600;
-  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 25px;
   color: var(--text-white);
 }
 
@@ -75,7 +76,9 @@
 }
 
 .post-content {
-  line-height: 1.6;
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  line-height: 1.4;
   margin-bottom: 20px;
   overflow: hidden;
   /* Muestra aprox. 4-5 líneas */
@@ -89,10 +92,10 @@
   align-items: center;
   font-size: 0.9em;
   color: var(--text-muted);
+  gap: 30px;
 }
 
 .post-footer-action {
-  margin-right: 20px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -111,8 +114,14 @@
   gap: 8px;
 }
 
-.like-button .fa-heart.liked {
-  color: var(--accent-gold);
+.like-icon, .comment-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.like-count {
+  padding-right: 20px;
+  padding-left: 0;
 }
 
 /* =================================================== */
@@ -125,8 +134,8 @@
     margin-bottom: 12px !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
-    border-radius: 12px !important;
-    background: linear-gradient(135deg, var(--bg-card-primary) 0%, var(--bg-card-secondary) 100%) !important;
+    border-radius: 15px !important;
+    background: linear-gradient(to bottom, #222222 0%, #3C3C3C 100%) !important;
     border: 1px solid var(--border-light) !important;
     transition: background-color 0.2s ease !important;
     width: 100% !important;
@@ -137,12 +146,12 @@
 
   .post-card-container:hover {
     transform: none !important;
-    background: linear-gradient(135deg, var(--bg-card-hover) 0%, #3a3a3a 100%) !important;
+    background: linear-gradient(to bottom, #2a2a2a 0%, #444444 100%) !important;
     box-shadow: none !important;
   }
 
   .post-card-container:active {
-    background: linear-gradient(135deg, #323232 0%, #3d3d3d 100%) !important;
+    background: linear-gradient(to bottom, #2a2a2a 0%, #444444 100%) !important;
   }
 
   .post-header {
@@ -158,7 +167,9 @@
   }
 
   .post-author-info .author-name {
-    font-size: 0.95rem !important;
+    font-size: 28px !important;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
   }
 
   .post-author-info .author-meta {
@@ -166,34 +177,42 @@
   }
 
   .post-content {
-    font-size: 0.9rem !important;
-    line-height: 1.5 !important;
+    font-family: 'Poppins', sans-serif;
+    font-size: 22px !important;
+    line-height: 1.3 !important;
     margin-bottom: 16px !important;
     -webkit-line-clamp: 3 !important;
   }
 
   .post-footer {
     font-size: 0.85em !important;
+    gap: 25px !important;
   }
 
   .post-footer-action {
-    margin-right: 16px !important;
+    gap: 8px !important;
   }
 
   .like-button {
     font-size: 0.85rem !important;
+  }
+
+  .like-icon, .comment-icon {
+    width: 20px !important;
+    height: 20px !important;
   }
 }
 
 @media (max-width: 480px) {
   .post-card-container {
     padding: 16px 10px 16px 14px !important;
-    border-radius: 10px !important;
+    border-radius: 15px !important;
     width: 100% !important;
     max-width: 100% !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
     box-sizing: border-box !important;
+    background: linear-gradient(to bottom, #222222 0%, #3C3C3C 100%) !important;
   }
 
   .post-avatar,
@@ -205,7 +224,9 @@
   }
 
   .post-author-info .author-name {
-    font-size: 0.9rem !important;
+    font-size: 24px !important;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
   }
 
   .post-author-info .author-meta {
@@ -213,17 +234,23 @@
   }
 
   .post-content {
-    font-size: 0.85rem !important;
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px !important;
     margin-bottom: 14px !important;
   }
 
   .post-footer {
     font-size: 0.8em !important;
+    gap: 20px !important;
   }
 
-  .post-footer-action,
-  .like-button {
-    font-size: 0.8rem !important;
+  .post-footer-action {
+    gap: 6px !important;
+  }
+
+  .like-icon, .comment-icon {
+    width: 18px !important;
+    height: 18px !important;
   }
 }
 
@@ -240,14 +267,6 @@
 }
 
 @media (max-width: 768px) {
-  .post-author-info .author-name {
-    font-size: 0.95rem !important;
-  }
-
-  .post-content {
-    font-size: 0.9rem !important;
-  }
-
   .post-footer {
     font-size: 0.85em !important;
   }

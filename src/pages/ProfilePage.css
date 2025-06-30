@@ -178,19 +178,100 @@
 @media (max-width: 768px) {
   .profile-page {
     padding: 12px;
-    padding-top: 80px; /* Espacio para header fijo */
+    padding-top: 60px; /* Reducido el espacio para header */
     background: transparent;
   }
 
   .profile-header {
-    flex-direction: column;
-    gap: 16px;
-    margin-bottom: 24px;
-    text-align: center;
+    display: none; /* Ocultamos el header original */
   }
 
-  .profile-header h1 {
-    font-size: 1.3rem;
+  /* Nuevo botón de volver */
+  .back-button-profile {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    box-sizing: border-box;
+    background: linear-gradient(122.63deg, rgba(34, 34, 34, 0.75) 0%, rgba(215, 182, 21, 0.75) 100%);
+    border: 1px solid #3C3C3C;
+    border-radius: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    z-index: 10;
+  }
+
+  .back-icon-profile {
+    width: 20px;
+    height: 20px;
+    filter: brightness(0) invert(1);
+  }
+
+  /* Nuevos estilos para la sección de perfil en mobile */
+  .profile-mobile-header {
+    display: flex;
+    margin-top: 70px;
+    align-items: center;
+    gap: 15px;
+    padding: 0 5px;
+  }
+
+  .profile-avatar-mobile {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2C2C2C 0%, #1A1A1A 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #EAEAEA;
+    font-size: 1.8rem;
+    font-weight: 700;
+    border: 2px solid #F0B90B;
+    flex-shrink: 0;
+  }
+
+  .profile-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex-grow: 1;
+    height: 70px; /* Mismo alto que la foto */
+    justify-content: space-between;
+  }
+
+  .profile-tab-button {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    color: #a0a0a0;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    padding: 8px 0;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .profile-tab-button.active {
+    color: #F0B90B;
+    font-weight: 500;
+  }
+
+  .profile-tab-button.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 30px;
+    height: 2px;
+    background-color: #F0B90B;
   }
 
   .profile-section {
@@ -252,6 +333,85 @@
     width: 100%;
     padding: 14px 20px;
     align-self: stretch;
+  }
+
+  /* Estilos para la información del perfil en mobile */
+  .profile-info-mobile {
+    margin: 15px 0 20px;
+    padding: 0 5px;
+  }
+  
+  .profile-name-mobile {
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 5px;
+    color: #ffffff;
+  }
+  
+  .profile-username-mobile {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: #a0a0a0;
+    margin: 0 0 8px;
+  }
+  
+  .profile-level-mobile {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #F0B90B;
+    margin: 0 0 12px;
+  }
+  
+  .profile-bio-mobile {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    line-height: 1.4;
+    color: #e0e0e0;
+    margin: 0 0 15px;
+  }
+  
+  .profile-metadata-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    color: #a0a0a0;
+  }
+  
+  .profile-metadata-mobile span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .profile-metadata-mobile svg {
+    color: #F0B90B;
+    font-size: 14px;
+  }
+
+  /* Mostrar los nuevos tabs con borde y gradiente */
+  .profile-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex-grow: 1;
+    height: 70px; /* Mismo alto que la foto */
+    justify-content: space-between;
+  }
+  
+  /* Ajustar altura de los botones para que coincidan con la foto */
+  .profile-tab-button-new {
+    padding: 0;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0;
+    font-size: 13px;
+    line-height: 1;
   }
 }
 
@@ -1101,4 +1261,578 @@
     .profile-stats button {
         min-width: 150px;
     }
+}
+
+/* Estilos para mostrar/ocultar elementos según tamaño de pantalla */
+@media (max-width: 768px) {
+  /* Ocultar header de navegación original y header antiguo */
+  #root > header,
+  nav.top-nav-bar,
+  .page-header {
+    display: none !important;
+  }
+  
+  /* Ocultar elementos solo visibles en desktop */
+  .profile-details-card {
+    display: none;
+  }
+  
+  /* Mostrar elementos solo visibles en mobile */
+  .profile-mobile-header {
+    display: flex;
+    margin-top: 20px;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 0;
+  }
+  
+  /* Ajustes para el contenedor principal */
+  .my-profile-container {
+    padding: 0 12px 80px;
+    position: relative;
+    background-color: #222222;
+  }
+  
+  /* Estilos para la información del perfil en mobile */
+  .profile-info-mobile {
+    margin: 15px 0 20px;
+    padding: 0;
+  }
+  
+  /* Estilos para el nombre del perfil */
+  .profile-name-mobile {
+    font-family: 'Poppins', sans-serif;
+    font-size: 21px;
+    font-weight: 700;
+    margin: 0 0 5px;
+    background: linear-gradient(to right, #D7B615, #FFFFFF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* Estilos para el nivel */
+  .profile-level-mobile {
+    font-family: 'Poppins', sans-serif;
+    font-size: 19px;
+    font-weight: 600;
+    background: linear-gradient(to right, #FFFFFF, #A0A0A0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0 0 12px;
+  }
+  
+  /* Ocultar los tabs originales */
+  .profile-tab-button {
+    display: none;
+  }
+  
+  /* Mostrar los nuevos tabs con borde y gradiente */
+  .profile-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-grow: 1;
+    height: 100px; /* Más alto para que coincida con la foto más grande */
+    justify-content: space-between;
+    width: 65%; /* Más angosto */
+  }
+  
+  /* Ajustes para la sección de contribuciones */
+  .user-contributions {
+    margin-top: 0;
+  }
+  
+  .contributions-header {
+    padding: 0 0 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .contributions-header h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(to right, #FFFFFF, #A0A0A0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* Ajustes para las tarjetas de contribución */
+  .my-contribution-card {
+    display: none;
+  }
+  
+  /* Estilos para el avatar en mobile */
+  .profile-avatar-mobile {
+    width: 100px; /* Más grande */
+    height: 100px; /* Más grande */
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2C2C2C 0%, #1A1A1A 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #EAEAEA;
+    font-size: 2.2rem; /* Más grande */
+    font-weight: 700;
+    border: 2px solid #F0B90B;
+    flex-shrink: 0;
+  }
+  
+  /* Ajustar altura de los botones para que coincidan con la foto */
+  .profile-tab-button-new {
+    padding: 0;
+    height: 28px; /* Más alto */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0;
+    font-size: 13px;
+    line-height: 1;
+  }
+}
+
+@media (min-width: 769px) {
+  /* Ocultar elementos solo visibles en mobile */
+  .profile-mobile-header {
+    display: none;
+  }
+  
+  .back-button-profile {
+    display: none;
+  }
+  
+  .profile-info-mobile {
+    display: none;
+  }
+  
+  .profile-header-mobile {
+    display: none;
+  }
+}
+
+/* Header mobile con botón volver y título */
+.profile-header-mobile {
+  display: flex;
+  align-items: center;
+  padding: 15px 10px;
+  background-color: #222222;
+  position: relative;
+}
+
+.profile-title-mobile {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #FFFFFF;
+  margin: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Estilos para los nuevos botones de tab con borde y gradiente */
+.profile-tab-button-new {
+  background: linear-gradient(135deg, #222222 0%, #3C3C3C 100%);
+  border: 1px solid #3C3C3C;
+  border-radius: 10px;
+  color: #FFFFFF;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  padding: 8px 15px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+  width: 100%;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-tab-button-new.active {
+  background: linear-gradient(135deg, #D7B615 0%, #F0B90B 100%);
+  border-color: #F0B90B;
+  color: #FFFFFF;
+  font-weight: 500;
+}
+
+/* Estilos para el botón de filtro */
+.filter-button {
+  background: transparent;
+  border: none;
+  color: #F0B90B;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+/* ========================================= */
+/* ESTILOS PARA PC - LAYOUT DESKTOP */
+/* ========================================= */
+
+/* Ocultar elementos mobile en PC */
+@media (min-width: 769px) {
+  .profile-header-mobile,
+  .profile-mobile-layout,
+  .user-contributions-mobile {
+    display: none;
+  }
+  
+  .page-header-desktop {
+    display: block;
+    padding: 20px 0;
+    border-bottom: 1px solid #3C3C3C;
+    margin-bottom: 30px;
+  }
+  
+  .page-header-desktop h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    color: #FFFFFF;
+  }
+  
+  /* Layout principal desktop - Distribución de UserProfilePage */
+  .profile-desktop-layout {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Sidebar del perfil - Card principal */
+  .profile-details-card-desktop {
+    background: linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%);
+    border-radius: 20px;
+    border: 1px solid #3C3C3C;
+    padding: 30px;
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+  }
+  
+  .profile-main-section-desktop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  /* Avatar grande para desktop */
+  .profile-avatar-large-desktop {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 2px solid #6A6A6A;
+    background: linear-gradient(135deg, #3C3C3C 0%, #2A2A2A 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    font-size: 2.5rem;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    margin-bottom: 20px;
+    object-fit: cover;
+  }
+  
+  .profile-content-desktop {
+    width: 100%;
+  }
+  
+  /* Información del usuario desktop */
+  .profile-summary-desktop {
+    margin-bottom: 20px;
+  }
+  
+  .user-info-desktop {
+    text-align: center;
+  }
+  
+  .user-name-desktop {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    color: #FFFFFF;
+  }
+  
+  .user-level-desktop {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #A0A0A0;
+    margin: 0 0 20px 0;
+  }
+  
+  /* Botones de estadísticas en desktop */
+  .profile-stats-desktop {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .profile-stats-desktop .profile-tab-button-new {
+    margin-bottom: 0;
+  }
+  
+  /* Biografía desktop */
+  .user-bio-desktop {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .user-handle-desktop {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #A0A0A0;
+    margin: 0 0 10px 0;
+  }
+  
+  .bio-text-desktop {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    color: #EAEAEA;
+    line-height: 1.5;
+    margin: 0 0 15px 0;
+  }
+  
+  /* Enlaces sociales desktop */
+  .user-links-desktop {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .user-links-desktop a {
+    color: #A0A0A0;
+    font-size: 1.2rem;
+    transition: color 0.2s ease;
+  }
+  
+  .user-links-desktop a:hover {
+    color: #FFFFFF;
+  }
+  
+  /* Metadatos desktop */
+  .user-metadata-desktop {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    color: #A0A0A0;
+  }
+  
+  .user-metadata-desktop span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+  }
+  
+  /* Sección de contribuciones desktop */
+  .user-contributions-desktop {
+    background: linear-gradient(135deg, #2A2A2A 0%, #1A1A1A 100%);
+    border-radius: 20px;
+    border: 1px solid #3C3C3C;
+    padding: 30px;
+  }
+  
+  .contributions-header-desktop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #3C3C3C;
+    margin-bottom: 20px;
+  }
+  
+  .contributions-header-desktop h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    color: #FFFFFF;
+  }
+  
+  .contributions-header-desktop .filter-button {
+    color: #A0A0A0;
+    font-size: 1.2rem;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+  
+  .contributions-header-desktop .filter-button:hover {
+    background: rgba(106, 106, 106, 0.1);
+    color: #FFFFFF;
+  }
+  
+  .contributions-list-desktop {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+/* Ocultar elementos desktop en mobile */
+@media (max-width: 768px) {
+  .page-header-desktop,
+  .profile-desktop-layout {
+    display: none;
+  }
+  
+  .profile-header-mobile,
+  .profile-mobile-layout,
+  .user-contributions-mobile {
+    display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Mostrar header mobile y ocultar header original */
+  .profile-header-mobile {
+    display: flex;
+  }
+  
+  /* Ocultar header de navegación original y header antiguo */
+  #root > header,
+  nav.top-nav-bar,
+  .page-header {
+    display: none !important;
+  }
+  
+  /* Ocultar elementos solo visibles en desktop */
+  .profile-details-card {
+    display: none;
+  }
+  
+  /* Mostrar elementos solo visibles en mobile */
+  .profile-mobile-header {
+    display: flex;
+    margin-top: 70px;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 0;
+  }
+  
+  /* Ajustes para el contenedor principal */
+  .my-profile-container {
+    padding: 0 12px 80px;
+    position: relative;
+  }
+  
+  /* Estilos para la información del perfil en mobile */
+  .profile-info-mobile {
+    margin: 15px 0 20px;
+    padding: 0;
+  }
+  
+  /* Estilos para el nombre del perfil */
+  .profile-name-mobile {
+    font-family: 'Poppins', sans-serif;
+    font-size: 21px;
+    font-weight: 700;
+    margin: 0 0 5px;
+    background: linear-gradient(to right, #D7B615, #FFFFFF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* Estilos para el nivel */
+  .profile-level-mobile {
+    font-family: 'Poppins', sans-serif;
+    font-size: 19px;
+    font-weight: 600;
+    background: linear-gradient(to right, #FFFFFF, #A0A0A0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0 0 12px;
+  }
+  
+  /* Ocultar los tabs originales */
+  .profile-tab-button {
+    display: none;
+  }
+  
+  /* Mostrar los nuevos tabs con borde y gradiente */
+  .profile-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex-grow: 1;
+    height: 70px; /* Mismo alto que la foto */
+    justify-content: space-between;
+  }
+  
+  /* Ajustes para la sección de contribuciones */
+  .user-contributions {
+    margin-top: 0;
+  }
+  
+  .contributions-header {
+    padding: 0 0 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .contributions-header h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(to right, #FFFFFF, #A0A0A0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* Ajustes para las tarjetas de contribución */
+  .my-contribution-card {
+    display: none;
+  }
+  
+  /* Estilos para el avatar en mobile */
+  .profile-avatar-mobile {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2C2C2C 0%, #1A1A1A 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #EAEAEA;
+    font-size: 1.8rem;
+    font-weight: 700;
+    border: 2px solid #F0B90B;
+    flex-shrink: 0;
+  }
+}
+
+@media (min-width: 769px) {
+  /* Ocultar elementos solo visibles en mobile */
+  .profile-mobile-header {
+    display: none;
+  }
+  
+  .back-button-profile {
+    display: none;
+  }
+  
+  .profile-info-mobile {
+    display: none;
+  }
+  
+  .profile-header-mobile {
+    display: none;
+  }
 } 

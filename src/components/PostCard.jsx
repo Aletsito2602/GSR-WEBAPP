@@ -174,10 +174,11 @@ function PostCard({ post }) {
 
         <div className="post-footer">
             <button onClick={handleLike} className="like-button">
-              <i className={`fa-heart ${isLiked ? 'fas liked' : 'far'}`}></i> {likeCount}
+              <img src="/images/likes.svg" alt="Like" className={`like-icon ${isLiked ? 'liked' : ''}`} />
+              <span className="like-count">{likeCount}</span>
             </button>
             <div className="post-footer-action">
-                <i className="far fa-comment"></i>
+                <img src="/images/comments.svg" alt="Comments" className="comment-icon" />
                 <span>{safePost.comments}</span>
             </div>
         </div>

@@ -12,8 +12,8 @@ function ClassCard({ id, title, description, progress, imageUrl }) {
   return (
     <Link to={`/clases/${id}`} style={{ textDecoration: 'none' }}>
       <div style={{
-        background: '#2c2c2c',
-        borderRadius: '16px',
+        background: 'linear-gradient(to bottom, #222222 0%, #3C3C3C 100%)',
+        borderRadius: '20px',
         overflow: 'hidden',
         color: '#fff',
         fontFamily: 'Poppins, sans-serif',
@@ -53,8 +53,21 @@ function ClassCard({ id, title, description, progress, imageUrl }) {
           </div>
         </div>
         <div style={{ padding: '16px', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-          <h3 style={{ marginTop: 0, marginBottom: '8px', fontSize: '1.1rem' }}>{title}</h3>
-          <p style={{ color: '#aaa', fontSize: '14px', marginBottom: '16px', flexGrow: 1 }}>{description}</p>
+          <h3 style={{ 
+            marginTop: 0, 
+            marginBottom: '8px', 
+            fontSize: '20px',
+            fontFamily: 'Poppins, sans-serif',
+            fontWeight: '500'
+          }}>{title}</h3>
+          <p style={{ 
+            color: '#aaa', 
+            fontSize: '16px', 
+            marginBottom: '16px', 
+            flexGrow: 1,
+            fontFamily: 'Poppins, sans-serif',
+            fontWeight: 'normal'
+          }}>{description}</p>
           <ProgressBar progress={progress} />
           <p style={{ color: '#aaa', fontSize: '12px', marginTop: '8px', textAlign: 'right', marginBlockEnd: 0 }}>{progress || 0}% completado</p>
         </div>

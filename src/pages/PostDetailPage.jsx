@@ -129,9 +129,12 @@ function PostDetailPage() {
 
   return (
     <div className="post-detail-container">
-      <button onClick={() => navigate(-1)} className="back-button">
-        <FaArrowLeft />
-      </button>
+      <div className="back-button-wrapper">
+        <button onClick={() => navigate(-1)} className="back-button-absolute">
+          <img src="/images/left-arrow.svg" alt="Volver" className="back-icon" />
+        </button>
+        <span className="back-text">Volver</span>
+      </div>
 
       <div className="post-card-detail">
         <div className="post-header-detail">
@@ -150,10 +153,12 @@ function PostDetailPage() {
               </div>
         <div className="post-footer-detail">
           <button onClick={handleLike} className="like-button-detail">
-            <i className={`fa-heart ${isLiked ? 'fas' : 'far'}`}></i> {likeCount}
+            <img src="/images/likes.svg" alt="Like" className="like-icon-detail" />
+            <span className="like-count-detail">{likeCount}</span>
           </button>
           <div className="comment-count-detail">
-            <i className="far fa-comment"></i> {post.commentCount || 0}
+            <img src="/images/comments.svg" alt="Comments" className="comment-icon-detail" />
+            <span>{post.commentCount || 0}</span>
             </div>
           </div>
       </div>

@@ -39,27 +39,34 @@ const MemberCard = ({ member, onClick }) => {
     const userInitials = getInitials(member.displayName);
     const lastActive = getLastActiveTime(member.lastSeen);
     const isOnline = lastActive === 'En línea';
-    const bio = member.bio || 'Sin biografía';
+    const bio = member.bio || 'Sin bio';
     const location = member.location || 'Argentina';
     
     return (
         <div 
             style={{ 
+                width: '100%',
+                maxWidth: '1230px',
+                minHeight: '250px',
                 background: 'linear-gradient(135deg, #2A2A2A 0%, #3C3C3C 100%)',
                 borderRadius: '20px', 
-                padding: '24px', 
+                padding: '30px', 
                 color: '#fff', 
-                fontFamily: 'Inter, SF Pro Display, Nunito Sans, sans-serif',
+                fontFamily: 'Poppins, Inter, SF Pro Display, Nunito Sans, sans-serif',
                 border: '1px solid #4A4A4A',
                 cursor: 'pointer',
                 transition: 'all 0.3s ease',
                 position: 'relative',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                boxSizing: 'border-box'
             }}
             onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = '#F0B90B';
+                e.currentTarget.style.borderColor = '#6A6A6A';
                 e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 8px 25px rgba(240, 185, 11, 0.15)';
+                e.currentTarget.style.boxShadow = '0 8px 25px rgba(106, 106, 106, 0.15)';
             }}
             onMouseLeave={(e) => {
                 e.currentTarget.style.borderColor = '#4A4A4A';
@@ -74,24 +81,24 @@ const MemberCard = ({ member, onClick }) => {
                 left: '-100%',
                 width: '100%',
                 height: '100%',
-                background: 'linear-gradient(90deg, transparent, rgba(240, 185, 11, 0.05), transparent)',
+                background: 'linear-gradient(90deg, transparent, rgba(106, 106, 106, 0.05), transparent)',
                 transition: 'left 0.6s ease',
                 pointerEvents: 'none'
             }} className="shine-effect"></div>
             
-            {/* Layout horizontal */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+            {/* Header con foto y título */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '20px', marginBottom: '20px' }}>
                 {/* Avatar */}
                 <div style={{ flexShrink: 0 }}>
-                    {member.photoURL && member.photoURL.trim() !== '' ? (
+                    {member.photoURL && member.photoURL.trim() !== '' && member.photoURL !== 'undefined' ? (
                         <img 
                             src={member.photoURL} 
                             alt={member.displayName} 
                             style={{ 
-                                width: '64px', 
-                                height: '64px', 
+                                width: '80px', 
+                                height: '80px', 
                                 borderRadius: '50%',
-                                border: '1px solid #F0B90B',
+                                border: '2px solid #6A6A6A',
                                 objectFit: 'cover'
                             }}
                             onError={(e) => {
@@ -112,125 +119,137 @@ const MemberCard = ({ member, onClick }) => {
                     
                     {/* Contenedor de iniciales - mostrar si no hay foto o si falla la carga */}
                     <div style={{ 
-                        width: '64px', 
-                        height: '64px', 
+                        width: '80px', 
+                        height: '80px', 
                         borderRadius: '50%',
-                        border: '1px solid #F0B90B',
+                        border: '2px solid #6A6A6A',
                         background: 'linear-gradient(135deg, #3C3C3C 0%, #2A2A2A 100%)',
-                        display: member.photoURL && member.photoURL.trim() !== '' ? 'none' : 'flex',
+                        display: (!member.photoURL || member.photoURL.trim() === '' || member.photoURL === 'undefined') ? 'flex' : 'none',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        color: '#F0B90B',
-                        fontSize: '1.5rem',
+                        color: '#FFFFFF',
+                        fontSize: '1.8rem',
                         fontWeight: '700'
                     }}>
                         {userInitials}
                     </div>
                 </div>
                 
-                {/* Contenido principal */}
+                {/* Información del usuario */}
                 <div style={{ flex: 1, minWidth: 0 }}>
-                    {/* Nombre y username */}
-                    <div style={{ marginBottom: '8px' }}>
-                        <h3 style={{ 
-                            margin: 0, 
-                            fontSize: '1.3rem', 
-                            fontWeight: '600',
-                            color: '#EAEAEA',
-                            marginBottom: '4px'
-                        }}>
-                            {member.displayName || 'Usuario'}
-                        </h3>
-                        <p style={{ 
-                            margin: 0, 
-                            color: '#F0B90B', 
+                    {/* Nombre */}
+                    <h2 style={{ 
+                        margin: '0 0 8px 0', 
+                        fontSize: '2rem', 
+                        fontWeight: '700',
+                        color: '#FFFFFF',
+                        lineHeight: '1.2'
+                    }}>
+                        {member.displayName || 'Usuario'}
+                    </h2>
+                    
+                    {/* Username */}
+                    <p style={{ 
+                        margin: '0 0 20px 0', 
+                        color: '#A0A0A0', 
+                        fontSize: '1.2rem',
+                        fontWeight: '500'
+                    }}>
+                        @{member.username || member.displayName?.toLowerCase().replace(/\s+/g, '') || 'usuario'}
+                    </p>
+                </div>
+            </div>
+            
+            {/* Biografía */}
+            <div style={{ 
+                flex: 1,
+                display: 'flex',
+                alignItems: 'center',
+                marginBottom: '20px'
+            }}>
+                <p style={{ 
+                    color: '#CCCCCC', 
+                    fontSize: '1.1rem',
+                    lineHeight: '1.6',
+                    margin: 0,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: 'vertical',
+                    fontFamily: 'Poppins, sans-serif'
+                }}>
+                    {bio}
+                </p>
+            </div>
+            
+            {/* Footer con estado, ubicación y botón */}
+            <div style={{ 
+                display: 'flex', 
+                justifyContent: 'space-between',
+                alignItems: 'center'
+            }}>
+                {/* Estado y ubicación */}
+                <div style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '30px'
+                }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <GoDotFill 
+                            color={isOnline ? '#32CD32' : '#888'} 
+                            size={16}
+                        />
+                        <span style={{ 
+                            color: '#A0A0A0', 
                             fontSize: '1rem',
                             fontWeight: '500'
                         }}>
-                            @{member.username || member.displayName?.toLowerCase().replace(/\s+/g, '') || 'usuario'}
-                        </p>
+                            {lastActive}
+                        </span>
                     </div>
-                    
-                    {/* Biografía */}
-                    <p style={{ 
-                        color: '#CCCCCC', 
-                        fontSize: '1rem',
-                        lineHeight: '1.5',
-                        margin: '12px 0',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical'
-                    }}>
-                        "{bio}"
-                    </p>
-                    
-                    {/* Estado y ubicación */}
-                    <div style={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        gap: '24px',
-                        marginTop: '16px',
-                        flexWrap: 'wrap'
-                    }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <GoDotFill 
-                                color={isOnline ? '#32CD32' : '#888'} 
-                                size={12}
-                            />
-                            <span style={{ 
-                                color: '#A0A0A0', 
-                                fontSize: '0.9rem',
-                                fontWeight: '500'
-                            }}>
-                                {lastActive}
-                            </span>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <FaMapMarkerAlt color="#F0B90B" size={14} />
-                            <span style={{ 
-                                color: '#A0A0A0', 
-                                fontSize: '0.9rem'
-                            }}>
-                                {location}
-                            </span>
-                        </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <FaMapMarkerAlt color="#A0A0A0" size={16} />
+                        <span style={{ 
+                            color: '#A0A0A0', 
+                            fontSize: '1rem'
+                        }}>
+                            {location}
+                        </span>
                     </div>
                 </div>
                 
                 {/* Botón Ver perfil */}
-                <div style={{ flexShrink: 0 }}>
-                    <button 
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            onClick(member);
-                        }}
-                        style={{ 
-                            background: 'transparent',
-                            color: '#FFFFFF',
-                            border: '2px solid #F0B90B',
-                            padding: '12px 24px',
-                            borderRadius: '25px',
-                            cursor: 'pointer',
-                            fontWeight: '600',
-                            fontSize: '1rem',
-                            transition: 'all 0.2s ease'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.target.style.transform = 'translateY(-2px)';
-                            e.target.style.boxShadow = '0 8px 25px rgba(240, 185, 11, 0.3)';
-                            e.target.style.backgroundColor = 'rgba(240, 185, 11, 0.1)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.target.style.transform = 'translateY(0)';
-                            e.target.style.boxShadow = 'none';
-                            e.target.style.backgroundColor = 'transparent';
-                        }}
-                    >
-                        Ver perfil
-                    </button>
-                </div>
+                <button 
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onClick(member);
+                    }}
+                    style={{ 
+                        background: 'linear-gradient(90deg, #000000 0%, #4A4A4A 100%)',
+                        color: '#FFFFFF',
+                        border: 'none',
+                        padding: '15px 35px',
+                        borderRadius: '30px',
+                        cursor: 'pointer',
+                        fontWeight: '600',
+                        fontSize: '1.1rem',
+                        transition: 'all 0.3s ease',
+                        fontFamily: 'Poppins, sans-serif'
+                    }}
+                    onMouseEnter={(e) => {
+                        e.target.style.transform = 'translateY(-2px)';
+                        e.target.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.3)';
+                        e.target.style.background = 'linear-gradient(90deg, #1A1A1A 0%, #5A5A5A 100%)';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.target.style.transform = 'translateY(0)';
+                        e.target.style.boxShadow = 'none';
+                        e.target.style.background = 'linear-gradient(90deg, #000000 0%, #4A4A4A 100%)';
+                    }}
+                >
+                    Ver perfil
+                </button>
             </div>
         </div>
     );
@@ -350,28 +369,7 @@ function MembersPage() {
             padding: '20px',
             fontFamily: 'Inter, SF Pro Display, Nunito Sans, sans-serif'
         }}>
-            {/* Header */}
-            <div style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between', 
-                alignItems: 'center', 
-                marginBottom: '32px',
-                flexWrap: 'wrap',
-                gap: '16px'
-            }}>
-                <h1 style={{
-                    fontSize: '2rem',
-                    fontWeight: '700',
-                    margin: 0,
-                    color: '#EAEAEA',
-                    background: 'linear-gradient(135deg, #F0B90B 0%, #E5A500 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text'
-                }}>
-                    Miembros de la Comunidad
-                </h1>
-            </div>
+
 
             {/* Filtros y búsqueda */}
             <div style={{ 
@@ -382,36 +380,36 @@ function MembersPage() {
                 flexWrap: 'wrap',
                 gap: '16px'
             }}>
-                {/* Filtros */}
+                {/* Filtros con diseño de tabbar de comunidad */}
                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                     {filters.map(filter => (
                         <button
                             key={filter.key}
                             onClick={() => setActiveFilter(filter.key)}
                             style={{
-                                background: activeFilter === filter.key 
-                                    ? 'linear-gradient(135deg, #F0B90B 0%, #E5A500 100%)' 
-                                    : 'linear-gradient(135deg, #2A2A2A 0%, #1F1F1F 100%)',
-                                color: activeFilter === filter.key ? '#000' : '#EAEAEA',
-                                border: activeFilter === filter.key ? 'none' : '1px solid #3C3C3C',
-                                padding: '10px 20px',
-                                borderRadius: '25px',
+                                background: 'linear-gradient(135deg, #222222, #353535)',
+                                color: activeFilter === filter.key ? '#FFFFFF' : '#e0e0e0',
+                                border: activeFilter === filter.key ? '2px solid #a18a51' : '1px solid #3c3c3c',
+                                padding: '6px 12px',
+                                borderRadius: '10px',
                                 cursor: 'pointer',
                                 fontWeight: '600',
                                 fontSize: '0.9rem',
                                 transition: 'all 0.2s ease',
-                                whiteSpace: 'nowrap'
+                                whiteSpace: 'nowrap',
+                                minWidth: '70px',
+                                boxShadow: 'none'
                             }}
                             onMouseEnter={(e) => {
                                 if (activeFilter !== filter.key) {
-                                    e.target.style.borderColor = '#F0B90B';
-                                    e.target.style.color = '#F0B90B';
+                                    e.target.style.background = 'linear-gradient(135deg, #252525, #383838)';
+                                    e.target.style.borderColor = 'rgba(161, 138, 81, 0.6)';
                                 }
                             }}
                             onMouseLeave={(e) => {
                                 if (activeFilter !== filter.key) {
-                                    e.target.style.borderColor = '#3C3C3C';
-                                    e.target.style.color = '#EAEAEA';
+                                    e.target.style.background = 'linear-gradient(135deg, #222222, #353535)';
+                                    e.target.style.borderColor = '#3c3c3c';
                                 }
                             }}
                         >
@@ -421,12 +419,12 @@ function MembersPage() {
                 </div>
                 
                 {/* Búsqueda */}
-                <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                     <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                         <FaSearch style={{ 
                             position: 'absolute', 
                             left: '16px', 
-                            color: '#F0B90B',
+                            color: '#A0A0A0',
                             zIndex: 1
                         }} />
                         <input
@@ -435,28 +433,53 @@ function MembersPage() {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             style={{
-                                background: '#2C2C2C',
-                                border: '1px solid #3C3C3C',
-                                borderRadius: '25px',
-                                padding: '12px 20px 12px 48px',
-                                color: '#EAEAEA',
-                                fontSize: '1rem',
-                                minWidth: '250px',
+                                background: 'linear-gradient(135deg, #222222, #353535)',
+                                border: '1px solid #3c3c3c',
+                                borderRadius: '10px',
+                                padding: '6px 12px 6px 40px',
+                                color: '#e0e0e0',
+                                fontSize: '0.9rem',
+                                minWidth: '200px',
                                 outline: 'none',
-                                transition: 'border-color 0.2s ease'
+                                transition: 'border-color 0.2s ease',
+                                boxShadow: 'none'
                             }}
-                            onFocus={(e) => e.target.style.borderColor = '#F0B90B'}
-                            onBlur={(e) => e.target.style.borderColor = '#3C3C3C'}
+                            onFocus={(e) => e.target.style.borderColor = 'rgba(161, 138, 81, 0.6)'}
+                            onBlur={(e) => e.target.style.borderColor = '#3c3c3c'}
                         />
                     </div>
+                    <button 
+                        style={{
+                            background: 'linear-gradient(135deg, #222222, #353535)',
+                            border: '1px solid #3c3c3c',
+                            color: '#e0e0e0',
+                            padding: '6px 10px',
+                            borderRadius: '10px',
+                            fontSize: '0.9rem',
+                            cursor: 'pointer',
+                            boxShadow: 'none',
+                            transition: 'all 0.2s ease'
+                        }}
+                        onMouseEnter={(e) => {
+                            e.target.style.background = 'linear-gradient(135deg, #252525, #383838)';
+                            e.target.style.borderColor = 'rgba(161, 138, 81, 0.6)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.target.style.background = 'linear-gradient(135deg, #222222, #353535)';
+                            e.target.style.borderColor = '#3c3c3c';
+                        }}
+                    >
+                        <FaFilter />
+                    </button>
                 </div>
             </div>
 
             {/* Lista de miembros */}
             <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '16px'
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(1230px, 100%), 1fr))',
+                gap: '24px',
+                justifyContent: 'center'
             }}>
                 {filteredMembers.length > 0 ? (
                     filteredMembers.map(member => (
@@ -475,7 +498,7 @@ function MembersPage() {
                         borderRadius: '20px',
                         border: '1px solid #3C3C3C'
                     }}>
-                        <FaUser size={48} style={{ marginBottom: '16px', color: '#F0B90B' }} />
+                        <FaUser size={48} style={{ marginBottom: '16px', color: '#A0A0A0' }} />
                         <h3 style={{ color: '#EAEAEA', marginBottom: '8px' }}>
                             No se encontraron miembros
                         </h3>

@@ -5,9 +5,9 @@
   --text-white: #FFFFFF;
   --progress-bar-bg: #363636;
 
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  background-color: var(--background-dark);
-  border-radius: 12px;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to bottom, #222222 0%, #3C3C3C 100%);
+  border-radius:15x;
   overflow: hidden;
   position: relative;
   cursor: pointer;
@@ -89,18 +89,19 @@
 .course-card__title {
   font-weight: 600;
   color: var(--text-white);
-  font-size: 1.25rem;
+  font-size: 20px;
   margin: 0;
   line-height: 1.2;
+  font-family: 'Poppins', sans-serif;
 }
 
 .course-card__description {
-  font-weight: 400;
   color: var(--text-light);
-  font-size: 0.9rem;
-  line-height: 1.5;
+  font-size: 16px;
   margin: 0;
-  flex-grow: 1;
+  line-height: 1.4;
+  font-family: 'Poppins', sans-serif;
+  font-weight: normal;
 }
 
 .course-card__progress-bar-container {
@@ -109,23 +110,60 @@
   background-color: var(--progress-bar-bg);
   border-radius: 3px;
   overflow: hidden;
-  margin-top: auto; /* Push to bottom */
 }
 
 .course-card__progress-bar {
   height: 100%;
-  background-color: var(--primary-color);
+  background: linear-gradient(90deg, #D7B615, #F0D042);
   border-radius: 3px;
-  transition: width 0.5s ease-in-out;
+  transition: width 0.3s ease;
 }
 
 .course-card__progress-text {
-  font-weight: 400;
   color: var(--text-light);
   font-size: 0.8rem;
   margin: 0;
+  text-align: right;
 }
 
+/* Variante compacta para listas */
+.course-card.compact {
+  flex-direction: row;
+  height: 100px;
+}
+
+.course-card.compact .course-card__image-container {
+  width: 30%;
+  padding-bottom: 0;
+  height: 100%;
+}
+
+.course-card.compact .course-card__content {
+  width: 70%;
+}
+
+.course-card.compact .course-card__title {
+  font-size: 1rem;
+}
+
+.course-card.compact .course-card__description {
+  display: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .course-card__content {
+    padding: 15px;
+  }
+  
+  .course-card__title {
+    font-size: 18px;
+  }
+  
+  .course-card__description {
+    font-size: 14px;
+  }
+}
 
 /* Variant Mindset */
 .course-card.mindset .course-card__play-button {
