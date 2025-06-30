@@ -1,0 +1,50 @@
+.niveles-page {
+  --bg-dark-primary: #1A1A1A;
+  --text-white: #FFFFFF;
+  
+  background-color: var(--bg-dark-primary);
+  color: var(--text-white);
+  padding: 24px;
+  min-height: 100vh;
+}
+
+.niveles-page__main-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centrar la tarjeta de perfil */
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.niveles-page__bottom-section {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 24px;
+  width: 100%;
+  align-items: start;
+}
+
+.niveles-page__left-column,
+.niveles-page__right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.ranking-info {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .niveles-page__bottom-section {
+    grid-template-columns: 1fr;
+  }
+} 

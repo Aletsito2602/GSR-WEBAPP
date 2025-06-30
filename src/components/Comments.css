@@ -1,0 +1,160 @@
+.comments-section {
+  background-color: #2a2a2a;
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid #3c3c3c;
+}
+
+.comments-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #3c3c3c;
+}
+
+.comment-item {
+  display: flex;
+  gap: 12px;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #3c3c3c;
+}
+.comment-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.comment-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-top: 4px;
+}
+
+.comment-body {
+  flex-grow: 1;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.comment-author {
+  font-weight: 600;
+  color: #fff;
+}
+
+.comment-time {
+  font-size: 0.8rem;
+  color: #a0a0a0;
+}
+
+.comment-text {
+  margin: 0 0 12px 0;
+  line-height: 1.6;
+}
+
+.comment-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-button, .reply-button {
+  background: none;
+  border: none;
+  color: #a0a0a0;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.reply-button {
+  margin-left: auto; /* Empuja el botón de responder a la derecha */
+}
+
+/* Formulario para nuevo comentario */
+.comment-form {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.comment-textarea {
+  flex-grow: 1;
+  background-color: #3c3c3c;
+  border: 1px solid #555;
+  border-radius: 12px;
+  padding: 12px;
+  color: #fff;
+  resize: vertical;
+  min-height: 50px;
+  font-family: inherit;
+  font-size: 1rem;
+}
+.comment-textarea::placeholder {
+  color: #888;
+}
+
+.comment-submit-button {
+  background: linear-gradient(to right, #D7B615, #B99C18);
+  color: #121212;
+  border: none;
+  border-radius: 12px;
+  padding: 0 24px;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-end; /* Alinear con la parte de abajo del textarea */
+}
+.comment-submit-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .comments-section {
+    padding: 16px;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: none; /* Evitar doble borde con la tarjeta de post */
+  }
+
+  .comments-title {
+    font-size: 1rem;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+
+  .comment-author {
+    font-size: 0.9rem;
+  }
+
+  .comment-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .comment-actions {
+    font-size: 0.8rem;
+  }
+
+  .comment-form {
+    flex-direction: column;
+    align-items: flex-end; /* Alinear botón a la derecha */
+    gap: 8px;
+  }
+  
+  .comment-textarea {
+    width: 100%;
+    box-sizing: border-box; /* Asegurar que el padding no cause overflow */
+  }
+
+  .comment-submit-button {
+    height: 40px;
+    padding: 0 20px;
+    align-self: flex-end;
+  }
+} 

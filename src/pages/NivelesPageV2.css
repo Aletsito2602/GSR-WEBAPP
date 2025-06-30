@@ -1,0 +1,78 @@
+.niveles-page-v2 {
+  padding: 20px;
+  color: var(--text-white);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.niveles-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background-color: #1e1e1e;
+  border-radius: 12px;
+  margin: 20px 0;
+  font-size: 0.9rem;
+  color: #a0a0a0;
+  position: relative;
+}
+
+.position-info {
+  font-weight: 500;
+  color: var(--text-white);
+}
+
+.last-updated {
+  color: var(--text-light-gray);
+}
+
+.niveles-content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.score-modal-content {
+  font-family: 'Poppins', sans-serif;
+}
+
+.score-modal-content h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 24px;
+}
+
+.score-modal-content .score-section {
+  margin-bottom: 24px;
+}
+
+.score-modal-content h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #D7B615;
+  margin-bottom: 8px;
+}
+
+.score-modal-content p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #e0e0e0;
+  margin: 0;
+}
+
+.levels-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  font-size: 16px;
+  color: #e0e0e0;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .niveles-content-grid {
+    grid-template-columns: 1fr;
+  }
+} 

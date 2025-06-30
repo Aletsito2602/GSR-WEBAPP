@@ -1,0 +1,135 @@
+.roadmap-node-container {
+  display: flex;
+  position: relative;
+  margin-bottom: 20px;
+  align-items: flex-start;
+}
+
+.roadmap-node-icon-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.roadmap-node-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-white);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.connector-line {
+  width: 3px;
+  height: 100%;
+  min-height: 80px; /* Asegura que la línea tenga una longitud mínima */
+  position: absolute;
+  top: 40px; /* Comienza justo debajo del icono */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: -1;
+}
+
+.roadmap-node-card {
+  background-color: var(--bg-card-secondary);
+  border: 1px solid var(--border-gray);
+  border-radius: 12px;
+  padding: 20px;
+  flex-grow: 1;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.roadmap-node-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-content .card-title {
+  margin: 0 0 8px 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.card-content .card-description {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-light-gray);
+}
+
+/* Status: Completed */
+.status-completed .roadmap-node-icon,
+.roadmap-node-icon.status-completed {
+  background-color: var(--accent-yellow);
+}
+.connector-line.status-completed {
+  background-color: var(--progress-line-completed);
+}
+.roadmap-node-card.status-completed {
+  border-left: 5px solid var(--accent-yellow);
+}
+.roadmap-node-card.status-completed .card-title {
+  color: var(--text-white);
+}
+
+/* Status: Active */
+.status-active .roadmap-node-icon,
+.roadmap-node-icon.status-active {
+  background-color: var(--accent-yellow);
+  box-shadow: 0 0 15px 5px rgba(255, 215, 0, 0.5); /* Glow effect */
+  transform: scale(1.1);
+}
+.connector-line.status-active {
+  background-color: var(--progress-line-pending);
+}
+.roadmap-node-card.status-active {
+  border: 1px solid var(--accent-yellow);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+}
+.roadmap-node-card.status-active .card-title {
+  color: var(--text-white);
+}
+
+/* Status: Locked */
+.status-locked .roadmap-node-icon,
+.roadmap-node-icon.status-locked {
+  background-color: var(--border-gray);
+  color: var(--text-light-gray);
+  cursor: not-allowed;
+}
+.connector-line.status-locked {
+  background-color: var(--progress-line-pending);
+}
+.roadmap-node-card.status-locked {
+  background-color: #1f1f1f;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.roadmap-node-card.status-locked .card-title,
+.roadmap-node-card.status-locked .card-description {
+  color: var(--text-light-gray);
+}
+
+/* Progress Bar */
+.progress-bar-container {
+  background-color: var(--border-gray);
+  border-radius: 5px;
+  height: 6px;
+  margin-top: 15px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  background-color: var(--accent-yellow);
+  height: 100%;
+  border-radius: 5px;
+} 

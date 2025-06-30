@@ -1,0 +1,40 @@
+.level-progression-list-v2 {
+  background-color: #2a2a2a;
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid var(--border-gray);
+}
+
+.level-item {
+  padding: 16px 0;
+}
+
+.level-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.level-title {
+  color: var(--text-white);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.level-lock-icon {
+  color: var(--text-light-gray);
+}
+
+.level-description {
+  color: var(--text-light-gray);
+  font-size: 14px;
+  margin: 0;
+}
+
+.level-divider {
+  border: none;
+  height: 1px;
+  background-color: var(--border-gray);
+  margin: 0;
+} 

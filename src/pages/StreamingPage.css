@@ -1,0 +1,70 @@
+/* /src/pages/StreamingPage.css */
+
+.streaming-page-container {
+    padding: 24px;
+    max-width: 1300px;
+    margin: 0 auto;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.streaming-page-header {
+    color: #FFFFFF;
+    margin-bottom: 24px;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.live-section-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+.recorded-section-container {
+    margin-top: 48px;
+}
+
+.recorded-section-header h2 {
+    color: #FFD700;
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+}
+
+.recorded-section-header p {
+    color: #FFFFFF;
+    margin-top: 0;
+    max-width: 600px;
+    line-height: 1.5;
+}
+
+.recorded-videos-carousel {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 20px 0;
+    /* Custom Scrollbar for carousel */
+    scrollbar-width: thin;
+    scrollbar-color: #FFD700 #1A1A1A;
+}
+
+.recorded-videos-carousel::-webkit-scrollbar {
+    height: 8px;
+}
+
+.recorded-videos-carousel::-webkit-scrollbar-track {
+    background: #1A1A1A;
+    border-radius: 4px;
+}
+
+.recorded-videos-carousel::-webkit-scrollbar-thumb {
+    background-color: #FFD700;
+    border-radius: 4px;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .live-section-container {
+        grid-template-columns: 1fr;
+    }
+} 

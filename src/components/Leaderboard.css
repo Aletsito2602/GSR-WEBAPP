@@ -1,0 +1,60 @@
+.leaderboard {
+  --text-white: #FFFFFF;
+  --accent-yellow: #FFD700;
+  --bg-tab-active: #363636;
+  --text-light-gray: #A9A9A9;
+  
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  padding: 20px;
+}
+
+.leaderboard__header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.leaderboard__trophy-icon {
+  color: var(--accent-yellow);
+  font-size: 1.8rem;
+}
+
+.leaderboard__title {
+  color: var(--text-white);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.leaderboard__tabs {
+  display: flex;
+  background-color: #242424; /* bg-card-secondary */
+  border-radius: 8px;
+  padding: 5px;
+  margin-bottom: 20px;
+}
+
+.leaderboard__tab-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background-color: transparent;
+  color: var(--text-light-gray);
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.leaderboard__tab-btn.active {
+  background-color: var(--bg-tab-active);
+  color: var(--text-white);
+}
+
+.leaderboard__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+} 

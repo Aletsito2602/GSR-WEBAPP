@@ -17,13 +17,18 @@ import VideoPlayer from '../components/VideoPlayer';
 import VideoInfo from '../components/VideoInfo';
 import Playlist from '../components/Playlist';
 import VideoGallery from '../components/VideoGallery';
-import NivelesPageNuevo from '../components/NivelesPageNuevo'; // Importar el nuevo componente
+import NivelesPageV2 from '../pages/NivelesPageV2'; // Importar el nuevo componente de niveles
 import MapaPage from '../components/MapaPage'; // Importar el nuevo componente de mapa
 import TopNavBar from '../components/TopNavBar';
 import Header from '../components/Header';
 import CalendarioPage from './CalendarioPage'; // Importar la página de calendario
 import MembersPage from './MembersPage'; // Importar la página de miembros
 import AboutPage from './AboutPage'; // Importar AboutPage
+import CourseCard from '../components/CourseCard'; // Importar la nueva tarjeta de curso
+import './ClasesPage.css'; // Importar los estilos para la página de clases
+import LiveChat from '../components/LiveChat'; // Importar chat
+import RecordedVideoCard from '../components/RecordedVideoCard'; // Importar tarjeta de video grabado
+import './StreamingPage.css'; // Importar estilos de la página de streaming
 
 // Componente para el feed de la comunidad
 const CommunityFeed = ({ 
@@ -318,36 +323,20 @@ function UserProfile({ currentUser }) {
         </div>
 
         {/* Botón para guardar cambios */}
-        <button
+        <button 
           onClick={handleSaveChanges}
           disabled={!hasChanges || isUploading}
-          style={{
-            padding: '12px 24px',
-            backgroundColor: hasChanges ? '#D7B615' : '#666',
-            color: hasChanges ? '#222' : '#999',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: hasChanges && !isUploading ? 'pointer' : 'not-allowed',
-            fontWeight: 'bold',
-            fontSize: '1rem',
-            transition: 'all 0.3s ease',
-            marginTop: '20px',
-            width: '100%',
-            maxWidth: '300px',
-            display: 'block'
+          style={{ 
+            padding: '8px 16px', 
+            border: 'none', 
+            borderRadius: '5px', 
+            backgroundColor: hasChanges ? '#D7B615' : '#555', 
+            color: hasChanges ? 'black' : '#888',
+            cursor: hasChanges ? 'pointer' : 'not-allowed',
+            fontWeight: 'bold'
           }}
         >
-          {isUploading ? (
-            <span>
-              <i className="fas fa-spinner fa-spin" style={{ marginRight: '8px' }}></i>
-              Guardando...
-            </span>
-          ) : (
-            <span>
-              <i className="fas fa-save" style={{ marginRight: '8px' }}></i>
-              Guardar Cambios
-            </span>
-          )}
+          {isUploading ? 'Guardando...' : 'Guardar Cambios'}
         </button>
       </div>
     </div>
@@ -363,213 +352,6 @@ const samplePlaylistItems = [
   { id: 'pl5', title: 'Secretos del análisis técnico', thumbnailUrl: 'https://placehold.co/100x60/333/eee?text=Chart4' },
   // Añadir más items
 ];
-
-function LiveChat({ db, currentUser }) {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
-  const [sending, setSending] = useState(false);
-  const messagesContainerRef = useRef(null);
-
-  // Presence: track viewers
-  useEffect(() => {
-    let presenceRef;
-    let userPresenceId;
-    if (currentUser) {
-      presenceRef = collection(db, 'livechat_presence');
-      userPresenceId = currentUser.uid;
-      // Registrar presencia
-      addDoc(presenceRef, {
-        uid: userPresenceId,
-        name: currentUser.displayName || currentUser.email,
-        lastActive: serverTimestamp()
-      });
-    }
-    // Escuchar presencia
-    const q = query(collection(db, 'livechat_presence'));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      // Solo contar usuarios activos en los últimos 2 minutos
-      const now = Date.now();
-      const active = snapshot.docs.filter(doc => {
-        const data = doc.data();
-        return data.lastActive && data.lastActive.toDate() > new Date(now - 2 * 60 * 1000);
-      });
-    });
-    // Limpiar presencia al salir
-    return () => {
-      unsubscribe();
-      // (Opcional: eliminar presencia del usuario)
-    };
-  }, [db, currentUser]);
-
-  useEffect(() => {
-    // Escuchar mensajes en tiempo real, solo los de las últimas 2 horas
-    const twoHoursAgo = Timestamp.fromDate(new Date(Date.now() - 2 * 60 * 60 * 1000));
-    const q = query(
-      collection(db, 'livechat'),
-      orderBy('createdAt', 'asc')
-    );
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const msgs = snapshot.docs
-        .map(doc => ({ id: doc.id, ...doc.data() }))
-        .filter(msg => msg.createdAt && msg.createdAt.toDate() > new Date(Date.now() - 2 * 60 * 60 * 1000));
-      setMessages(msgs);
-    });
-    return unsubscribe;
-  }, [db]);
-
-  // Effect para hacer scroll automático al final cuando hay nuevos mensajes
-  useEffect(() => {
-    if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
-    }
-  }, [messages]);
-
-  const handleSend = async (e) => {
-    e.preventDefault();
-    if (!input.trim() || !currentUser) return;
-    setSending(true);
-    try {
-      await addDoc(collection(db, 'livechat'), {
-        text: input.trim(),
-        user: {
-          uid: currentUser.uid,
-          name: currentUser.displayName || currentUser.email,
-          photo: currentUser.photoURL || ''
-        },
-        createdAt: serverTimestamp()
-      });
-      setInput('');
-    } catch (err) {
-      alert('Error al enviar mensaje');
-    } finally {
-      setSending(false);
-    }
-  };
-
-  return (
-    <div style={{
-      background: '#232323',
-      borderRadius: 12,
-      padding: 0,
-      height: '450px', // Altura fija
-      width: '100%', // Ancho 100% para responsive
-      display: 'flex',
-      flexDirection: 'column',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
-      position: 'relative', // Asegurar posición relativa para posicionamiento interior
-    }}>
-      <div style={{
-        fontWeight: 'bold',
-        color: '#D7B615',
-        fontSize: '1.15em',
-        padding: '18px 20px 10px 20px',
-        borderBottom: '2px solid #333',
-        borderTopLeftRadius: 12,
-        borderTopRightRadius: 12,
-        background: '#232323',
-        position: 'sticky',
-        top: 0,
-        zIndex: 2,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-      }}>
-        <span>Chat en vivo</span>
-      </div>
-      <div 
-        ref={messagesContainerRef}
-        style={{
-          flex: 1,
-          overflowY: 'auto',
-          background: '#161616',
-          borderRadius: 0,
-          padding: '18px 20px 12px 20px',
-          borderLeft: '2px solid #333',
-          borderRight: '2px solid #333',
-          borderBottom: '2px solid #333',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.18)',
-          height: '300px', // Altura fija para el contenedor de mensajes
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        {messages.length === 0 && <div style={{ color: '#aaa', textAlign: 'center' }}>Sé el primero en comentar...</div>}
-        {messages.map(msg => (
-          <div key={msg.id} style={{ display: 'flex', alignItems: 'flex-start', marginBottom: 12 }}>
-            <div style={{
-              width: 32, height: 32, borderRadius: '50%', background: '#444',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: '#D7B615', fontWeight: 'bold', marginRight: 8, fontSize: '1em',
-              overflow: 'hidden', flexShrink: 0
-            }}>
-              {msg.user.photo ? (
-                <img src={msg.user.photo} alt={msg.user.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              ) : (
-                msg.user.name[0].toUpperCase()
-              )}
-            </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <span style={{ color: '#fff', fontWeight: 'bold', fontSize: '0.97em' }}>{msg.user.name}</span>
-              <span style={{ color: '#888', fontSize: '0.8em', marginLeft: 8 }}>
-                {msg.createdAt && msg.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </span>
-              <div style={{ color: '#eee', fontSize: '0.98em', wordBreak: 'break-word' }}>{msg.text}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div style={{ 
-        padding: '12px 20px 18px 20px', 
-        background: '#232323', 
-        borderBottomLeftRadius: 12, 
-        borderBottomRightRadius: 12,
-        borderTop: '1px solid #333'
-      }}>
-        {currentUser ? (
-          <form onSubmit={handleSend} style={{ display: 'flex', gap: 8 }}>
-            <input
-              type="text"
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              placeholder="Escribe un mensaje..."
-              style={{
-                flex: 1,
-                padding: '8px 12px',
-                borderRadius: 6,
-                border: '1px solid #444',
-                background: '#181818',
-                color: '#fff',
-                fontSize: '1em'
-              }}
-              maxLength={120}
-              disabled={sending}
-            />
-            <button
-              type="submit"
-              disabled={sending || !input.trim()}
-              style={{
-                background: '#D7B615',
-                color: '#222',
-                border: 'none',
-                borderRadius: 6,
-                fontWeight: 'bold',
-                padding: '0 18px',
-                fontSize: '1em',
-                cursor: sending || !input.trim() ? 'not-allowed' : 'pointer'
-              }}
-            >
-              Enviar
-            </button>
-          </form>
-        ) : (
-          <div style={{ color: '#aaa', textAlign: 'center', fontSize: '0.98em' }}>
-            Inicia sesión para comentar
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
 
 function HomePage() {
   const { currentUser } = useAuth(); // <<< Obtener usuario actual
@@ -803,7 +585,7 @@ function HomePage() {
 
   // Efecto para cargar las clases grabadas de Vimeo
   useEffect(() => {
-    if (activeTab === 'streaming') {
+    if (activeTab === 'clases' || activeTab === 'streaming') {
       const fetchRecordedClasses = async () => {
         setLoadingClasses(true);
         setErrorClasses(null);
@@ -835,8 +617,8 @@ function HomePage() {
             const formattedVideos = data.data.map(video => ({
               id: video.uri.replace('/videos/', ''),
               title: video.name,
-              description: video.description || '',
-              thumbnail: video.pictures?.base_link || '',
+              description: video.description || 'Sin descripción.',
+              thumbnail: video.pictures?.base_link ? `${video.pictures.base_link}_640x360.jpg` : 'https://via.placeholder.com/640x360',
               link: video.link
             }));
             
@@ -1045,13 +827,37 @@ function HomePage() {
           onPostUpdate={fetchPosts}
         />;
       case 'clases':
-        return <VideoGallery videos={recordedClasses} />;
+        if (loadingClasses) {
+          return <div className="clases-loading">Cargando clases...</div>;
+        }
+        if (errorClasses) {
+          return <div className="clases-error">Error al cargar las clases: {errorClasses}</div>;
+        }
+        return (
+          <div className="clases-container">
+            <div className="clases-grid">
+              {recordedClasses.map(video => (
+                <CourseCard
+                  key={video.id}
+                  imageUrl={video.thumbnail}
+                  title={video.title}
+                  description={video.description}
+                  progress={30} // Hardcoded for now
+                  isFavorite={false} // Hardcoded for now
+                  onPress={() => navigate(`/clases/${video.id}`)}
+                  onToggleFavorite={() => console.log('Toggled favorite:', video.id)}
+                  onPlayVideo={() => navigate(`/clases/${video.id}`)}
+                />
+              ))}
+            </div>
+          </div>
+        );
       case 'streaming':
         return (
-          <div key="streaming" className="tab-panel" style={{ maxWidth: '1200px', margin: '20px auto', padding: '0 20px', fontFamily: 'Poppins, sans-serif' }}>
-            <h2 style={{ color: '#fff', marginBottom: '24px' }}>Disfruta del contenido en vivo</h2>
+          <div key="streaming" className="tab-panel streaming-page-container">
+            <h2 className="streaming-page-header">Disfruta del contenido en vivo</h2>
             
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px', alignItems: 'start' }}>
+            <div className="live-section-container">
               {/* Columna Izquierda: Player + Info */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <VideoPlayer 
@@ -1068,19 +874,30 @@ function HomePage() {
               <LiveChat db={db} currentUser={currentUser} />
             </div>
 
-            {/* Sección de Lives Grabados */}
-            <div style={{ marginTop: '48px' }}>
-                <h2 style={{ color: '#D7B615', fontSize: '24px' }}>Lives grabados</h2>
-                <p style={{color: '#ccc', marginTop: '-10px'}}>¡Vuelve a mirar el contenido!<br/>Al termino de la transmisión aparecerán los lives grabados en la siguiente sección :</p>
-                <VideoGallery videos={recordedClasses} />
+            <div className="recorded-section-container">
+              <div className="recorded-section-header">
+                <h2>Lives grabados</h2>
+                <p>¡Vuelve a mirar el contenido! Al termino de la transmisión aparecerán los lives grabados en la siguiente sección:</p>
+              </div>
+              <div className="recorded-videos-carousel">
+                {recordedClasses.map(video => (
+                  <RecordedVideoCard
+                    key={video.id}
+                    imageUrl={video.thumbnail}
+                    title={video.title}
+                    onPress={() => console.log("Play recorded video:", video.id)}
+                  />
+                ))}
+              </div>
             </div>
-
           </div>
         );
       case 'calendario':
         return <CalendarioPage />;
       case 'niveles':
-        return <NivelesPageNuevo />;
+        return <NivelesPageV2 />;
+      case 'mapa':
+        return <MapaPage />;
       case 'miembros':
         return <MembersPage />;
       case 'acerca':

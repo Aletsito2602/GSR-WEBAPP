@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { FaArrowLeft } from 'react-icons/fa'; // Importar el ícono
 import Comments from '../components/Comments';
 import { db, auth } from '../firebaseConfig'; // <<< Importar db
 import { doc, getDoc, Timestamp, updateDoc, increment, arrayUnion, arrayRemove } from "firebase/firestore"; // <<< Importar funciones Firestore
 import { useAuth } from '../context/AuthContext'; // <<< Importar useAuth
+import './PostDetailPage.css'; // Importar el nuevo CSS
 
 // <<< QUITAR samplePosts >>>
 // const samplePosts = [/* ... */];
 
 function PostDetailPage() {
   const { postId } = useParams(); 
+  const navigate = useNavigate();
   const { currentUser } = useAuth(); // <<< Obtener usuario
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -86,6 +89,7 @@ function PostDetailPage() {
 
   // <<< Función handleLike (similar a PostCard) >>>
   const handleLike = async (e) => {
+    e.stopPropagation(); // Evitar que el clic se propague
     if (!currentUser) return alert("Debes iniciar sesión para dar Me Gusta.");
     if (!post) return; // Asegurarse que el post ha cargado
     
@@ -99,50 +103,61 @@ function PostDetailPage() {
             setLikeCount(prev => prev + 1); setIsLiked(true);
         }
     } catch (error) { console.error("Error liking post:", error); }
+
+    const authorRef = doc(db, "users", post.authorUid);
+    // ... (lógica para actualizar puntos del autor) ...
   };
 
   // <<< Estilo botón like >>>
   const likeButtonStyle = { background: 'none', border: 'none', padding: 0, margin: 0, cursor: 'pointer', color: isLiked ? '#D7B615' : 'inherit' };
 
-  if (loading) return <div>Cargando post...</div>;
-  if (error) return <div style={{ color: 'red' }}>{error}</div>;
-  if (!post) return <div>Post no disponible.</div>;
+  const formatTime = (timestamp) => {
+    if (!timestamp) return '';
+    const date = timestamp.toDate();
+    const now = new Date();
+    const diff = Math.round((now - date) / 1000); // Diferencia en segundos
+
+    if (diff < 60) return `hace ${diff}s`;
+    if (diff < 3600) return `hace ${Math.floor(diff / 60)}m`;
+    if (diff < 86400) return `hace ${Math.floor(diff / 3600)}h`;
+    return `hace ${Math.floor(diff / 86400)}d`;
+  }
+
+  if (loading) return <div className="loading-state">Cargando post...</div>;
+  if (error) return <div className="error-state">{error}</div>;
+  if (!post) return <div className="loading-state">Post no disponible.</div>;
 
   return (
-    <div>
-      <Link to="/" style={{ color: '#D7B615', marginBottom: '20px', display: 'inline-block' }}>
-        &larr; Volver a Comunidad
-      </Link>
+    <div className="post-detail-container">
+      <button onClick={() => navigate(-1)} className="back-button">
+        <FaArrowLeft />
+      </button>
 
-      {/* Contenedor del Post */}
-      <div style={postContainerStyle}>
-          <div style={headerStyle}>
-            <img src={post.author?.avatarUrl || 'https://placehold.co/45x45/777/FFF?text=A'} alt={`${post.author?.name || 'Autor'} avatar`} style={avatarStyle} />
-            <div>
-              <div style={authorNameStyle}>{post.authorName || 'Usuario Desconocido'}</div>
-              <div style={authorInfoStyle}>{post.time} | {post.category}</div>
-            </div>
+      <div className="post-card-detail">
+        <div className="post-header-detail">
+          <img 
+            src={post.authorAvatarUrl || `https://i.pravatar.cc/40?u=${post.authorUid}`} 
+            alt="Avatar del autor" 
+            className="author-avatar-detail"
+          />
+          <div className="author-info-detail">
+            <span className="author-name-detail">{post.authorName}</span>
+            <span className="post-meta-detail">{formatTime(post.createdAt)} | {post.category}</span>
           </div>
-          <div style={contentStyle}>{post.content}</div> {/* Mostrar contenido completo */} 
-          <div style={footerStyle}>
-            {/* <<< Botón Like interactivo >>> */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'flex-start' }}>
-              <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#333', borderRadius: '12px', padding: '4px 10px' }}>
-                <button onClick={handleLike} style={likeButtonStyle}>
-                  <i className="fas fa-heart" style={{ color: isLiked ? '#D7B615' : '#aaa', fontSize: '16px' }} />
-                </button>
-                <span style={{ color: '#FFD700', fontWeight: 600, marginLeft: 8 }}>{likeCount}</span>
               </div>
-              
-              <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#333', borderRadius: '12px', padding: '4px 10px' }}>
-                <i className="fas fa-comment-alt" style={{ color: '#aaa', fontSize: '16px' }} />
-                <span style={{ color: '#aaa', marginLeft: 8 }}>{post.commentCount || 0}</span>
+        <div className="post-content-detail">
+          {post.content}
               </div>
+        <div className="post-footer-detail">
+          <button onClick={handleLike} className="like-button-detail">
+            <i className={`fa-heart ${isLiked ? 'fas' : 'far'}`}></i> {likeCount}
+          </button>
+          <div className="comment-count-detail">
+            <i className="far fa-comment"></i> {post.commentCount || 0}
             </div>
           </div>
       </div>
 
-      {/* Sección de Comentarios */}
       <Comments postId={postId} /> 
     </div>
   );

@@ -9,9 +9,10 @@
 
   position: relative;
   width: 100%;
+  box-sizing: border-box;
   max-width: 1200px;
   height: auto;
-  min-height: 60px;
+  min-height: 65px; /* Aumentado para dar más espacio */
   margin: 0 auto 20px auto;
   overflow-x: auto;
   overflow-y: hidden;
@@ -27,6 +28,9 @@
   /* Smooth scrolling */
   scroll-behavior: smooth;
   scrollbar-width: thin;
+  
+  /* Mejorar el scroll en móvil */
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Scrollbar personalizada para webkit browsers */
@@ -54,9 +58,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 12px 20px;
-  color: #e0e0e0;
+  gap: 10px; /* Aumentado el gap base */
+  padding: 14px 24px; /* Aumentado el padding base para mejor UX */
+  color: var(--text-secondary);
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
@@ -67,7 +71,7 @@
   cursor: pointer;
   white-space: nowrap;
   min-width: fit-content;
-  height: 45px;
+  height: 47px; /* Aumentado la altura base */
   box-sizing: border-box;
   position: relative;
   overflow: hidden;
@@ -97,7 +101,7 @@
 
 .nav-item.active {
   background: linear-gradient(135deg, rgba(161, 138, 81, 0.2), rgba(212, 195, 102, 0.2));
-  color: #f5f5f5;
+  color: var(--text-white);
   border: 2px solid #a18a51;
   box-shadow: 
     0 0 20px rgba(161, 138, 81, 0.4),
@@ -111,9 +115,10 @@
 
 .nav-item i {
   font-size: 16px;
-  min-width: 16px;
+  min-width: 18px; /* Aumentado el ancho mínimo del ícono */
   z-index: 1;
   position: relative;
+  flex-shrink: 0; /* Evitar que el ícono se comprima */
 }
 
 .nav-item span {
@@ -134,44 +139,67 @@
   }
 
   .nav-item {
-    padding: 10px 16px;
+    padding: 12px 25px; /* Aumentado el padding horizontal para botones más anchos */
     font-size: 13px;
-    min-width: 100px;
-    height: 40px;
-    border-radius: 20px;
+    min-width: 130px; /* Aumentado significativamente el ancho mínimo */
+    height: 42px;
+    border-radius: 21px;
+    gap: 12px; /* Aumentado el gap entre ícono y texto */
   }
 
   .nav-item i {
     font-size: 14px;
+    min-width: 18px;
+    padding-left: 5px; /* 5px de padding extra al ícono del lado izquierdo */
   }
 
   .nav-item span {
     font-size: 13px;
+    padding-right: 5px; /* 5px de padding extra al texto del lado derecho */
   }
 }
 
 @media (max-width: 480px) {
   .top-navbar {
     padding: 6px 12px;
-    gap: 8px;
-    min-height: 50px;
-    border-radius: 25px;
+    gap: 10px; /* Aumentado el gap entre botones */
+    min-height: 52px; /* Aumentado altura mínima */
+    border-radius: 26px;
   }
 
   .nav-item {
-    padding: 8px 12px;
+    padding: 10px 20px; /* Aumentado el padding horizontal para botones más anchos */
     font-size: 12px;
-    min-width: 85px;
-    height: 36px;
-    border-radius: 18px;
+    min-width: 115px; /* Aumentado significativamente el ancho mínimo */
+    height: 38px;
+    border-radius: 19px;
+    gap: 10px; /* Aumentado el gap entre ícono y texto */
   }
 
   .nav-item i {
     font-size: 13px;
+    min-width: 16px;
+    padding-left: 5px; /* 5px de padding extra al ícono del lado izquierdo */
   }
 
   .nav-item span {
     font-size: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding-right: 5px; /* 5px de padding extra al texto del lado derecho */
+  }
+
+  /* Mejorar área táctil en móvil */
+  .nav-item {
+    min-height: 44px; /* Área táctil mínima recomendada */
+    touch-action: manipulation; /* Optimizar para touch */
+  }
+
+  /* Estado activo mejorado en móvil */
+  .nav-item.active {
+    padding: 10px 22px; /* Padding aún mayor para el estado activo */
+    border: 2px solid #a18a51;
+    background: linear-gradient(135deg, rgba(161, 138, 81, 0.25), rgba(212, 195, 102, 0.25));
   }
 }
 

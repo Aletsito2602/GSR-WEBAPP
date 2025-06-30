@@ -1,11 +1,34 @@
 /* Añadir estilos para Font Awesome */
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
 
+/* Prevenir overflow horizontal global */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* Prevenir overflow en todos los contenedores principales */
+.app-container, .main-layout, .content-area, .homepage-container, 
+.posts-container, .tab-panel, .tab-content, .community-nav {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 /* Asegurar que el contenedor principal ocupe toda la altura */
 .app-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 /* Contenedor para Sidebar y Contenido */
@@ -13,6 +36,9 @@
   display: flex;
   flex: 1; /* Ocupa el espacio restante */
   overflow-y: auto; /* Permite scroll en el layout principal si es necesario */
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 /* Estilo para el área de contenido */
@@ -20,16 +46,20 @@
   flex: 1;
   padding: 20px;
   overflow-y: auto; /* Permite scroll solo en el área de contenido */
-  background-color: #232323;
+  overflow-x: hidden; /* Evita scroll horizontal */
+  background-color: var(--bg-card-primary);
   padding-bottom: 50px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Estilos básicos para la sidebar */
 .sidebar {
   width: 250px; 
   height: 100%;
-  background: #353535; 
-  color: rgba(255, 255, 255, 0.8);
+  background: var(--bg-card-secondary); 
+  color: var(--text-primary);
   box-sizing: border-box;
   overflow-y: auto;
   z-index: 150;
@@ -52,8 +82,8 @@
   align-items: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  border: 1px solid #D7B615;
-  color: #D7B615;
+  border: 1px solid var(--accent-gold);
+  color: var(--accent-gold);
   background: transparent;
 }
 
@@ -102,13 +132,13 @@
 
 /* Estilos para la página de perfil */
 .profile-page {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
 /* Estilos para la página Acerca */
 .about-page {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -118,100 +148,144 @@
   border-radius: 20px;
   cursor: pointer;
   transition: all 0.2s ease;
-  border: 1px solid #D7B615;
+  border: 1px solid var(--accent-gold);
   background-color: transparent;
-  color: #D7B615;
+  color: var(--accent-gold);
 }
 
 .tab-button.active {
-  border: 2px solid #D7B615;
-  background-color: #444;
-  color: #D7B615;
+  border: 2px solid var(--accent-gold);
+  background-color: var(--bg-card-secondary);
+  color: var(--accent-gold);
   font-weight: bold;
 }
 
 /* === MEDIA QUERIES PARA RESPONSIVE === */
 @media (max-width: 768px) {
-  /* Ajustes para el área de contenido cuando el sidebar está activo */
+  /* LAYOUT GENERAL */
   .content-area {
-    margin-left: 0; /* Sin margen para el sidebar en móvil */
-    width: 100%; /* Ancho completo en móvil */
-    padding: 15px; /* Reducir padding */
-    transition: none; /* No necesitamos transición en móvil */
+    margin-left: 0;
+    width: 100%;
+    max-width: 100vw;
+    padding: 0; 
+    padding-top: 70px; /* Espacio para el header fijo, un poco más por si acaso */
+    transition: none;
+    background-color: var(--bg-card-primary); /* Un fondo ligeramente más oscuro para todo el view */
+    overflow-x: hidden;
+    box-sizing: border-box;
   }
 
-  /* En dispositivos móviles, el sidebar se posiciona como una capa sobre el contenido */
   .sidebar {
     position: fixed;
-    top: 57px; /* Altura del header */
+    top: 57px; 
     left: 0;
     height: calc(100vh - 57px);
-    transform: translateX(-100%); /* Oculto por defecto */
-    box-shadow: 2px 0 10px rgba(0,0,0,0.2); /* Sombra para mejor visibilidad */
+    transform: translateX(-100%);
+    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
   }
 
-  /* Cuando el sidebar está abierto */
   .sidebar.open {
     transform: translateX(0);
   }
 
-  /* Ajustes adicionales para mejorar la experiencia móvil */
+  /* TIPOGRAFÍA Y ELEMENTOS BASE */
   html { 
     font-size: 90%; 
   }
-
-  /* Apilar columnas */
-  .page-layout-columns, .streaming-layout {
-    flex-direction: column;
-  }
-  
-  /* Ajustar ancho máximo en móvil */
-  .left-column {
-    max-width: 100%; 
-  }
-
-  /* Ajustar grid de colecciones */
-  .collection-grid {
-    justify-content: center; /* Centrar items */
-  }
-
-  /* Ajustar header */
-  header { 
-    padding: 8px 15px; 
-  }
-  
-  /* Ajustar tamaño de botones */
   button {
     padding: 0.5em 1em; 
-      font-size: 0.9em;
+    font-size: 0.9em;
   }
-  
-  /* Ajustar títulos */
   h1 { font-size: 2em; }
   h2 { font-size: 1.5em; }
   h3 { font-size: 1.2em; margin-bottom: 10px; }
 
-  /* Tarjetas optimizadas para móvil */
-  .feed .post-card, 
-  .content-area .video-item-wrapper, 
-  .comments-list .comment-item {
-    padding: 10px;
+  /* LAYOUTS DE COLUMNAS */
+  .page-layout-columns, .streaming-layout {
+    flex-direction: column;
+  }
+  .left-column {
+    max-width: 100%; 
+  }
+
+  /* HOMEPAGE Y COMUNIDAD */
+   .homepage-container {
+    padding: 12px;
+    padding-top: 80px; /* Espacio para header fijo */
+    background: transparent;
     width: 100%;
-    max-width: none;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+  .posts-container,
+  .tab-content {
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+  /* PostInput component adjustments for mobile */
+  .post-input-container {
+    padding: 0 16px;
+    margin-bottom: 16px;
+  }
+  
+  .community-nav {
+    padding: 0 0 12px 0;
+    margin-bottom: 16px;
+    background: transparent;
+  }
+  .community-nav::-webkit-scrollbar {
+    display: none;
+  }
+  .nav-row {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 0 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+   .nav-filter-button {
+    white-space: nowrap;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid #3c3c3c;
+    background: #2a2a2a;
+    color: #e0e0e0;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+  }
+  
+  .nav-filter-button.active {
+    background: #F0B90B;
+    color: #000;
+    border-color: #F0B90B;
+  }
+  
+  .filter-button,
+  .week-dropdown {
+    background: #2a2a2a;
+    border: 1px solid #3c3c3c;
+    color: #e0e0e0;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+  }
+  .post-card {
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 1px solid #3c3c3c;
+    margin: 0;
   }
 
-  .feed .post-card .post-header,
-  .comments-list .comment-item .comment-header {
-    .avatar { 
-          width: 35px;
-          height: 35px;
-          margin-right: 8px;
-      }
-      .author-name { font-size: 0.9em; }
-      .author-info { font-size: 0.8em; }
+  /* GRIDS Y TARJETAS */
+  .collection-grid {
+    justify-content: center;
   }
 
-  /* ClassCard para móvil */
   .class-card {
     flex-direction: column; 
   }
@@ -221,13 +295,8 @@
   .class-card .class-content {
     padding: 10px; 
   }
-  .class-card .class-title { font-size: 1em; }
-  .class-card .class-duration { font-size: 0.8em; }
-  .class-card .class-progress-text { font-size: 0.75em; }
-  .class-card .download-icon { font-size: 1em; padding: 4px; }
 }
 
-/* Para pantallas más pequeñas */
 @media (max-width: 480px) {
     html {
         font-size: 85%;
@@ -235,6 +304,11 @@
     .content-area {
     padding: 10px;
     padding-bottom: 40px;
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
     }
     button {
       padding: 0.4em 0.8em; 
@@ -366,6 +440,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  background: transparent; /* Quitar cualquier fondo */
   position: relative;
 }
 
@@ -411,67 +486,57 @@
   opacity: 1;
   transform: translateY(0);
   transition: opacity 0.3s ease, transform 0.3s ease;
+  background: transparent; /* Quitar fondo */
+  border: none;
+  padding: 0;
+  margin: 0;
 }
 
 /* Community Navigation */
 .community-nav {
-  margin-bottom: 24px;
-  width: 100%;
+  background: transparent; /* Quitar fondo */
+  border: none;
+  padding: 0 0 16px 0;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .nav-row {
   display: flex;
-  align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  padding: 0;
+  overflow-x: auto;
+  padding: 0 4px;
+  -webkit-overflow-scrolling: touch;
+  background: transparent !important;
 }
 
 .nav-filter-button {
-  padding: 8px 16px;
-  border-radius: 5px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background-color: transparent;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
   white-space: nowrap;
-}
-
-.nav-filter-button:hover {
-  background-color: rgba(215, 182, 21, 0.1);
-  border-color: rgba(215, 182, 21, 0.5);
-  color: #D7B615;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid #3c3c3c;
+  background: #2a2a2a !important;
+  color: #e0e0e0;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  min-width: 80px; /* Ancho mínimo base */
 }
 
 .nav-filter-button.active {
-  background-color: #D7B615;
-  border-color: #D7B615;
-  color: white;
-  font-weight: 600;
+  background: #F0B90B !important;
+  color: #000;
+  border-color: #F0B90B;
 }
 
-.filter-button {
+.filter-button,
+.week-dropdown {
+  background: #2a2a2a !important;
+  border: 1px solid #3c3c3c;
+  color: #e0e0e0;
   padding: 8px 12px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background-color: rgba(215, 182, 21, 0.8);
-  color: #1a1a1a;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.filter-button:hover {
-  background-color: #D7B615;
-  transform: scale(1.05);
+  border-radius: 20px;
+  font-size: 0.9rem;
 }
 
 .week-dropdown {
@@ -496,8 +561,6 @@
   transform: translateY(-1px);
 }
 
-
-
 /* State Messages */
 .loading-state,
 .error-state,
@@ -509,25 +572,28 @@
   padding: 40px 20px;
   text-align: center;
   gap: 12px;
-  color: #888;
-  background: #232323;
+  color: #a0a0a0;
+  background: transparent;
   border-radius: 12px;
   margin: 20px 0;
 }
 
 .loading-state i {
   font-size: 2rem;
-  color: #D7B615;
+  margin-bottom: 16px;
+  color: #F0B90B;
 }
 
 .error-state i {
   font-size: 2rem;
+  margin-bottom: 16px;
   color: #ff6b6b;
 }
 
 .empty-state i {
   font-size: 2rem;
-  color: #666;
+  margin-bottom: 16px;
+  color: #6c7293;
 }
 
 .error-state {
@@ -581,11 +647,13 @@
 /* Responsive Tab Bar */
 @media (max-width: 768px) {
   .homepage-container {
-    --content-margin: 16px;
+    padding: 12px;
+    padding-top: 80px; /* Espacio para header fijo */
+    background: transparent;
   }
   
   .header {
-    padding: 10px calc(var(--content-margin) + 20px);
+    padding: 0 1rem;
   }
   
   .top-navbar {
@@ -597,11 +665,17 @@
   .community-nav,
   .posts-container,
   .tab-content {
-    padding: 0 var(--content-margin);
+    padding: 0 1rem;
+  }
+
+  .community-nav::-webkit-scrollbar,
+  .filters-container::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
   }
 
   .nav-row {
-    gap: 6px;
+    flex-wrap: nowrap;
+    width: max-content;
   }
 
   .nav-filter-button {
@@ -612,7 +686,8 @@
 
 @media (max-width: 480px) {
   .homepage-container {
-    --content-margin: 12px;
+    padding: 8px;
+    padding-top: 85px;
   }
   
   .header {
@@ -1347,11 +1422,11 @@
 .streaming-layout,
 .streaming-header,
 .video-player-container {
-  max-width: var(--max-content-width);
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
-  padding-left: var(--content-margin);
-  padding-right: var(--content-margin);
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .about-content,
@@ -1361,7 +1436,7 @@
 .loading-state,
 .error-state,
 .empty-state {
-  max-width: var(--max-content-width);
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -1374,7 +1449,7 @@
 .tab-panel > .calendar-placeholder {
   margin-left: auto;
   margin-right: auto;
-  max-width: var(--max-content-width);
+  max-width: 1200px;
 }
 
 /* === Estilos para campos de perfil en dos columnas === */
@@ -1448,5 +1523,205 @@
   .profile-row {
     flex-direction: column;
     gap: 12px;
+  }
+}
+
+/* =================================================== */
+/* CORRECCIONES ESPECÍFICAS - QUITAR FONDOS PROBLEMÁTICOS */
+/* =================================================== */
+
+/* Forzar transparencia en contenedores principales */
+.homepage-container,
+.tab-panel,
+.tab-content,
+.posts-container {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+}
+
+/* Community navigation sin fondo */
+.community-nav {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-bottom: none !important;
+  padding: 0 0 16px 0 !important;
+  margin-bottom: 20px;
+}
+
+/* Content area optimizado */
+.content-area {
+  background-color: #2a2a2a !important;
+  padding-top: 70px !important;
+}
+
+/* Homepage container limpio */
+.homepage-container {
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 20px !important;
+  background: transparent !important;
+}
+
+/* Posts container sin fondo */
+.posts-container,
+.tab-panel[key="comunidad"] .posts-container,
+.tab-panel .posts-container {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+/* Tab content limpio */
+.tab-content {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+/* Navegación de filtros optimizada */
+.nav-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 0 4px;
+  -webkit-overflow-scrolling: touch;
+  background: transparent !important;
+}
+
+.nav-filter-button {
+  white-space: nowrap;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid #3c3c3c;
+  background: #2a2a2a !important;
+  color: #e0e0e0;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  min-width: 80px; /* Ancho mínimo base */
+}
+
+.nav-filter-button.active {
+  background: #F0B90B !important;
+  color: #000;
+  border-color: #F0B90B;
+}
+
+.filter-button,
+.week-dropdown {
+  background: #2a2a2a !important;
+  border: 1px solid #3c3c3c;
+  color: #e0e0e0;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+/* Estados de carga mejorados */
+.loading-state,
+.error-state,
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #a0a0a0;
+  background: transparent !important;
+  border: none !important;
+}
+
+/* =================================================== */
+/* RESPONSIVE MÓVIL OPTIMIZADO */
+/* =================================================== */
+
+@media (max-width: 768px) {
+  /* Content area móvil */
+  .content-area {
+    padding-top: 80px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    background-color: #2a2a2a !important; /* Cambiar de negro a gris */
+  }
+  
+  /* Homepage móvil - Sin padding derecho */
+  .homepage-container {
+    padding: 8px 0 8px 8px !important; /* Reducido padding general */
+    padding-top: 16px !important; /* Reducido padding top */
+    background: transparent !important;
+  }
+  
+  /* Community nav móvil - Padding reducido */
+  .community-nav {
+    padding: 0 0 8px 0 !important; /* Reducido de 12px a 8px */
+    margin-bottom: 12px !important; /* Reducido de 16px a 12px */
+    margin-right: 0 !important;
+    background: transparent !important;
+    border: none !important;
+  }
+  
+  /* Navegación optimizada - Botones más anchos */
+  .nav-row {
+    gap: 6px !important; /* Reducido gap para permitir botones más anchos */
+    padding: 0 0 0 4px !important; /* Solo padding izquierdo */
+  }
+  
+  .nav-filter-button {
+    padding: 10px 20px !important; /* Aumentado padding horizontal */
+    font-size: 0.9rem !important;
+    background: #2a2a2a !important;
+    min-width: 100px !important; /* Aumentado ancho mínimo */
+    flex: 1 1 auto; /* Permitir que se expandan */
+    text-align: center;
+  }
+  
+  .nav-filter-button.active {
+    background: #F0B90B !important;
+    color: #000 !important;
+    font-weight: 600;
+  }
+  
+  .filter-button,
+  .week-dropdown {
+    padding: 10px 16px !important; /* Aumentado padding */
+    font-size: 0.9rem !important;
+    min-width: 80px !important;
+  }
+  
+  /* Posts container móvil - Sin padding derecho */
+  .posts-container {
+    padding: 0 !important;
+    margin-right: 0 !important;
+    background: transparent !important;
+  }
+  
+  /* Tab panel móvil */
+  .tab-panel {
+    background: transparent !important;
+    padding: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .homepage-container {
+    padding: 6px 0 6px 6px !important; /* Más reducido en pantallas pequeñas */
+    padding-top: 12px !important;
+  }
+  
+  .community-nav {
+    padding: 0 0 6px 0 !important; /* Aún más reducido */
+    margin-bottom: 10px !important;
+  }
+  
+  .nav-filter-button {
+    padding: 8px 16px !important; /* Ajustado para pantallas pequeñas */
+    font-size: 0.85rem !important;
+    min-width: 90px !important;
+  }
+  
+  .filter-button,
+  .week-dropdown {
+    padding: 8px 12px !important;
+    font-size: 0.85rem !important;
+    min-width: 70px !important;
   }
 }

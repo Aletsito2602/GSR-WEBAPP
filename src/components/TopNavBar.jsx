@@ -17,6 +17,7 @@ const TopNavBar = () => {
     { tab: 'calendario', label: 'Calendario', icon: 'fas fa-calendar-alt' },
     { tab: 'miembros', label: 'Miembros', icon: 'fas fa-user-friends' },
     { tab: 'niveles', label: 'Niveles', icon: 'fas fa-medal' },
+    { tab: 'mapa', label: 'Mapa', icon: 'fas fa-map-marked-alt' },
     { tab: 'acerca', label: 'Acerca De', icon: 'fas fa-info-circle' },
   ];
 

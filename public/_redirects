@@ -1,1 +1,42 @@
+# Redirects para GSR-WEBAPP (React SPA)
+
+# API routes - mantener como están
+/api/*  /api/:splat  200
+/functions/*  /.netlify/functions/:splat  200
+
+# Redirects específicos para rutas principales
+/home  /  301
+/inicio  /  301
+/dashboard  /  301
+
+# Redirects para rutas de usuario
+/usuario/*  /user/:splat  301
+/usuarios  /members  301
+/miembros  /members  301
+
+# Redirects para contenido
+/videos  /clases  301
+/courses  /clases  301
+/posts  /  301
+/publicaciones  /  301
+
+# Redirects para configuración
+/config  /settings  301
+/configuracion  /settings  301
+/ajustes  /settings  301
+
+# Redirects para perfil
+/perfil  /profile  301
+/mi-perfil  /profile  301
+
+# Redirects para notificaciones
+/notificaciones  /notifications  301
+/avisos  /notifications  301
+
+# Redirects para páginas de información
+/acerca  /about  301
+/sobre-nosotros  /about  301
+/info  /info  301
+
+# Catchall redirect para SPA (DEBE IR AL FINAL)
 /*    /index.html    200 

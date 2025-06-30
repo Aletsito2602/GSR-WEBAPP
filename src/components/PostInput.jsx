@@ -88,7 +88,7 @@ function PostInput({ onSubmitPost, isSubmitting, selectedCategory }) {
   };
 
   return (
-    <div>
+    <div className="post-input-container">
       {selectedCategory && (
         <div style={categoryStyle}>
           Publicando en: {selectedCategory}

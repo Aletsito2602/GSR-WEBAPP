@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
+import { IoNotifications, IoSettings } from 'react-icons/io5';
 import './TopNavBar.css';
 
 function Header({ onTabClick, currentTab }) {
@@ -37,7 +38,7 @@ function Header({ onTabClick, currentTab }) {
           onClick={handleNotificationsClick}
           title="Notificaciones"
         >
-          🔔
+          <IoNotifications size={20} />
         </button>
         
         <button 
@@ -45,7 +46,7 @@ function Header({ onTabClick, currentTab }) {
           onClick={handleSettingsClick}
           title="Configuración"
         >
-          ⚙️
+          <IoSettings size={20} />
         </button>
         
         <button 

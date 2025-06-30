@@ -18,13 +18,18 @@ import AdminUsersPage from './pages/AdminUsersPage';
 import NotificacionesPage from './pages/NotificacionesPage';
 import UserProfilePage from './pages/UserProfilePage';
 import SettingsPage from './pages/SettingsPage';
-// Las páginas ahora son manejadas por componentes dentro de HomePage
+import AdminCheck from './components/AdminCheck';
+import ProfilePage from './pages/ProfilePage';
 
 // Componente para Rutas Protegidas
 function ProtectedRoute({ children }) {
-  const { currentUser } = useAuth();
+  const { currentUser, loadingAuth } = useAuth();
   const location = useLocation();
   const isMobile = useMediaQuery('(max-width: 768px)');
+
+  if (loadingAuth) {
+    return <div>Cargando...</div>;
+  }
 
   if (!currentUser) {
     // Redirigir a login si no está autenticado
@@ -221,7 +226,7 @@ function App() {
         path="/perfil" 
         element={
           <ProtectedRoute>
-            <UserProfilePage />
+            <ProfilePage />
           </ProtectedRoute>
         }
       />
@@ -230,6 +235,14 @@ function App() {
         element={
           <ProtectedRoute>
             <SettingsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route 
+        path="/user/:userId" 
+        element={
+          <ProtectedRoute>
+            <UserProfilePage />
           </ProtectedRoute>
         }
       />

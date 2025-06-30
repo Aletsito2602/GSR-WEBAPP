@@ -1,0 +1,59 @@
+.ranked-user-item {
+  --bg-list-item-hover: #2F2F2F;
+  --bg-card-secondary: #242424;
+  --text-white: #FFFFFF;
+  --text-light-gray: #A9A9A9;
+  --accent-yellow: #FFD700;
+
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-card-secondary);
+  padding: 15px;
+  border-radius: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.ranked-user-item:hover {
+  background-color: var(--bg-list-item-hover);
+}
+
+.ranked-user-item__main {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.ranked-user-item__avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.ranked-user-item__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ranked-user-item__name {
+  color: var(--text-white);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.ranked-user-item__rank {
+  color: var(--text-light-gray);
+  font-size: 0.9rem;
+}
+
+.ranked-user-item__favorite-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-white);
+  font-size: 1.2rem;
+  padding: 5px;
+} 

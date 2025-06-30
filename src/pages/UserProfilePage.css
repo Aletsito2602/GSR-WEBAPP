@@ -1,0 +1,536 @@
+/* 1. Estilos Globales y Contenedor Principal */
+.user-profile-container {
+    background-color: transparent;
+    color: #EAEAEA;
+    font-family: 'Inter', 'SF Pro Display', 'Nunito Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.user-profile-loading {
+    text-align: center;
+    padding: 60px 20px;
+    font-size: 1.1rem;
+    color: #A0A0A0;
+}
+
+/* 2. Componente: Encabezado (Header) */
+.page-header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 16px 0 32px;
+    position: relative;
+}
+
+.page-header h1 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0;
+    color: #EAEAEA;
+}
+
+.back-button {
+    display: none;
+}
+
+/* 3. Componente: Sección de Perfil Principal */
+.profile-details-card {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 40px;
+}
+
+/* 3.1. Layout principal horizontal con avatar a la izquierda */
+.profile-main-section {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.profile-avatar-large {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 2px solid #EAEAEA;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #2C2C2C 0%, #1A1A1A 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #EAEAEA;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.profile-avatar-large::before {
+    content: attr(data-initials);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 3.2. Contenido del perfil a la derecha del avatar */
+.profile-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 3.3. Bloque de Nombre y Botón */
+.profile-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.user-info {
+    flex: 1;
+}
+
+.user-name {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #EAEAEA;
+    margin: 0 0 6px 0;
+}
+
+.user-level {
+    font-size: 1.1rem;
+    color: #A0A0A0;
+    margin: 0;
+}
+
+.follow-button {
+    background-color: #F0B90B;
+    color: #000000;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.follow-button:hover {
+    background-color: #E5A500;
+    transform: translateY(-1px);
+}
+
+/* 3.4. Barra de Estadísticas - Botones redondeados con bordes */
+.profile-stats {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.profile-stats button {
+    background: #2A2A2A;
+    border: 1px solid #3C3C3C;
+    color: #EAEAEA;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 12px 20px;
+    border-radius: 25px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    min-width: 140px;
+}
+
+.profile-stats button:hover {
+    border-color: #F0B90B;
+    color: #F0B90B;
+}
+
+/* 3.5. Biografía y Enlaces */
+.user-bio {
+    margin-bottom: 16px;
+}
+
+.user-handle {
+    color: #EAEAEA;
+    font-weight: 500;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.user-bio p:last-child {
+    color: #EAEAEA;
+    line-height: 1.5;
+    margin: 0;
+    font-size: 1rem;
+}
+
+.user-links {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.user-links a {
+    color: #EAEAEA;
+    font-size: 1.2rem;
+    transition: color 0.2s ease;
+}
+
+.user-links a:hover {
+    color: #F0B90B;
+}
+
+/* 3.6. Metadatos del Perfil */
+.user-metadata {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 0.95rem;
+    color: #A0A0A0;
+}
+
+.user-metadata span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-metadata svg {
+    width: 16px;
+    height: 16px;
+    color: #A0A0A0;
+}
+
+/* 4. Componente: Sección de Contribuciones */
+.user-contributions {
+    width: 100%;
+}
+
+/* 4.1. Encabezado de la Sección */
+.contributions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.contributions-header h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #EAEAEA;
+    margin: 0;
+}
+
+.filter-button {
+    background: transparent;
+    border: none;
+    color: #A0A0A0;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: color 0.2s ease;
+}
+
+.filter-button:hover {
+    color: #EAEAEA;
+}
+
+/* 4.2. Lista de Tarjetas de Contribución */
+.contributions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.user-contribution-card {
+    background-color: #1E1E1E;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+/* Estructura Interna de cada Tarjeta */
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.author-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: linear-gradient(135deg, #3C3C3C 0%, #2A2A2A 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #EAEAEA;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.author-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.author-name {
+    font-weight: 600;
+    color: #EAEAEA;
+    font-size: 1rem;
+}
+
+.post-meta {
+    font-size: 0.9rem;
+    color: #A0A0A0;
+}
+
+/* Cuerpo del post */
+.card-content {
+    color: #EAEAEA;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    font-size: 1rem;
+}
+
+.ver-mas {
+    color: #5DADE2;
+    font-weight: 500;
+    cursor: pointer;
+    margin-left: 4px;
+}
+
+.ver-mas:hover {
+    text-decoration: underline;
+}
+
+/* Pie de la tarjeta */
+.card-footer {
+    display: flex;
+    gap: 20px;
+    font-size: 0.95rem;
+    color: #A0A0A0;
+}
+
+.card-footer span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Responsive Design - MEJORADO PARA MÓVIL */
+@media (max-width: 768px) {
+    .user-profile-container {
+        padding: 12px;
+        padding-top: 80px;
+    }
+    
+    .page-header {
+        padding: 12px 0 20px;
+    }
+    
+    .page-header h1 {
+        font-size: 1.2rem;
+        text-align: center;
+        width: 100%;
+    }
+    
+    .profile-main-section {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+    
+    .profile-avatar-large {
+        width: 100px;
+        height: 100px;
+        font-size: 2rem;
+        margin-bottom: 0;
+    }
+    
+    .profile-content {
+        width: 100%;
+    }
+    
+    .profile-summary {
+        flex-direction: column;
+        gap: 16px;
+        margin-bottom: 20px;
+    }
+    
+    .user-name {
+        font-size: 1.6rem;
+        text-align: center;
+    }
+    
+    .user-level {
+        font-size: 1rem;
+        text-align: center;
+    }
+    
+    .follow-button {
+        width: 100%;
+        max-width: 200px;
+        padding: 14px 24px;
+        font-size: 1rem;
+    }
+    
+    .profile-stats {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    .profile-stats button {
+        width: 100%;
+        max-width: 280px;
+        min-width: auto;
+        padding: 14px 20px;
+        font-size: 1rem;
+    }
+    
+    .user-bio {
+        text-align: center;
+        margin-bottom: 16px;
+    }
+    
+    .user-handle {
+        font-size: 1rem;
+        text-align: center;
+    }
+    
+    .user-bio p:last-child {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        text-align: center;
+    }
+    
+    .user-links {
+        justify-content: center;
+        margin-bottom: 16px;
+    }
+    
+    .user-metadata {
+        gap: 10px;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .user-metadata span {
+        justify-content: center;
+    }
+    
+    .contributions-header {
+        margin-bottom: 16px;
+    }
+    
+    .contributions-header h3 {
+        font-size: 1.2rem;
+    }
+    
+    .card-header {
+        gap: 10px;
+    }
+    
+    .author-avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .author-name {
+        font-size: 0.95rem;
+    }
+    
+    .post-meta {
+        font-size: 0.85rem;
+    }
+    
+    .card-content {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+    
+    .user-contribution-card {
+        padding: 16px;
+        border-radius: 12px;
+    }
+    
+    .card-footer {
+        gap: 16px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .user-profile-container {
+        padding: 8px;
+        padding-top: 85px;
+    }
+    
+    .page-header h1 {
+        font-size: 1.1rem;
+    }
+    
+    .profile-avatar-large {
+        width: 90px;
+        height: 90px;
+        font-size: 1.8rem;
+    }
+    
+    .user-name {
+        font-size: 1.4rem;
+    }
+    
+    .profile-stats button {
+        padding: 12px 16px;
+        font-size: 0.9rem;
+        max-width: 100%;
+    }
+    
+    .follow-button {
+        padding: 12px 20px;
+        font-size: 0.95rem;
+    }
+    
+    .user-bio p:last-child {
+        font-size: 0.9rem;
+    }
+    
+    .card-content {
+        font-size: 0.9rem;
+    }
+    
+    .user-contribution-card {
+        padding: 14px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .user-profile-container {
+        padding: 18px;
+    }
+    
+    .profile-stats {
+        justify-content: flex-start;
+    }
+    
+    .profile-stats button {
+        min-width: 120px;
+    }
+} 

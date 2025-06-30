@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db, auth } from '../firebaseConfig'; // <<< Importar db y auth
 import { collection, query, where, orderBy, onSnapshot, addDoc, serverTimestamp, Timestamp, doc, deleteDoc, updateDoc, arrayUnion, arrayRemove, increment } from "firebase/firestore"; // <<< Añadir deleteDoc, updateDoc, arrayUnion, arrayRemove y increment
 import { useAuth } from '../context/AuthContext'; // <<< Importar useAuth
+import './Comments.css'; // Importar nuevo CSS
 
 // Recibir postId como prop
 function Comments({ postId }) { 
@@ -78,12 +79,7 @@ function Comments({ postId }) {
   // <<< Función para enviar nuevo comentario >>>
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
-    if (!newComment.trim()) return; // No enviar comentarios vacíos
-    if (!currentUser) {
-        alert("Debes iniciar sesión para comentar."); // O redirigir a login
-        return;
-    }
-
+    if (!newComment.trim() || !currentUser) return;
     setIsSubmitting(true);
     try {
       // Añadir comentario
